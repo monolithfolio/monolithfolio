@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONOLITH | ARCHIVE</title>
     
-    <link rel="icon" type="image/x-icon" href="https://pin.it/1wWXnpIdg">
+    <link rel="icon" type="image/png" href="icon.jpg">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -76,19 +76,19 @@
             transform: scaleY(1.4); animation: pillarPulse 4s infinite ease-in-out; 
         }
 
-        /* Wheel */
+        /* Wheel Boundary - Higher Visibility */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
         .wheel-outer-detail { 
-            position: absolute; inset: -45px; border: 1px dashed rgba(255, 255, 255, 0.25); 
+            position: absolute; inset: -45px; border: 1px dashed rgba(255, 255, 255, 0.3); 
             border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; 
         }
         @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         #wheel { 
             position: absolute; inset: 0; border-radius: 50%; 
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); 
-            border: 2px solid rgba(255,255,255,0.25); 
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.04);
-            background: rgba(255, 255, 255, 0.015);
+            border: 2px solid rgba(255,255,255,0.3); 
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
         }
         .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .hub-data { font-family: var(--mono-font); font-size: 9px; color: #fff; letter-spacing: 4px; font-weight: 700; }
@@ -302,7 +302,11 @@
             const l = document.createElement('div'); l.className = 'term-line'; l.innerText = `> ${cmds[i++]}`;
             log.prepend(l);
             document.getElementById('pre-bar').style.width = (i/cmds.length)*100+"%";
-            if(i==cmds.length){ clearInterval(interval); isBooted=true; document.getElementById('any-key-prompt').classList.add('visible');}
+            if(i==cmds.length){ 
+                clearInterval(interval); 
+                isBooted = true; 
+                document.getElementById('any-key-prompt').classList.add('visible');
+            }
         }, 150);
     }
 
@@ -311,37 +315,42 @@
         preloader.classList.add('exit');
         setTimeout(() => {
             preloader.style.display = 'none';
-            if(!isMobile) {
-                const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
-                const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
-            }
+            // Trigger first slide animations
+            const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
+            const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
             triggerSkills();
         }, 800);
     }
 
-    // Infinite Mobile Loop Logic
+    // --- REARRANGED MOBILE LOOP ---
     if(isMobile) {
         const container = document.getElementById('loop-container');
         const firstClone = slides[0].cloneNode(true);
         const lastClone = slides[slides.length - 1].cloneNode(true);
+        
         container.appendChild(firstClone);
         container.insertBefore(lastClone, slides[0]);
 
+        // Position the user at the REAL first slide (Identity) on load
+        window.addEventListener('load', () => {
+            const slideHeight = window.innerHeight - 55;
+            window.scrollTo(0, slideHeight);
+        });
+
         window.addEventListener('scroll', () => {
             const scrollPos = window.scrollY;
-            const height = window.innerHeight - 55; // 55 is brand pillar height
-            
-            // Loop from end back to start
-            if (scrollPos >= height * (slides.length + 1)) {
-                window.scrollTo(0, height);
+            const height = window.innerHeight - 55;
+            const totalSlides = slides.length;
+
+            // If we scroll into the "Last Clone" at the top, jump to the "Real Last"
+            if (scrollPos <= 2) {
+                window.scrollTo(0, height * totalSlides);
             } 
-            // Loop from start back to end
-            else if (scrollPos <= 0) {
-                window.scrollTo(0, height * slides.length);
+            // If we scroll into the "First Clone" at the bottom, jump to the "Real First"
+            else if (scrollPos >= height * (totalSlides + 1) - 2) {
+                window.scrollTo(0, height);
             }
         });
-        // Initial offset to skip the clone at top
-        window.addEventListener('load', () => window.scrollTo(0, window.innerHeight - 55));
     }
 
     // Desktop Navigation
@@ -366,12 +375,20 @@
         };
     }
 
-    function triggerSkills() { document.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level); }
+    function triggerSkills() { 
+        document.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level); 
+    }
+
     function scramble(el, txt) {
-        if (!el || !txt) return; let i = 0; clearInterval(el.itv);
+        if (!el || !txt) return; 
+        let i = 0; 
+        clearInterval(el.itv);
         el.itv = setInterval(() => {
-            el.innerText = txt.split("").map((l, idx) => idx < i ? txt[idx] : chars[Math.floor(Math.random()*chars.length)]).join("");
-            if (i >= txt.length) clearInterval(el.itv); i += txt.length / 10;
+            el.innerText = txt.split("").map((l, idx) => 
+                idx < i ? txt[idx] : chars[Math.floor(Math.random()*chars.length)]
+            ).join("");
+            if (i >= txt.length) clearInterval(el.itv); 
+            i += txt.length / 10;
         }, 30);
     }
 
@@ -381,4 +398,3 @@
 </script>
 </body>
 </html>
-
