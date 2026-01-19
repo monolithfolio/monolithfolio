@@ -284,6 +284,11 @@
     </div>
 
 <script>
+    // 1. Force browser to ignore previous scroll position
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
     const chars = "ΑΒΓΔΕΖΗΘΙΚΛΜΞΟΠΡΣΤΥΦΧΨΩ0123456789";
     const wheel = document.getElementById('wheel');
     const slides = Array.from(document.querySelectorAll('.slide'));
@@ -310,12 +315,28 @@
         }, 150);
     }
 
+    // Function to strictly align to Identity slide
+    function scrollToIdentity() {
+        if(isMobile) {
+            const headerHeight = 55; // --brand-height in CSS
+            const slideHeight = window.innerHeight - headerHeight;
+            // Scroll to exactly 1 slide height to skip the "Contact" clone
+            window.scrollTo({
+                top: slideHeight,
+                behavior: 'instant'
+            });
+        }
+    }
+
     function exitPreloader() {
         if (!isBooted) return;
+        
+        // Strictly position before showing content
+        scrollToIdentity();
+        
         preloader.classList.add('exit');
         setTimeout(() => {
             preloader.style.display = 'none';
-            // Trigger first slide animations
             const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
             const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
             triggerSkills();
@@ -331,23 +352,17 @@
         container.appendChild(firstClone);
         container.insertBefore(lastClone, slides[0]);
 
-        // Position the user at the REAL first slide (Identity) on load
-        window.addEventListener('load', () => {
-            const slideHeight = window.innerHeight - 55;
-            window.scrollTo(0, slideHeight);
-        });
-
         window.addEventListener('scroll', () => {
             const scrollPos = window.scrollY;
-            const height = window.innerHeight - 55;
+            const headerHeight = 55;
+            const height = window.innerHeight - headerHeight;
             const totalSlides = slides.length;
 
-            // If we scroll into the "Last Clone" at the top, jump to the "Real Last"
+            // Loop logic
             if (scrollPos <= 2) {
                 window.scrollTo(0, height * totalSlides);
             } 
-            // If we scroll into the "First Clone" at the bottom, jump to the "Real First"
-            else if (scrollPos >= height * (totalSlides + 1) - 2) {
+            else if (scrollPos >= height * (totalSlides + 1) - 5) {
                 window.scrollTo(0, height);
             }
         });
@@ -395,6 +410,13 @@
     window.addEventListener('mousedown', exitPreloader);
     window.addEventListener('touchstart', exitPreloader);
     window.addEventListener('load', runBoot);
+    
+    // Safety check: ensure scroll is correct if window resizes
+    window.addEventListener('resize', () => {
+        if(isMobile && !preloader.style.display === 'none') {
+            scrollToIdentity();
+        }
+    });
 </script>
 </body>
 </html>
