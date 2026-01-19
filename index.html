@@ -25,21 +25,43 @@
         * { cursor: none !important; box-sizing: border-box; outline: none; }
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; }
 
-        /* --- PRELOADER (DRAMATIC SHUTTER) --- */
-        #preloader { position: fixed; inset: 0; z-index: 30000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        #preloader::before, #preloader::after {
-            content: ""; position: absolute; left: 0; width: 100%; height: 50%; background: #000;
-            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1); z-index: -1;
+        /* --- TERMINAL PRELOADER --- */
+        #preloader { 
+            position: fixed; inset: 0; z-index: 30000; 
+            background: #000; display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.87, 0, 0.13, 1);
         }
-        #preloader::before { top: 0; border-bottom: 1px solid #222; }
-        #preloader::after { bottom: 0; border-top: 1px solid #222; }
+        .terminal-loader {
+            width: 450px; padding: 20px;
+            font-family: var(--mono-font);
+        }
+        .term-header {
+            display: flex; justify-content: space-between;
+            color: #333; font-size: 9px; margin-bottom: 20px;
+            border-bottom: 1px solid #111; padding-bottom: 5px;
+        }
+        #preloader-log-container {
+            height: 180px; overflow: hidden; display: flex; flex-direction: column-reverse;
+        }
+        .term-line {
+            font-size: 10px; line-height: 1.5; color: #555;
+            white-space: nowrap; margin-bottom: 2px;
+        }
+        .term-line.highlight { color: var(--hazard-yellow); }
+        .term-line.success { color: #fff; }
+        
+        .term-progress-wrap { margin-top: 25px; }
+        .term-bar-bg { height: 2px; width: 100%; background: #111; position: relative; overflow: hidden; }
+        #pre-bar { height: 100%; width: 0%; background: #fff; transition: width 0.1s linear; }
 
-        #preloader.exit::before { transform: translateY(-100%); border-bottom-color: var(--hazard-yellow); }
-        #preloader.exit::after { transform: translateY(100%); border-top-color: var(--hazard-yellow); }
-        #preloader.exit .preloader-content { transform: scale(1.5); opacity: 0; filter: blur(10px); }
+        #any-key-prompt {
+            margin-top: 20px; font-size: 10px; color: #fff;
+            letter-spacing: 2px; opacity: 0; transition: opacity 0.5s;
+            text-align: center;
+        }
+        #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
 
-        .preloader-content { width: 300px; text-align: left; transition: 0.5s cubic-bezier(0.87, 0, 0.13, 1); }
-        #preloader-log { font-family: var(--mono-font); font-size: 8px; color: var(--hazard-yellow); margin-top: 15px; height: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        #preloader.exit { opacity: 0; pointer-events: none; }
 
         /* --- REDIRECT OVERLAY --- */
         #redirect-overlay {
@@ -51,15 +73,6 @@
         .hazard-text { color: var(--hazard-yellow); font-family: var(--mono-font); font-size: 11px; letter-spacing: 4px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .hazard-loader-container { width: 300px; height: 12px; border: 1px solid #222; position: relative; overflow: hidden; }
         .hazard-stripes { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1); }
-
-        /* --- SCREEN SHAKE --- */
-        @keyframes impact-shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(4px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-            40%, 60% { transform: translate3d(6px, 0, 0); }
-        }
-        .shake-active { animation: impact-shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 
         /* --- BRAND PILLAR --- */
         .brand-pillar {
@@ -79,27 +92,11 @@
 
         /* --- NAV HUB (WHEEL) --- */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
-        
-        /* NEW REPLACED BORDER */
         .wheel-outer-detail { 
-            position: absolute; inset: -20px; 
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 50%; 
-            pointer-events: none;
-            animation: rotateDetail 60s linear infinite;
+            position: absolute; inset: -20px; border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite;
         }
         @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* NEW HORIZONTAL MINI INSTRUCTION */
-        .nav-instruction {
-            position: absolute; left: calc(var(--wheel-size) / 2 + 40px); top: 50%; transform: translateY(-50%);
-            font-family: var(--mono-font); font-size: 8px; color: #555;
-            letter-spacing: 1px; transition: opacity 1s ease-out;
-            border-bottom: 1px solid #222; padding-bottom: 4px;
-            display: flex; align-items: center; gap: 8px;
-            white-space: nowrap;
-        }
-        .nav-instruction.fade-out { opacity: 0; pointer-events: none; }
 
         #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
         .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid var(--accent-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05); }
@@ -144,12 +141,15 @@
 
         .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-bottom: 12px; letter-spacing: 5px; text-transform: uppercase;}
         .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
+        
         #cursor-main { position: fixed; width: 12px; height: 12px; border: 1px solid #fff; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; transition: width 0.3s; border-radius: 50%; }
         body.is-hovering #cursor-main { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); }
+        
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
+        
+        @keyframes blinker { 50% { opacity: 0; } }
         .blink { animation: blinker 1.5s steps(2) infinite; }
-        @keyframes blinker { from { opacity: 1; } to { opacity: 0.3; } }
 
         .project-action-link {
             display: inline-block; margin-top: 30px; padding: 12px 20px; border: 1px solid #222;
@@ -164,12 +164,18 @@
     <div id="cursor-main"></div>
 
     <div id="preloader">
-        <div class="preloader-content">
-            <div class="scramble-h2" id="pre-title">SYSTEM_BOOT_SEQUENCE</div>
-            <div class="hazard-loader-container">
-                <div class="hazard-stripes" id="pre-bar"></div>
+        <div class="terminal-loader">
+            <div class="term-header">
+                <span>MNLTH_OS_v4.2.0</span>
+                <span>SYS_READY</span>
             </div>
-            <div id="preloader-log">> INITIALIZING...</div>
+            <div id="preloader-log-container"></div>
+            <div class="term-progress-wrap">
+                <div class="term-bar-bg">
+                    <div id="pre-bar"></div>
+                </div>
+            </div>
+            <div id="any-key-prompt">PRESS_ANY_KEY_TO_INITIALIZE</div>
         </div>
     </div>
 
@@ -191,10 +197,6 @@
 
     <div class="nav-hub" id="main-nav">
         <div class="wheel-outer-detail"></div>
-        <div class="nav-instruction" id="nav-instruct">
-            <i data-lucide="mouse-wheel" size="12"></i>
-            OVERRIDE WHEEL TO NAVIGATE
-        </div>
         <div id="wheel">
             <div class="wheel-center-hub"><div class="hub-data">MNLTH</div></div>
             <div class="inner-label active" style="--i:0;"><span>01</span></div>
@@ -294,82 +296,75 @@
 
     const chars = "ΑΒΓΔΕΖΗΘΙΚΛΜΞΟΠΡΣΤΥΦΧΨΩ0123456789";
     const wheel = document.getElementById('wheel');
-    const instruct = document.getElementById('nav-instruct');
     const slides = Array.from(document.querySelectorAll('.slide'));
     const hazardFill = document.getElementById('hazard-fill');
     const overlay = document.getElementById('redirect-overlay');
     const navHub = document.getElementById('main-nav');
     const sideUI = document.getElementById('side-ui');
-    const termFeed = document.getElementById('terminal-feed');
     const backHint = document.querySelector('.back-hint');
     const preloader = document.getElementById('preloader');
     const preBar = document.getElementById('pre-bar');
-    const preLog = document.getElementById('preloader-log');
+    const logContainer = document.getElementById('preloader-log-container');
+    const anyKey = document.getElementById('any-key-prompt');
     
     let lastIdx = 0;
     let isProjectOpen = false;
-    let hasScrolled = false;
+    let isBooted = false;
 
-    // --- PRELOADER LOGIC ---
-    const bootSteps = ["Mounting core...", "Syncing grid...", "Decrypting archive...", "Deploying UI..."];
-    let step = 0;
-    const logInterval = setInterval(() => { if(step < bootSteps.length) preLog.innerText = `> ${bootSteps[step++]}`; }, 400);
+    // --- TERMINAL BOOT LOGIC ---
+    const bootCommands = [
+        {txt: "INIT_KERNEL_V4", type: "default"},
+        {txt: "MOUNTING_DRIVE_01...", type: "default"},
+        {txt: "CHECKING_INTEGRITY: [OK]", type: "success"},
+        {txt: "DECRYPTING_ASSETS...", type: "default"},
+        {txt: "WARNING: EXTERNAL_BREACH_DETECTED", type: "highlight"},
+        {txt: "BYPASSING_SECURITY_PROTOCOLS...", type: "default"},
+        {txt: "GRID_SYNC_ESTABLISHED", type: "success"},
+        {txt: "LOADING_MONOLITH_CORE...", type: "default"},
+        {txt: "ALLOCATING_BUFFER...", type: "default"},
+        {txt: "BOOT_SUCCESSFUL", type: "success"}
+    ];
 
-    let progress = 0;
-    const progInterval = setInterval(() => {
-        progress += Math.random() * 15;
-        if(progress > 100) progress = 100;
-        preBar.style.width = progress + "%";
-    }, 120);
+    function addLogLine(text, type) {
+        const line = document.createElement('div');
+        line.className = `term-line ${type}`;
+        line.innerText = `> ${text}`;
+        logContainer.prepend(line);
+    }
 
-    window.addEventListener('load', () => {
+    let cmdIdx = 0;
+    function runBoot() {
+        if (cmdIdx < bootCommands.length) {
+            addLogLine(bootCommands[cmdIdx].txt, bootCommands[cmdIdx].type);
+            cmdIdx++;
+            preBar.style.width = (cmdIdx / bootCommands.length) * 100 + "%";
+            setTimeout(runBoot, 80 + Math.random() * 150);
+        } else {
+            anyKey.classList.add('visible');
+            isBooted = true;
+        }
+    }
+
+    function exitPreloader() {
+        if (!isBooted) return;
+        preloader.classList.add('exit');
         setTimeout(() => {
-            clearInterval(logInterval); clearInterval(progInterval);
-            preBar.style.width = "100%";
-            preLog.innerText = "> BOOT_COMPLETE";
-            setTimeout(() => {
-                preloader.classList.add('exit');
-                document.getElementById('viewport').classList.add('shake-active');
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                    scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
-                    const b = slides[0].querySelector('.scramble-body');
-                    if(b) scramble(b, b.dataset.txt);
-                    triggerSkills();
-                }, 850);
-            }, 600);
-        }, 1600);
-    });
+            preloader.style.display = 'none';
+            scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
+            const b = slides[0].querySelector('.scramble-body');
+            if(b) scramble(b, b.dataset.txt);
+            triggerSkills();
+        }, 850);
+    }
 
-    // EmailJS Form Submission
-    const contactForm = document.getElementById('contact-protocol');
-    contactForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const btn = contactForm.querySelector('.submit-btn');
-        const originalText = btn.innerText;
-        btn.innerText = "TRANSMITTING...";
-        btn.disabled = true;
-        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
-            .then(() => {
-                btn.innerText = "SUCCESS";
-                contactForm.reset();
-                setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
-            }, () => {
-                btn.innerText = "FAILED";
-                setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
-            });
-    });
+    window.addEventListener('keydown', () => { if(isBooted) exitPreloader(); });
+    window.addEventListener('mousedown', () => { if(isBooted) exitPreloader(); });
+
+    window.addEventListener('load', () => { setTimeout(runBoot, 400); });
 
     // Nav Wheel logic
     window.onwheel = e => {
-        if(isProjectOpen) return;
-
-        // FADE OUT INSTRUCTION ON FIRST SCROLL
-        if(!hasScrolled && e.deltaY !== 0) {
-            hasScrolled = true;
-            instruct.classList.add('fade-out');
-        }
-
+        if(isProjectOpen || !isBooted) return;
         let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
         let targetRot = currentRot - (e.deltaY * 0.4);
         wheel.style.transform = `rotate(${targetRot}deg)`;
