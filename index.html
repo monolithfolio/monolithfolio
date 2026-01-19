@@ -271,7 +271,6 @@
     function exitPreloader() {
         if (!isBooted) return;
         preloader.classList.add('exit');
-        if(isMobile) window.scrollTo(0, 0);
 
         setTimeout(() => {
             preloader.style.display = 'none';
@@ -282,17 +281,6 @@
     }
 
     if(isMobile) {
-        const clone = slides[0].cloneNode(true);
-        clone.id = "s1-clone";
-        container.appendChild(clone);
-
-        window.addEventListener('scroll', () => {
-            if (!isBooted) return;
-            if (window.scrollY >= clone.offsetTop) {
-                window.scrollTo(0, 0);
-            }
-        });
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -301,7 +289,7 @@
                 }
             });
         }, { threshold: 0.2 });
-        document.querySelectorAll('.slide').forEach(s => observer.observe(s));
+        slides.forEach(s => observer.observe(s));
     } else {
         window.onwheel = e => {
             if(!isBooted) return;
@@ -327,17 +315,12 @@
         document.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level); 
     }
 
-    // UPDATED: No scramble on mobile
     function scramble(el, txt) {
         if (!el || !txt) return; 
-        
-        // If mobile, just set the text and exit
         if (isMobile) {
             el.innerText = txt;
             return;
         }
-
-        // Desktop Scramble Logic
         let i = 0; 
         clearInterval(el.itv);
         el.itv = setInterval(() => {
