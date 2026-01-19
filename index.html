@@ -105,42 +105,49 @@
         
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
-        
-        @keyframes blinker { 50% { opacity: 0; } }
-        .blink { animation: blinker 1.5s steps(2) infinite; }
 
-        /* --- MOBILE REWRITE WITH SNAP SCROLL --- */
+        /* --- MOBILE REWRITE WITH HORIZONTAL SIDE-INFO --- */
         @media (max-width: 768px) {
             :root {
                 --brand-width: 45px;
                 --safety-gap: 15px;
-                --header-height: 100px;
+                --header-height: 80px;
             }
             body, html { 
                 overflow-y: scroll !important; 
                 height: 100vh !important; 
                 cursor: auto !important;
-                scroll-snap-type: y mandatory; /* Enable snap scroll */
+                scroll-snap-type: y mandatory;
             }
             #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
             
             #viewport { padding-right: var(--brand-width); height: auto !important; }
-            .text-frame { margin-left: 20px !important; width: calc(100% - 30px) !important; height: auto !important; }
+            .text-frame { margin-left: 15px !important; width: calc(100% - 20px) !important; height: auto !important; }
             
             .slide { 
                 position: relative !important; opacity: 1 !important; visibility: visible !important; 
-                transform: none !important; margin-bottom: 0 !important; 
-                height: 100vh !important; /* Full screen height for each snap section */
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                scroll-snap-align: start; /* Snap target */
-                scroll-snap-stop: always;
+                transform: none !important; height: 100vh !important;
+                display: flex; flex-direction: column; justify-content: center;
+                scroll-snap-align: start; scroll-snap-stop: always;
             }
-            .content-layout { grid-template-columns: 1fr !important; gap: 20px; }
-            .side-info { border-right: none; border-bottom: 1px solid #111; padding-bottom: 15px; width: 100%; }
+
+            .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
+
+            /* MODIFIED: Horizontal layout for side-info on mobile */
+            .side-info { 
+                display: flex; 
+                flex-direction: row; 
+                gap: 20px; 
+                border-right: none; 
+                border-bottom: 1px solid #222; 
+                padding-bottom: 10px; 
+                padding-right: 0;
+                width: 100%; 
+            }
+            .side-info b { display: inline; margin-right: 5px; margin-bottom: 0; }
+
             .desc-container { padding-left: 0; }
-            .profile-wrapper { flex-direction: column; }
+            .profile-wrapper { flex-direction: column; gap: 15px; }
             .terminal-loader { width: 90%; }
             .brand-letter { font-size: 20px; }
         }
@@ -182,7 +189,7 @@
             <div class="slide active" data-h2="SYSTEM_INIT_IDENTITY">
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">IDENTITY.</h1></div>
                 <div class="content-layout">
-                    <div class="side-info"><b>LOC</b>EARTH<br><b>SYS</b>01</div>
+                    <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
                         <div class="profile-wrapper">
                             <div class="profile-img-frame"><img src="https://via.placeholder.com/150/000000/FFFFFF?text=USER" alt="Profile"></div>
@@ -202,7 +209,7 @@
             <div class="slide" data-h2="ARCHIVE_ACCESS_WORKS">
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">WORKS.</h1></div>
                 <div class="content-layout">
-                    <div class="side-info"><b>UNITS</b>04<br><b>ARC</b>2026</div>
+                    <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
                         <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency."></div>
                         <div style="margin-top:25px;">
@@ -216,7 +223,7 @@
             <div class="slide" data-h2="HARDWARE_SYNC_STACK">
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">STACK.</h1></div>
                 <div class="content-layout">
-                    <div class="side-info"><b>CORE</b>JS<br><b>VER</b>4.2</div>
+                    <div class="side-info"><span><b>CORE</b>JS</span><span><b>VER</b>4.2</span></div>
                     <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization and complex data processing. Using Three.js, GSAP, and Custom GLSL."></div></div>
                 </div>
             </div>
@@ -224,7 +231,7 @@
             <div class="slide" data-h2="SYSTEM_VOID">
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">VOID.</h1></div>
                 <div class="content-layout">
-                    <div class="side-info"><b>STAT</b>NULL<br><b>CHNL</b>04</div>
+                    <div class="side-info"><span><b>STAT</b>NULL</span><span><b>CHNL</b>04</span></div>
                     <div class="desc-container">
                         <div class="scramble-body" data-txt="This sector is currently under construction. Access protocols restricted. Check back for system updates."></div>
                     </div>
@@ -234,7 +241,7 @@
             <div class="slide" data-h2="TRANSMISSION_OPEN_CONTACT">
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">CONTACT.</h1></div>
                 <div class="content-layout">
-                    <div class="side-info"><b>MODE</b>OPEN<br><b>FREQ</b>99.1</div>
+                    <div class="side-info"><span><b>MODE</b>OPEN</span><span><b>FREQ</b>99.1</span></div>
                     <div class="desc-container">
                         <form class="contact-form" id="contact-protocol">
                             <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
@@ -282,7 +289,6 @@
         setTimeout(() => {
             preloader.style.display = 'none';
             if(isMobile) {
-                // NO SCRAMBLE ON MOBILE - Just show text instantly
                 slides.forEach(s => {
                     const h2 = s.querySelector('.scramble-h2');
                     const b = s.querySelector('.scramble-body');
