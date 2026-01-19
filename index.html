@@ -118,6 +118,29 @@
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
 
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px 25px;
+            font-family: var(--mono-font);
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            cursor: pointer;
+            z-index: 6000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(20px);
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:hover { background: var(--hazard-yellow); }
+
         @media (max-width: 768px) {
             body, html { overflow-y: auto !important; height: auto !important; }
             #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
@@ -129,6 +152,7 @@
             .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
             .side-info { display: flex; flex-direction: row; gap: 20px; border-right: none; border-bottom: 1px solid #222; padding: 0 0 10px 0; width: 100%; }
             .desc-container { padding-left: 0; }
+            .back-to-top { width: calc(100% - 40px); left: 20px; right: 20px; bottom: 20px; text-align: center; }
         }
     </style>
 </head>
@@ -241,17 +265,20 @@
         </div>
     </div>
 
+    <button id="back-to-top" class="back-to-top">REBOOT_SYSTEM</button>
+
 <script>
     const chars = "ΑΒΓΔΕΖΗΘΙΚΛΜΞΟΠΡΣΤΥΦΧΨΩ0123456789";
     const wheel = document.getElementById('wheel');
-    const container = document.getElementById('loop-container');
     const slides = Array.from(document.querySelectorAll('.slide'));
     const preloader = document.getElementById('preloader');
+    const backToTopBtn = document.getElementById('back-to-top');
     const isMobile = window.innerWidth <= 768;
     
     let lastIdx = 0;
     let isBooted = false;
 
+    // BOOT SEQUENCE
     function runBoot() {
         const log = document.getElementById('preloader-log-container');
         const cmds = ["INIT_CORE", "MOUNT_OS", "GRID_SYNC", "READY"];
@@ -271,7 +298,6 @@
     function exitPreloader() {
         if (!isBooted) return;
         preloader.classList.add('exit');
-
         setTimeout(() => {
             preloader.style.display = 'none';
             const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
@@ -280,6 +306,7 @@
         }, 800);
     }
 
+    // NAVIGATION LOGIC
     if(isMobile) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -290,6 +317,17 @@
             });
         }, { threshold: 0.2 });
         slides.forEach(s => observer.observe(s));
+
+        // Back to Top trigger only at end
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.innerHeight + window.pageYOffset;
+            const pageHeight = document.documentElement.scrollHeight;
+            if (scrollPos >= pageHeight - 100) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
     } else {
         window.onwheel = e => {
             if(!isBooted) return;
@@ -315,6 +353,7 @@
         document.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level); 
     }
 
+    // SCRAMBLE EFFECT (Disabled for mobile)
     function scramble(el, txt) {
         if (!el || !txt) return; 
         if (isMobile) {
@@ -331,6 +370,11 @@
             i += txt.length / 10;
         }, 30);
     }
+
+    // BACK TO TOP ACTION
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     window.addEventListener('mousedown', exitPreloader);
     window.addEventListener('touchstart', exitPreloader);
