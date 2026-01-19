@@ -31,7 +31,7 @@
             margin: 0; padding: 0; height: 100%; 
             background: var(--bg-color); color: var(--text-main); 
             font-family: 'Inter', sans-serif; 
-            overflow: hidden; /* Standard for Desktop Wheel logic */
+            overflow: hidden; 
         }
 
         #cursor-main { 
@@ -57,7 +57,6 @@
         @keyframes blinker { 50% { opacity: 0; } }
         #preloader.exit { opacity: 0; pointer-events: none; }
 
-        /* Brand Pillar */
         .brand-pillar {
             position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
             background: #080808; border-left: 1px solid #1a1a1a;
@@ -76,7 +75,6 @@
             transform: scaleY(1.4);
         }
 
-        /* Wheel Navigation */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
         .wheel-outer-detail { 
             position: absolute; inset: -45px; border: 1px dashed rgba(255, 255, 255, 0.3); 
@@ -120,38 +118,14 @@
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
 
-        /* --- MOBILE REWRITE (LINEAR SCROLL) --- */
         @media (max-width: 768px) {
-            body, html { 
-                overflow-y: auto !important; 
-                height: auto !important; 
-            }
+            body, html { overflow-y: auto !important; height: auto !important; }
             #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
-            
-            .brand-pillar {
-                position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-                width: 100%; height: 60px;
-                flex-direction: row; padding: 0 15px; border-left: none; border-bottom: 1px solid #1a1a1a;
-                background: #000;
-            }
+            .brand-pillar { position: fixed; top: 0; left: 0; right: 0; bottom: auto; width: 100%; height: 60px; flex-direction: row; padding: 0 15px; border-left: none; border-bottom: 1px solid #1a1a1a; background: #000; }
             .brand-letter { font-size: 14px; letter-spacing: 2px; color: #fff; transform: none; }
-
-            #viewport { 
-                padding-right: 0; padding-top: 80px; 
-                height: auto !important; width: 100%; overflow: visible;
-            }
-            .text-frame { 
-                margin-left: 0 !important; width: 100% !important; height: auto !important; 
-                padding: 0 20px;
-            }
-            
-            .slide { 
-                position: relative !important; opacity: 1 !important; visibility: visible !important; 
-                transform: none !important; height: auto !important;
-                margin-bottom: 100px;
-                display: block;
-            }
-
+            #viewport { padding-right: 0; padding-top: 80px; height: auto !important; width: 100%; overflow: visible; }
+            .text-frame { margin-left: 0 !important; width: 100% !important; height: auto !important; padding: 0 20px; }
+            .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto !important; margin-bottom: 100px; display: block; }
             .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
             .side-info { display: flex; flex-direction: row; gap: 20px; border-right: none; border-bottom: 1px solid #222; padding: 0 0 10px 0; width: 100%; }
             .desc-container { padding-left: 0; }
@@ -278,7 +252,6 @@
     let lastIdx = 0;
     let isBooted = false;
 
-    // Boot Logic
     function runBoot() {
         const log = document.getElementById('preloader-log-container');
         const cmds = ["INIT_CORE", "MOUNT_OS", "GRID_SYNC", "READY"];
@@ -297,44 +270,29 @@
 
     function exitPreloader() {
         if (!isBooted) return;
-        
         preloader.classList.add('exit');
-        if(isMobile) window.scrollTo(0, 0); // Strictly ensure start at top
+        if(isMobile) window.scrollTo(0, 0);
 
         setTimeout(() => {
             preloader.style.display = 'none';
-            // Start animations for the first section
             const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
             const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
             triggerSkills();
         }, 800);
     }
 
-    // --- MOBILE LOOP IMPLEMENTATION ---
     if(isMobile) {
-        // 1. Create the clone of Section 1
         const clone = slides[0].cloneNode(true);
         clone.id = "s1-clone";
         container.appendChild(clone);
 
-        // 2. Monitor scroll for the reset point
         window.addEventListener('scroll', () => {
             if (!isBooted) return;
-            
-            const scrollPos = window.scrollY;
-            const viewportHeight = window.innerHeight;
-            
-            // Calculate height of the original 5 sections
-            // We use the offsetTop of the clone as the exact point where we reset
-            const cloneTop = clone.offsetTop;
-
-            if (scrollPos >= cloneTop) {
-                // Instantly snap to top without animation
+            if (window.scrollY >= clone.offsetTop) {
                 window.scrollTo(0, 0);
             }
         });
 
-        // Mobile Intersection Observer for Scramble
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -343,18 +301,13 @@
                 }
             });
         }, { threshold: 0.2 });
-        
-        // Observe all original slides + the clone
         document.querySelectorAll('.slide').forEach(s => observer.observe(s));
-
     } else {
-        // Desktop Navigation (Wheel)
         window.onwheel = e => {
             if(!isBooted) return;
             let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
             let targetRot = currentRot - (e.deltaY * 0.4);
             wheel.style.transform = `rotate(${targetRot}deg)`;
-            
             let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
             if (newIdx !== lastIdx) {
                 lastIdx = newIdx;
@@ -374,8 +327,17 @@
         document.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level); 
     }
 
+    // UPDATED: No scramble on mobile
     function scramble(el, txt) {
         if (!el || !txt) return; 
+        
+        // If mobile, just set the text and exit
+        if (isMobile) {
+            el.innerText = txt;
+            return;
+        }
+
+        // Desktop Scramble Logic
         let i = 0; 
         clearInterval(el.itv);
         el.itv = setInterval(() => {
@@ -391,7 +353,6 @@
     window.addEventListener('touchstart', exitPreloader);
     window.addEventListener('load', runBoot);
 
-    // Mouse Tracking (Desktop Only)
     if(!isMobile) {
         const cursor = document.getElementById('cursor-main');
         window.addEventListener('mousemove', (e) => {
