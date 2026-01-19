@@ -18,7 +18,7 @@
             --hazard-yellow: #ffcc00;
             --brand-width: 100px;
             --safety-gap: 60px;
-            --header-height: 140px;
+            --header-height: 180px;
             --accent-bright: rgba(255, 255, 255, 0.15);
         }
 
@@ -47,8 +47,6 @@
         .term-header { display: flex; justify-content: space-between; color: #333; font-size: 9px; margin-bottom: 20px; border-bottom: 1px solid #111; padding-bottom: 5px; }
         #preloader-log-container { height: 180px; overflow: hidden; display: flex; flex-direction: column-reverse; }
         .term-line { font-size: 10px; line-height: 1.5; color: #555; white-space: nowrap; margin-bottom: 2px; }
-        .term-line.highlight { color: var(--hazard-yellow); }
-        .term-line.success { color: #fff; }
         .term-progress-wrap { margin-top: 25px; }
         .term-bar-bg { height: 2px; width: 100%; background: #111; position: relative; overflow: hidden; }
         #pre-bar { height: 100%; width: 0%; background: #fff; transition: width 0.1s linear; }
@@ -69,14 +67,9 @@
         }
         @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 28.28px; } }
         .brand-letter { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 45px; color: #7e7c7c; transform: scaleX(1.5); user-select: none; line-height: 0.8; letter-spacing: -2px; animation: pillarPulse 4s infinite ease-in-out; }
-        @keyframes pillarPulse { 0%, 100% { color: #7e7c7c; } 50% { color: #ececec; } }
 
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
-        .wheel-outer-detail { position: absolute; inset: -20px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; }
-        @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
-        .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid var(--accent-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05); }
-        .hub-data { font-family: var(--mono-font); font-size: 9px; color: #999; letter-spacing: 4px; font-weight: 700; }
         .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.08); display: block; transition: 0.4s; }
         .inner-label.active span { color: #fff; transform: scale(1.6); text-shadow: 0 0 20px rgba(255,255,255,0.4); }
@@ -92,17 +85,17 @@
         .side-info b { color: #888; display: block; margin-bottom: 8px; }
         .desc-container { padding-left: 20px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
 
+        .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-top: 15px; letter-spacing: 5px; text-transform: uppercase;}
+        .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
+        
         .profile-wrapper { display: flex; gap: 30px; align-items: flex-start; margin-bottom: 30px; }
         .profile-img-frame { width: 130px; height: 130px; padding: 10px; position: relative; flex-shrink: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
         .profile-img-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); border: 3px solid #000; }
         .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         .skill-item { font-family: var(--mono-font); font-size: 9px; color: #666; }
         .skill-bar-container { height: 10px; width: 100%; border: 1px solid #222; margin-top: 8px; position: relative; overflow: hidden; background: #080808; }
-        .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); position: relative; }
+        .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
 
-        .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-bottom: 12px; letter-spacing: 5px; text-transform: uppercase;}
-        .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
-        
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
 
@@ -111,17 +104,11 @@
             :root {
                 --brand-height: 50px;
                 --safety-gap: 15px;
-                --header-height: 60px;
+                --header-height: auto;
             }
-            body, html { 
-                overflow-y: scroll !important; 
-                height: 100vh !important; 
-                cursor: auto !important;
-                scroll-snap-type: y mandatory;
-            }
-            #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
+            body, html { overflow-y: scroll !important; height: 100vh !important; scroll-snap-type: y mandatory; }
+            #cursor-main, .nav-hub { display: none !important; }
             
-            /* Horizontal Brand Pillar */
             .brand-pillar {
                 position: fixed; top: 0; left: 0; right: 0; bottom: auto;
                 width: 100%; height: var(--brand-height);
@@ -147,7 +134,6 @@
 
             .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
 
-            /* Horizontal Side-Info */
             .side-info { 
                 display: flex; flex-direction: row; gap: 20px; 
                 border-right: none; border-bottom: 1px solid #222; 
@@ -181,9 +167,7 @@
     </div>
 
     <div class="nav-hub" id="main-nav">
-        <div class="wheel-outer-detail"></div>
         <div id="wheel">
-            <div class="wheel-center-hub"><div class="hub-data">MNLTH</div></div>
             <div class="inner-label active" style="--i:0;"><span>01</span></div>
             <div class="inner-label" style="--i:1;"><span>02</span></div>
             <div class="inner-label" style="--i:2;"><span>03</span></div>
@@ -194,14 +178,17 @@
 
     <div id="viewport">
         <div class="text-frame">
-            <div class="slide active" data-h2="SYSTEM_INIT_IDENTITY">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">IDENTITY.</h1></div>
+            <div class="slide active">
+                <div class="slide-header">
+                    <h1 class="stable-h1">IDENTITY.</h1>
+                    <div class="scramble-h2" data-orig="SYSTEM_INIT_IDENTITY">SYSTEM_INIT_IDENTITY</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
                         <div class="profile-wrapper">
                             <div class="profile-img-frame"><img src="https://via.placeholder.com/150/000000/FFFFFF?text=USER" alt="Profile"></div>
-                            <div class="scramble-body" style="max-width: 400px;" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging the gap between raw hardware speed and human interaction."></div>
+                            <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging the gap between raw hardware speed and human interaction."></div>
                         </div>
                         <div class="scramble-h2" style="margin-top: 40px; color: #888;">CAPABILITY_STACK</div>
                         <div class="skills-grid">
@@ -214,8 +201,11 @@
                 </div>
             </div>
 
-            <div class="slide" data-h2="ARCHIVE_ACCESS_WORKS">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">WORKS.</h1></div>
+            <div class="slide">
+                <div class="slide-header">
+                    <h1 class="stable-h1">WORKS.</h1>
+                    <div class="scramble-h2" data-orig="ARCHIVE_ACCESS_WORKS">ARCHIVE_ACCESS_WORKS</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
@@ -228,16 +218,22 @@
                 </div>
             </div>
 
-            <div class="slide" data-h2="HARDWARE_SYNC_STACK">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">STACK.</h1></div>
+            <div class="slide">
+                <div class="slide-header">
+                    <h1 class="stable-h1">STACK.</h1>
+                    <div class="scramble-h2" data-orig="HARDWARE_SYNC_STACK">HARDWARE_SYNC_STACK</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>CORE</b>JS</span><span><b>VER</b>4.2</span></div>
                     <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization and complex data processing. Using Three.js, GSAP, and Custom GLSL."></div></div>
                 </div>
             </div>
 
-            <div class="slide" data-h2="SYSTEM_VOID">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">VOID.</h1></div>
+            <div class="slide">
+                <div class="slide-header">
+                    <h1 class="stable-h1">VOID.</h1>
+                    <div class="scramble-h2" data-orig="SYSTEM_VOID">SYSTEM_VOID</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>STAT</b>NULL</span><span><b>CHNL</b>04</span></div>
                     <div class="desc-container">
@@ -246,8 +242,11 @@
                 </div>
             </div>
 
-            <div class="slide" data-h2="TRANSMISSION_OPEN_CONTACT">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">CONTACT.</h1></div>
+            <div class="slide">
+                <div class="slide-header">
+                    <h1 class="stable-h1">CONTACT.</h1>
+                    <div class="scramble-h2" data-orig="TRANSMISSION_OPEN_CONTACT">TRANSMISSION_OPEN_CONTACT</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>MODE</b>OPEN</span><span><b>FREQ</b>99.1</span></div>
                     <div class="desc-container">
@@ -284,7 +283,7 @@
             line.innerText = `> ${bootCommands[cmdIdx++]}`;
             logContainer.prepend(line);
             preBar.style.width = (cmdIdx / bootCommands.length) * 100 + "%";
-            setTimeout(runBoot, 150 + Math.random() * 200);
+            setTimeout(runBoot, 150 + Math.random() * 180);
         } else {
             anyKey.classList.add('visible');
             isBooted = true;
@@ -297,15 +296,13 @@
         setTimeout(() => {
             preloader.style.display = 'none';
             if(isMobile) {
-                // Remove scramble on mobile
                 slides.forEach(s => {
-                    const h2 = s.querySelector('.scramble-h2');
                     const b = s.querySelector('.scramble-body');
-                    if(h2) h2.innerText = s.dataset.h2;
                     if(b) b.innerText = b.dataset.txt;
                 });
             } else {
-                scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
+                const firstSub = slides[0].querySelector('.scramble-h2');
+                scramble(firstSub, firstSub.dataset.orig);
                 const b = slides[0].querySelector('.scramble-body');
                 if(b) scramble(b, b.dataset.txt);
             }
@@ -329,9 +326,10 @@
                 slides.forEach((s, i) => {
                     s.classList.toggle('active', i === newIdx);
                     if (i === newIdx) {
-                        scramble(s.querySelector('.scramble-h2'), s.dataset.h2);
-                        const b = s.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
-                        if(i === 0) triggerSkills();
+                        const sub = s.querySelector('.scramble-h2');
+                        scramble(sub, sub.dataset.orig);
+                        const b = s.querySelector('.scramble-body'); 
+                        if(b) scramble(b, b.dataset.txt);
                     }
                 });
                 document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
@@ -357,8 +355,8 @@
         element.interval = setInterval(() => {
             element.innerText = targetText.split("").map((l, i) => i < iteration ? targetText[i] : chars[Math.floor(Math.random()*chars.length)]).join("");
             if (iteration >= targetText.length) clearInterval(element.interval);
-            iteration += targetText.length / 20;
-        }, 40);
+            iteration += targetText.length / 15;
+        }, 35);
     }
 
     window.addEventListener('load', () => setTimeout(runBoot, 400));
