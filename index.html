@@ -54,19 +54,25 @@
         #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
         #preloader.exit { opacity: 0; pointer-events: none; }
 
+        /* Impactful Brand Pillar Styling */
         .brand-pillar {
             position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
             background: #080808; border-left: 1px solid #1a1a1a;
             display: flex; flex-direction: column; justify-content: space-between; align-items: center;
             padding: 40px 0; z-index: 5000; pointer-events: none;
         }
-        .brand-pillar::before {
+        .brand-pillar::after {
             content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
             background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
             background-size: 100% 28.28px; animation: pillarHazardMove 0.8s linear infinite;
         }
         @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 28.28px; } }
-        .brand-letter { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 45px; color: #7e7c7c; transform: scaleX(1.5); user-select: none; line-height: 0.8; letter-spacing: -2px; animation: pillarPulse 4s infinite ease-in-out; }
+        .brand-letter { 
+            font-family: var(--title-font); font-weight: 800; font-size: 48px; 
+            color: #7e7c7c; user-select: none; line-height: 0.8; letter-spacing: -2px; 
+            transform: scaleY(1.4); animation: pillarPulse 4s infinite ease-in-out; 
+        }
+        @keyframes pillarPulse { 0%, 100% { color: #555; } 50% { color: #fff; } }
 
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
         #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
@@ -85,8 +91,9 @@
         .side-info b { color: #888; display: block; margin-bottom: 8px; }
         .desc-container { padding-left: 20px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
 
-        .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-top: 15px; letter-spacing: 5px; text-transform: uppercase;}
-        .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
+        /* Adjusted Spacing for Headings */
+        .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-top: 2px; letter-spacing: 5px; text-transform: uppercase;}
+        .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 0.9; text-transform: uppercase; }
         
         .profile-wrapper { display: flex; gap: 30px; align-items: flex-start; margin-bottom: 30px; }
         .profile-img-frame { width: 130px; height: 130px; padding: 10px; position: relative; flex-shrink: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
@@ -102,48 +109,43 @@
         /* --- MOBILE REWRITE --- */
         @media (max-width: 768px) {
             :root {
-                --brand-height: 50px;
+                --brand-height: 55px;
                 --safety-gap: 15px;
                 --header-height: auto;
             }
             body, html { overflow-y: scroll !important; height: 100vh !important; scroll-snap-type: y mandatory; }
             #cursor-main, .nav-hub { display: none !important; }
             
+            /* Enhanced Mobile Brand Pillar */
             .brand-pillar {
                 position: fixed; top: 0; left: 0; right: 0; bottom: auto;
                 width: 100%; height: var(--brand-height);
-                flex-direction: row; padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a;
+                flex-direction: row; padding: 0 15px; border-left: none; border-bottom: 1px solid #1a1a1a;
+                background: #000;
             }
-            .brand-pillar::before {
-                left: 0; right: 0; bottom: 0; top: auto; width: 100%; height: 4px;
-                background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
-                animation: pillarHazardMoveHoriz 0.8s linear infinite;
+            .brand-pillar::after {
+                left: 0; right: 0; bottom: 0; top: auto; width: 100%; height: 6px;
+                background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
+                background-size: 24px 100%; animation: pillarHazardMoveHoriz 0.6s linear infinite;
             }
-            @keyframes pillarHazardMoveHoriz { from { background-position: 0 0; } to { background-position: 28.28px 0; } }
-            .brand-letter { font-size: 18px; transform: scaleY(1.3); }
+            @keyframes pillarHazardMoveHoriz { from { background-position: 0 0; } to { background-position: 24px 0; } }
+            .brand-letter { font-size: 14px; letter-spacing: 2px; transform: scaleY(1.1); font-weight: 900; color: #fff; }
 
             #viewport { padding-right: 0; padding-top: var(--brand-height); height: auto !important; }
             .text-frame { margin-left: 20px !important; width: calc(100% - 40px) !important; height: auto !important; }
             
             .slide { 
                 position: relative !important; opacity: 1 !important; visibility: visible !important; 
-                transform: none !important; height: calc(100vh - var(--brand-height)) !important;
+                transform: none !important; min-height: calc(100vh - var(--brand-height)) !important;
                 display: flex; flex-direction: column; justify-content: center;
-                scroll-snap-align: start; scroll-snap-stop: always;
+                scroll-snap-align: start; scroll-snap-stop: always; padding-bottom: 50px;
             }
 
             .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
-
-            .side-info { 
-                display: flex; flex-direction: row; gap: 20px; 
-                border-right: none; border-bottom: 1px solid #222; 
-                padding: 0 0 10px 0; width: 100%; 
-            }
+            .side-info { display: flex; flex-direction: row; gap: 20px; border-right: none; border-bottom: 1px solid #222; padding: 0 0 10px 0; width: 100%; }
             .side-info b { display: inline; margin-right: 5px; margin-bottom: 0; }
-
             .desc-container { padding-left: 0; }
             .profile-wrapper { flex-direction: column; gap: 15px; }
-            .terminal-loader { width: 90%; }
         }
     </style>
 </head>
@@ -283,7 +285,7 @@
             line.innerText = `> ${bootCommands[cmdIdx++]}`;
             logContainer.prepend(line);
             preBar.style.width = (cmdIdx / bootCommands.length) * 100 + "%";
-            setTimeout(runBoot, 150 + Math.random() * 180);
+            setTimeout(runBoot, 120 + Math.random() * 100);
         } else {
             anyKey.classList.add('visible');
             isBooted = true;
@@ -355,8 +357,8 @@
         element.interval = setInterval(() => {
             element.innerText = targetText.split("").map((l, i) => i < iteration ? targetText[i] : chars[Math.floor(Math.random()*chars.length)]).join("");
             if (iteration >= targetText.length) clearInterval(element.interval);
-            iteration += targetText.length / 15;
-        }, 35);
+            iteration += targetText.length / 10;
+        }, 30);
     }
 
     window.addEventListener('load', () => setTimeout(runBoot, 400));
