@@ -76,13 +76,19 @@
         /* Wheel */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
         .wheel-outer-detail { 
-            position: absolute; inset: -30px; border: 1px dashed rgba(255, 255, 255, 0.1); 
+            position: absolute; inset: -45px; border: 1px dashed rgba(255, 255, 255, 0.25); 
             border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; 
         }
         @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); border: 1px solid rgba(255,255,255,0.05); }
-        .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid var(--accent-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .hub-data { font-family: var(--mono-font); font-size: 9px; color: #999; letter-spacing: 4px; font-weight: 700; }
+        #wheel { 
+            position: absolute; inset: 0; border-radius: 50%; 
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); 
+            border: 2px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.01);
+        }
+        .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .hub-data { font-family: var(--mono-font); font-size: 9px; color: #fff; letter-spacing: 4px; font-weight: 700; }
         .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.08); display: block; transition: 0.4s; }
         .inner-label.active span { color: #fff; transform: scale(1.6); text-shadow: 0 0 20px rgba(255,255,255,0.4); }
