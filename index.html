@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONOLITH | ARCHIVE</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -25,15 +24,13 @@
 
         * { box-sizing: border-box; outline: none; }
         
-        /* Hide cursor by default, enabled via media query logic */
         body, html { 
             margin: 0; padding: 0; height: 100%; 
             background: var(--bg-color); color: var(--text-main); 
             font-family: 'Inter', sans-serif; 
-            overflow: hidden; /* Desktop default */
+            overflow: hidden; 
         }
 
-        /* --- DESKTOP CURSOR --- */
         #cursor-main { 
             position: fixed; width: 12px; height: 12px; border: 1px solid #fff; 
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); 
@@ -41,7 +38,6 @@
         }
         body.is-hovering #cursor-main { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); }
 
-        /* --- TERMINAL PRELOADER --- */
         #preloader { 
             position: fixed; inset: 0; z-index: 30000; 
             background: #000; display: flex; align-items: center; justify-content: center;
@@ -60,7 +56,6 @@
         #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
         #preloader.exit { opacity: 0; pointer-events: none; }
 
-        /* --- BRAND PILLAR --- */
         .brand-pillar {
             position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
             background: #080808; border-left: 1px solid #1a1a1a;
@@ -76,7 +71,6 @@
         .brand-letter { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 45px; color: #7e7c7c; transform: scaleX(1.5); user-select: none; line-height: 0.8; letter-spacing: -2px; animation: pillarPulse 4s infinite ease-in-out; }
         @keyframes pillarPulse { 0%, 100% { color: #7e7c7c; } 50% { color: #ececec; } }
 
-        /* --- NAV HUB (WHEEL) --- */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
         .wheel-outer-detail { position: absolute; inset: -20px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; }
         @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -87,7 +81,6 @@
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.08); display: block; transition: 0.4s; }
         .inner-label.active span { color: #fff; transform: scale(1.6); text-shadow: 0 0 20px rgba(255,255,255,0.4); }
 
-        /* --- VIEWPORT & SLIDES --- */
         #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-right: calc(var(--brand-width) + var(--safety-gap)); }
         .text-frame { margin-left: 38%; height: 100%; width: 100%; position: relative; }
         .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); padding-bottom: 100px; }
@@ -99,7 +92,6 @@
         .side-info b { color: #888; display: block; margin-bottom: 8px; }
         .desc-container { padding-left: 20px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
 
-        /* Profile & Skills */
         .profile-wrapper { display: flex; gap: 30px; align-items: flex-start; margin-bottom: 30px; }
         .profile-img-frame { width: 130px; height: 130px; padding: 10px; position: relative; flex-shrink: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
         .profile-img-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); border: 3px solid #000; }
@@ -108,7 +100,6 @@
         .skill-bar-container { height: 10px; width: 100%; border: 1px solid #222; margin-top: 8px; position: relative; overflow: hidden; background: #080808; }
         .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); position: relative; }
 
-        /* Typography */
         .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-bottom: 12px; letter-spacing: 5px; text-transform: uppercase;}
         .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
         
@@ -118,14 +109,19 @@
         @keyframes blinker { 50% { opacity: 0; } }
         .blink { animation: blinker 1.5s steps(2) infinite; }
 
-        /* --- MOBILE REWRITE --- */
+        /* --- MOBILE REWRITE WITH SNAP SCROLL --- */
         @media (max-width: 768px) {
             :root {
                 --brand-width: 45px;
                 --safety-gap: 15px;
                 --header-height: 100px;
             }
-            body, html { overflow-y: auto !important; height: auto !important; cursor: auto !important; }
+            body, html { 
+                overflow-y: scroll !important; 
+                height: 100vh !important; 
+                cursor: auto !important;
+                scroll-snap-type: y mandatory; /* Enable snap scroll */
+            }
             #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
             
             #viewport { padding-right: var(--brand-width); height: auto !important; }
@@ -133,7 +129,13 @@
             
             .slide { 
                 position: relative !important; opacity: 1 !important; visibility: visible !important; 
-                transform: none !important; margin-bottom: 80px; height: auto !important; 
+                transform: none !important; margin-bottom: 0 !important; 
+                height: 100vh !important; /* Full screen height for each snap section */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                scroll-snap-align: start; /* Snap target */
+                scroll-snap-stop: always;
             }
             .content-layout { grid-template-columns: 1fr !important; gap: 20px; }
             .side-info { border-right: none; border-bottom: 1px solid #111; padding-bottom: 15px; width: 100%; }
@@ -258,7 +260,6 @@
     let lastIdx = 0;
     let isBooted = false;
 
-    // --- BOOT LOGIC ---
     const bootCommands = ["INIT_KERNEL_V4", "MOUNTING_DRIVE...", "GRID_SYNC_ESTABLISHED", "BOOT_SUCCESS"];
     let cmdIdx = 0;
     function runBoot() {
@@ -281,11 +282,12 @@
         setTimeout(() => {
             preloader.style.display = 'none';
             if(isMobile) {
-                // Trigger everything at once on mobile
+                // NO SCRAMBLE ON MOBILE - Just show text instantly
                 slides.forEach(s => {
-                    scramble(s.querySelector('.scramble-h2'), s.dataset.h2);
+                    const h2 = s.querySelector('.scramble-h2');
                     const b = s.querySelector('.scramble-body');
-                    if(b) scramble(b, b.dataset.txt);
+                    if(h2) h2.innerText = s.dataset.h2;
+                    if(b) b.innerText = b.dataset.txt;
                 });
             } else {
                 scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
@@ -300,7 +302,6 @@
     window.addEventListener('keydown', exitPreloader);
     window.addEventListener('touchstart', exitPreloader);
 
-    // --- NAVIGATION (Desktop Only) ---
     if(!isMobile) {
         window.onwheel = e => {
             if(!isBooted) return;
@@ -349,4 +350,3 @@
 </script>
 </body>
 </html>
-
