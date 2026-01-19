@@ -22,8 +22,23 @@
             --accent-bright: rgba(255, 255, 255, 0.15);
         }
 
-        * { cursor: none !important; box-sizing: border-box; outline: none; }
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; touch-action: none; }
+        * { box-sizing: border-box; outline: none; }
+        
+        /* Hide cursor by default, enabled via media query logic */
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            background: var(--bg-color); color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            overflow: hidden; /* Desktop default */
+        }
+
+        /* --- DESKTOP CURSOR --- */
+        #cursor-main { 
+            position: fixed; width: 12px; height: 12px; border: 1px solid #fff; 
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); 
+            mix-blend-mode: difference; transition: width 0.3s; border-radius: 50%; 
+        }
+        body.is-hovering #cursor-main { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); }
 
         /* --- TERMINAL PRELOADER --- */
         #preloader { 
@@ -31,73 +46,18 @@
             background: #000; display: flex; align-items: center; justify-content: center;
             transition: opacity 0.8s cubic-bezier(0.87, 0, 0.13, 1);
         }
-        .terminal-loader {
-            width: 90%; max-width: 450px; padding: 20px;
-            font-family: var(--mono-font);
-        }
-        .term-header {
-            display: flex; justify-content: space-between;
-            color: #333; font-size: 9px; margin-bottom: 20px;
-            border-bottom: 1px solid #111; padding-bottom: 5px;
-        }
-        #preloader-log-container {
-            height: 180px; overflow: hidden; display: flex; flex-direction: column-reverse;
-        }
-        .term-line {
-            font-size: 10px; line-height: 1.5; color: #555;
-            white-space: nowrap; margin-bottom: 2px;
-        }
+        .terminal-loader { width: 450px; padding: 20px; font-family: var(--mono-font); }
+        .term-header { display: flex; justify-content: space-between; color: #333; font-size: 9px; margin-bottom: 20px; border-bottom: 1px solid #111; padding-bottom: 5px; }
+        #preloader-log-container { height: 180px; overflow: hidden; display: flex; flex-direction: column-reverse; }
+        .term-line { font-size: 10px; line-height: 1.5; color: #555; white-space: nowrap; margin-bottom: 2px; }
         .term-line.highlight { color: var(--hazard-yellow); }
         .term-line.success { color: #fff; }
-        
         .term-progress-wrap { margin-top: 25px; }
         .term-bar-bg { height: 2px; width: 100%; background: #111; position: relative; overflow: hidden; }
         #pre-bar { height: 100%; width: 0%; background: #fff; transition: width 0.1s linear; }
-
-        #any-key-prompt {
-            margin-top: 20px; font-size: 10px; color: #fff;
-            letter-spacing: 2px; opacity: 0; transition: opacity 0.5s;
-            text-align: center;
-        }
+        #any-key-prompt { margin-top: 20px; font-size: 10px; color: #fff; letter-spacing: 2px; opacity: 0; transition: opacity 0.5s; text-align: center; }
         #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
-
         #preloader.exit { opacity: 0; pointer-events: none; }
-
-        /* --- MOBILE ADAPTATION --- */
-        @media (max-width: 768px) {
-            :root {
-                --wheel-size: 340px;
-                --brand-width: 45px;
-                --safety-gap: 20px;
-                --header-height: 100px;
-            }
-            * { cursor: auto !important; }
-            #cursor-main { display: none; }
-            .nav-hub { left: -160px !important; }
-            .text-frame { margin-left: 80px !important; width: calc(100% - 130px) !important; padding-right: 0; }
-            .stable-h1 { font-size: 2.2rem !important; }
-            .content-layout { grid-template-columns: 1fr !important; gap: 20px !important; }
-            .side-info { border-right: none !important; border-bottom: 1px solid #111; padding-bottom: 10px; width: 100%; }
-            .inner-label { transform: rotate(calc(72deg * var(--i))) translateX(140px) !important; }
-            .inner-label span { font-size: 0.65rem !important; }
-            .brand-letter { font-size: 20px !important; }
-            .profile-wrapper { flex-direction: column; gap: 15px; }
-            .project-side-ui { left: 10px; width: 60px; }
-            .unit-block { font-size: 30px; }
-            .terminal-feed { display: none; }
-            .back-hint { left: 80px !important; bottom: 20px; }
-        }
-
-        /* --- REDIRECT OVERLAY --- */
-        #redirect-overlay {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: flex; align-items: center; justify-content: center;
-            flex-direction: column; opacity: 0; pointer-events: none; transition: 0.4s;
-        }
-        #redirect-overlay.active { opacity: 1; pointer-events: all; }
-        .hazard-text { color: var(--hazard-yellow); font-family: var(--mono-font); font-size: 11px; letter-spacing: 4px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .hazard-loader-container { width: 300px; height: 12px; border: 1px solid #222; position: relative; overflow: hidden; }
-        .hazard-stripes { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1); }
 
         /* --- BRAND PILLAR --- */
         .brand-pillar {
@@ -117,12 +77,8 @@
 
         /* --- NAV HUB (WHEEL) --- */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
-        .wheel-outer-detail { 
-            position: absolute; inset: -20px; border: 1px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite;
-        }
+        .wheel-outer-detail { position: absolute; inset: -20px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; }
         @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
         #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
         .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid var(--accent-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05); }
         .hub-data { font-family: var(--mono-font); font-size: 9px; color: #999; letter-spacing: 4px; font-weight: 700; }
@@ -130,32 +86,19 @@
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.08); display: block; transition: 0.4s; }
         .inner-label.active span { color: #fff; transform: scale(1.6); text-shadow: 0 0 20px rgba(255,255,255,0.4); }
 
-        /* --- PROJECT SIDE UI --- */
-        .project-side-ui {
-            position: fixed; left: 60px; top: 0; bottom: 0; width: 300px;
-            z-index: 2000; opacity: 0; pointer-events: none; transition: 0.8s;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .project-side-ui.active { opacity: 1; }
-        .unit-block { font-family: var(--title-font); font-size: 80px; line-height: 0.8; color: #111; writing-mode: vertical-rl; text-orientation: mixed; margin-bottom: 30px; user-select: none; }
-        .terminal-feed { font-family: var(--mono-font); font-size: 8px; color: #444; height: 150px; overflow: hidden; position: relative; width: 100%; }
-        .terminal-feed::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--bg-color), transparent 20%, transparent 80%, var(--bg-color)); z-index: 2; }
-        .log-line { margin-bottom: 4px; white-space: nowrap; }
-        .log-line span { color: var(--hazard-yellow); }
-
         /* --- VIEWPORT & SLIDES --- */
         #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-right: calc(var(--brand-width) + var(--safety-gap)); }
         .text-frame { margin-left: 38%; height: 100%; width: 100%; position: relative; }
-        .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
-        .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); }
+        .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); padding-bottom: 100px; }
         .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
 
         .content-layout { display: grid; grid-template-columns: 120px 1fr 0.8fr; gap: 40px; width: 100%; max-width: 1100px; }
         .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; text-transform: uppercase; line-height: 2.2; padding-top: 10px; border-right: 1px solid #111; padding-right: 20px; }
         .side-info b { color: #888; display: block; margin-bottom: 8px; }
         .desc-container { padding-left: 20px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
 
-        /* --- PROFILE & SKILLS --- */
+        /* Profile & Skills */
         .profile-wrapper { display: flex; gap: 30px; align-items: flex-start; margin-bottom: 30px; }
         .profile-img-frame { width: 130px; height: 130px; padding: 10px; position: relative; flex-shrink: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
         .profile-img-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); border: 3px solid #000; }
@@ -164,11 +107,9 @@
         .skill-bar-container { height: 10px; width: 100%; border: 1px solid #222; margin-top: 8px; position: relative; overflow: hidden; background: #080808; }
         .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); position: relative; }
 
+        /* Typography */
         .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-bottom: 12px; letter-spacing: 5px; text-transform: uppercase;}
         .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 1; text-transform: uppercase; }
-        
-        #cursor-main { position: fixed; width: 12px; height: 12px; border: 1px solid #fff; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; transition: width 0.3s; border-radius: 50%; }
-        body.is-hovering #cursor-main { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); }
         
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
@@ -176,12 +117,30 @@
         @keyframes blinker { 50% { opacity: 0; } }
         .blink { animation: blinker 1.5s steps(2) infinite; }
 
-        .project-action-link {
-            display: inline-block; margin-top: 30px; padding: 12px 20px; border: 1px solid #222;
-            font-family: var(--mono-font); font-size: 10px; color: #fff; text-decoration: none;
-            letter-spacing: 2px; transition: 0.3s; white-space: nowrap;
+        /* --- MOBILE REWRITE --- */
+        @media (max-width: 768px) {
+            :root {
+                --brand-width: 45px;
+                --safety-gap: 15px;
+                --header-height: 100px;
+            }
+            body, html { overflow-y: auto !important; height: auto !important; cursor: auto !important; }
+            #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
+            
+            #viewport { padding-right: var(--brand-width); height: auto !important; }
+            .text-frame { margin-left: 20px !important; width: calc(100% - 30px) !important; height: auto !important; }
+            
+            .slide { 
+                position: relative !important; opacity: 1 !important; visibility: visible !important; 
+                transform: none !important; margin-bottom: 80px; height: auto !important; 
+            }
+            .content-layout { grid-template-columns: 1fr !important; gap: 20px; }
+            .side-info { border-right: none; border-bottom: 1px solid #111; padding-bottom: 15px; width: 100%; }
+            .desc-container { padding-left: 0; }
+            .profile-wrapper { flex-direction: column; }
+            .terminal-loader { width: 90%; }
+            .brand-letter { font-size: 20px; }
         }
-        .project-action-link:hover { background: #fff; color: #000; border-color: #fff; }
     </style>
 </head>
 <body>
@@ -190,28 +149,11 @@
 
     <div id="preloader">
         <div class="terminal-loader">
-            <div class="term-header">
-                <span>MNLTH_OS_v4.2.0</span>
-                <span>SYS_READY</span>
-            </div>
+            <div class="term-header"><span>MNLTH_OS_v4.2.0</span><span>SYS_READY</span></div>
             <div id="preloader-log-container"></div>
-            <div class="term-progress-wrap">
-                <div class="term-bar-bg">
-                    <div id="pre-bar"></div>
-                </div>
-            </div>
-            <div id="any-key-prompt">PRESS_ANY_KEY_TO_INITIALIZE</div>
+            <div class="term-progress-wrap"><div class="term-bar-bg"><div id="pre-bar"></div></div></div>
+            <div id="any-key-prompt">TAP_OR_PRESS_TO_INITIALIZE</div>
         </div>
-    </div>
-
-    <div id="redirect-overlay">
-        <div class="hazard-text"><i data-lucide="triangle-alert" class="blink"></i> <span id="hazard-status">INITIALIZING_RE-TRANSMISSION</span></div>
-        <div class="hazard-loader-container"><div class="hazard-stripes" id="hazard-fill"></div></div>
-    </div>
-
-    <div class="project-side-ui" id="side-ui">
-        <div class="unit-block">DATA_UNIT_04</div>
-        <div class="terminal-feed" id="terminal-feed"></div>
     </div>
 
     <div class="brand-pillar">
@@ -261,7 +203,8 @@
                     <div class="desc-container">
                         <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency."></div>
                         <div style="margin-top:25px;">
-                            <a href="#" onclick="transitionTo('pillar-link')" class="social-link hoverable">01 // PILLAR</a>
+                            <a href="#" class="social-link">01 // PILLAR_PROJECT</a>
+                            <a href="#" class="social-link">02 // VOID_CORE</a>
                         </div>
                     </div>
                 </div>
@@ -271,7 +214,7 @@
                 <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1">STACK.</h1></div>
                 <div class="content-layout">
                     <div class="side-info"><b>CORE</b>JS<br><b>VER</b>4.2</div>
-                    <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization and complex data processing."></div></div>
+                    <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization and complex data processing. Using Three.js, GSAP, and Custom GLSL."></div></div>
                 </div>
             </div>
 
@@ -291,80 +234,40 @@
                     <div class="side-info"><b>MODE</b>OPEN<br><b>FREQ</b>99.1</div>
                     <div class="desc-container">
                         <form class="contact-form" id="contact-protocol">
-                            <input type="text" name="user_name" placeholder="IDENTITY_NAME" class="contact-input hoverable" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
-                            <input type="email" name="user_email" placeholder="ENCRYPTION_EMAIL" class="contact-input hoverable" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
-                            <textarea name="message" placeholder="MESSAGE_DATA" class="contact-input hoverable" rows="4" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%;"></textarea>
-                            <button type="submit" class="submit-btn hoverable" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; letter-spacing: 2px; text-align: left; width: 100%; margin-top: 15px;">SEND_TRANSMISSION</button>
+                            <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
+                            <textarea placeholder="MESSAGE_DATA" rows="4" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%;"></textarea>
+                            <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%; margin-top: 15px;">SEND_TRANSMISSION</button>
                         </form>
                     </div>
                 </div>
             </div>
-
-            <div class="slide work-sub" id="pillar-link" data-h2="PROJECT_PILLAR">
-                <div class="slide-header"><div class="scramble-h2"></div><h1 class="stable-h1" style="color:var(--hazard-yellow)">PILLAR.</h1></div>
-                <div class="content-layout">
-                    <div class="side-info"><b>TYPE</b>STRCT<br><b>CAT</b>DELTA</div>
-                    <div class="desc-container">
-                        <div class="scramble-body" data-txt="High-load monolithic structural framework. Optimized for real-time vertex distribution and complex data architecture mapping."></div>
-                        <a href="#" target="_blank" class="project-action-link hoverable">[ ACCESS_EXTERNAL_DATA_PORT ]</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="back-hint" style="opacity: 0; pointer-events: none; transition: 0.5s; position: fixed; bottom: 40px; left: 38%; font-family: var(--mono-font); font-size: 9px; color: #333;">[ ESC ] TO RETURN TO ARCHIVE</div>
         </div>
     </div>
 
 <script>
-    emailjs.init("bgFMJyati7OGQVmXU");
-    lucide.createIcons();
-
     const chars = "ΑΒΓΔΕΖΗΘΙΚΛΜΞΟΠΡΣΤΥΦΧΨΩ0123456789";
     const wheel = document.getElementById('wheel');
     const slides = Array.from(document.querySelectorAll('.slide'));
-    const hazardFill = document.getElementById('hazard-fill');
-    const overlay = document.getElementById('redirect-overlay');
-    const navHub = document.getElementById('main-nav');
-    const sideUI = document.getElementById('side-ui');
-    const backHint = document.querySelector('.back-hint');
     const preloader = document.getElementById('preloader');
     const preBar = document.getElementById('pre-bar');
     const logContainer = document.getElementById('preloader-log-container');
     const anyKey = document.getElementById('any-key-prompt');
+    const isMobile = window.innerWidth <= 768;
     
     let lastIdx = 0;
-    let isProjectOpen = false;
     let isBooted = false;
-    let touchStartY = 0;
 
-    // --- TERMINAL BOOT LOGIC ---
-    const bootCommands = [
-        {txt: "INIT_KERNEL_V4", type: "default"},
-        {txt: "MOUNTING_DRIVE_01...", type: "default"},
-        {txt: "CHECKING_INTEGRITY: [OK]", type: "success"},
-        {txt: "DECRYPTING_ASSETS...", type: "default"},
-        {txt: "WARNING: EXTERNAL_BREACH_DETECTED", type: "highlight"},
-        {txt: "BYPASSING_SECURITY_PROTOCOLS...", type: "default"},
-        {txt: "GRID_SYNC_ESTABLISHED", type: "success"},
-        {txt: "LOADING_MONOLITH_CORE...", type: "default"},
-        {txt: "ALLOCATING_BUFFER...", type: "default"},
-        {txt: "BOOT_SUCCESSFUL", type: "success"}
-    ];
-
-    function addLogLine(text, type) {
-        const line = document.createElement('div');
-        line.className = `term-line ${type}`;
-        line.innerText = `> ${text}`;
-        logContainer.prepend(line);
-    }
-
+    // --- BOOT LOGIC ---
+    const bootCommands = ["INIT_KERNEL_V4", "MOUNTING_DRIVE...", "GRID_SYNC_ESTABLISHED", "BOOT_SUCCESS"];
     let cmdIdx = 0;
     function runBoot() {
         if (cmdIdx < bootCommands.length) {
-            addLogLine(bootCommands[cmdIdx].txt, bootCommands[cmdIdx].type);
-            cmdIdx++;
+            const line = document.createElement('div');
+            line.className = 'term-line';
+            line.innerText = `> ${bootCommands[cmdIdx++]}`;
+            logContainer.prepend(line);
             preBar.style.width = (cmdIdx / bootCommands.length) * 100 + "%";
-            setTimeout(runBoot, 80 + Math.random() * 150);
+            setTimeout(runBoot, 150 + Math.random() * 200);
         } else {
             anyKey.classList.add('visible');
             isBooted = true;
@@ -376,58 +279,57 @@
         preloader.classList.add('exit');
         setTimeout(() => {
             preloader.style.display = 'none';
-            scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
-            const b = slides[0].querySelector('.scramble-body');
-            if(b) scramble(b, b.dataset.txt);
+            if(isMobile) {
+                // Trigger everything at once on mobile
+                slides.forEach(s => {
+                    scramble(s.querySelector('.scramble-h2'), s.dataset.h2);
+                    const b = s.querySelector('.scramble-body');
+                    if(b) scramble(b, b.dataset.txt);
+                });
+            } else {
+                scramble(slides[0].querySelector('.scramble-h2'), slides[0].dataset.h2);
+                const b = slides[0].querySelector('.scramble-body');
+                if(b) scramble(b, b.dataset.txt);
+            }
             triggerSkills();
         }, 850);
     }
 
-    window.addEventListener('keydown', () => { if(isBooted) exitPreloader(); });
-    window.addEventListener('mousedown', () => { if(isBooted) exitPreloader(); });
-    window.addEventListener('touchstart', () => { if(isBooted) exitPreloader(); });
+    window.addEventListener('mousedown', exitPreloader);
+    window.addEventListener('keydown', exitPreloader);
+    window.addEventListener('touchstart', exitPreloader);
 
-    window.addEventListener('load', () => { setTimeout(runBoot, 400); });
-
-    // Core Rotation Handler for Wheel/Touch
-    function handleRotation(delta) {
-        if(isProjectOpen || !isBooted) return;
-        let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
-        let targetRot = currentRot - (delta * 0.4);
-        wheel.style.transform = `rotate(${targetRot}deg)`;
-        let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
-        if (newIdx !== lastIdx) {
-            lastIdx = newIdx;
-            slides.forEach((s, i) => {
-                if (i < 5) {
+    // --- NAVIGATION (Desktop Only) ---
+    if(!isMobile) {
+        window.onwheel = e => {
+            if(!isBooted) return;
+            let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
+            let targetRot = currentRot - (e.deltaY * 0.4);
+            wheel.style.transform = `rotate(${targetRot}deg)`;
+            let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
+            if (newIdx !== lastIdx) {
+                lastIdx = newIdx;
+                slides.forEach((s, i) => {
                     s.classList.toggle('active', i === newIdx);
                     if (i === newIdx) {
                         scramble(s.querySelector('.scramble-h2'), s.dataset.h2);
                         const b = s.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
                         if(i === 0) triggerSkills();
                     }
-                }
-            });
-            document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
-        }
+                });
+                document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
+            }
+        };
+
+        window.onmousemove = e => {
+            const c = document.getElementById('cursor-main');
+            c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
+            document.body.classList.toggle('is-hovering', !!e.target.closest('a, button, input, textarea'));
+        };
     }
 
-    // Input Listeners
-    window.onwheel = e => handleRotation(e.deltaY);
-    
-    window.addEventListener('touchstart', e => { touchStartY = e.touches[0].pageY; }, {passive: false});
-    window.addEventListener('touchmove', e => {
-        const touchY = e.touches[0].pageY;
-        const delta = touchStartY - touchY;
-        handleRotation(delta * 2); // Increased sensitivity for touch
-        touchStartY = touchY;
-    }, {passive: false});
-
     function triggerSkills() {
-        const skills = slides[0].querySelectorAll('.skill-pole-fill');
-        skills.forEach(bar => {
-            bar.style.width = '0'; void bar.offsetWidth;
-            bar.style.transition = 'width 1.5s cubic-bezier(0.19, 1, 0.22, 1)';
+        document.querySelectorAll('.skill-pole-fill').forEach(bar => {
             bar.style.width = bar.dataset.level;
         });
     }
@@ -442,37 +344,7 @@
         }, 40);
     }
 
-    function transitionTo(targetId) {
-        isProjectOpen = true; overlay.classList.add('active'); hazardFill.style.width = "100%";
-        setTimeout(() => {
-            navHub.style.opacity = '0'; sideUI.classList.add('active'); backHint.style.opacity = '1';
-            slides.forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(targetId);
-            target.classList.add('active');
-            scramble(target.querySelector('.scramble-h2'), target.dataset.h2);
-            setTimeout(() => { overlay.classList.remove('active'); hazardFill.style.width = "0%"; }, 500);
-        }, 600);
-    }
-
-    function backToArchive() {
-        if(!isProjectOpen) return;
-        overlay.classList.add('active'); hazardFill.style.width = "100%";
-        setTimeout(() => {
-            isProjectOpen = false; navHub.style.opacity = '1'; sideUI.classList.remove('active');
-            backHint.style.opacity = '0'; slides.forEach(s => s.classList.remove('active'));
-            slides[1].classList.add('active');
-            setTimeout(() => { overlay.classList.remove('active'); hazardFill.style.width = "0%"; }, 500);
-        }, 600);
-    }
-
-    window.addEventListener('keydown', (e) => { if (e.key === "Escape") backToArchive(); });
-    window.onmousemove = e => {
-        const c = document.getElementById('cursor-main');
-        if (c) {
-            c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px';
-            document.body.classList.toggle('is-hovering', !!e.target.closest('.hoverable, .social-link, button, input, textarea, #main-nav'));
-        }
-    };
+    window.addEventListener('load', () => setTimeout(runBoot, 400));
 </script>
 </body>
 </html>
