@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MONOLITH | ARCHIVE</title>
     
-    <link rel="icon" type="image/png" href="icon.jpg">
+    <link rel="icon" type="image/png" href="https://i.pinimg.com/736x/21/f5/99/21f599980d463e80c436896263056093.jpg">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,7 +31,7 @@
             margin: 0; padding: 0; height: 100%; 
             background: var(--bg-color); color: var(--text-main); 
             font-family: 'Inter', sans-serif; 
-            overflow: hidden; 
+            overflow: hidden; /* Standard for Desktop Wheel logic */
         }
 
         #cursor-main { 
@@ -39,7 +39,6 @@
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); 
             mix-blend-mode: difference; transition: width 0.3s; border-radius: 50%; 
         }
-        body.is-hovering #cursor-main { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); }
 
         #preloader { 
             position: fixed; inset: 0; z-index: 30000; 
@@ -55,6 +54,7 @@
         #pre-bar { height: 100%; width: 0%; background: #fff; transition: width 0.1s linear; }
         #any-key-prompt { margin-top: 20px; font-size: 10px; color: #fff; letter-spacing: 2px; opacity: 0; transition: opacity 0.5s; text-align: center; }
         #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
         #preloader.exit { opacity: 0; pointer-events: none; }
 
         /* Brand Pillar */
@@ -73,11 +73,11 @@
         .brand-letter { 
             font-family: var(--title-font); font-weight: 800; font-size: 48px; 
             color: #7e7c7c; user-select: none; line-height: 0.8; letter-spacing: -2px; 
-            transform: scaleY(1.4); animation: pillarPulse 4s infinite ease-in-out; 
+            transform: scaleY(1.4);
         }
 
-        /* Wheel Boundary - Higher Visibility */
-        .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
+        /* Wheel Navigation */
+        .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
         .wheel-outer-detail { 
             position: absolute; inset: -45px; border: 1px dashed rgba(255, 255, 255, 0.3); 
             border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; 
@@ -87,7 +87,6 @@
             position: absolute; inset: 0; border-radius: 50%; 
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); 
             border: 2px solid rgba(255,255,255,0.3); 
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
             background: rgba(255, 255, 255, 0.02);
         }
         .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -98,7 +97,7 @@
 
         #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-right: calc(var(--brand-width) + var(--safety-gap)); }
         .text-frame { margin-left: 38%; height: 100%; width: 100%; position: relative; }
-        .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); padding-bottom: 100px; }
+        .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); }
         .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
         .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
 
@@ -121,38 +120,24 @@
         .social-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; color: #444; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 15px; }
         .social-link:hover { color: #fff; transform: translateX(5px); }
 
-        /* --- MOBILE REWRITE --- */
+        /* --- MOBILE REWRITE (LINEAR SCROLL) --- */
         @media (max-width: 768px) {
-            :root {
-                --brand-height: 55px;
-                --safety-gap: 15px;
-                --header-height: auto;
-            }
             body, html { 
-                overflow-y: scroll !important; 
-                height: 100% !important; 
-                scroll-snap-type: y mandatory; 
-                scrollbar-width: none;
+                overflow-y: auto !important; 
+                height: auto !important; 
             }
-            body::-webkit-scrollbar { display: none; }
             #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
             
             .brand-pillar {
                 position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-                width: 100%; height: var(--brand-height);
+                width: 100%; height: 60px;
                 flex-direction: row; padding: 0 15px; border-left: none; border-bottom: 1px solid #1a1a1a;
                 background: #000;
             }
-            .brand-pillar::after {
-                left: 0; right: 0; bottom: 0; top: auto; width: 100%; height: 6px;
-                background: linear-gradient(45deg, var(--hazard-yellow) 25%, #000 25%, #000 50%, var(--hazard-yellow) 50%, var(--hazard-yellow) 75%, #000 75%, #000);
-                background-size: 20px 20px; animation: pillarHazardMoveMobile 0.5s linear infinite;
-            }
-            @keyframes pillarHazardMoveMobile { from { background-position: 0 0; } to { background-position: 20px 0; } }
-            .brand-letter { font-size: 14px; letter-spacing: 2px; transform: scaleY(1.1); font-weight: 900; color: #fff; }
+            .brand-letter { font-size: 14px; letter-spacing: 2px; color: #fff; transform: none; }
 
             #viewport { 
-                padding-right: 0; padding-top: var(--brand-height); 
+                padding-right: 0; padding-top: 80px; 
                 height: auto !important; width: 100%; overflow: visible;
             }
             .text-frame { 
@@ -162,14 +147,13 @@
             
             .slide { 
                 position: relative !important; opacity: 1 !important; visibility: visible !important; 
-                transform: none !important; height: calc(100vh - var(--brand-height)) !important;
-                display: flex; flex-direction: column; justify-content: center;
-                scroll-snap-align: start; scroll-snap-stop: always; padding-bottom: 20px;
+                transform: none !important; height: auto !important;
+                margin-bottom: 100px;
+                display: block;
             }
 
             .content-layout { display: flex !important; flex-direction: column; gap: 15px; }
             .side-info { display: flex; flex-direction: row; gap: 20px; border-right: none; border-bottom: 1px solid #222; padding: 0 0 10px 0; width: 100%; }
-            .side-info b { display: inline; margin-right: 5px; margin-bottom: 0; }
             .desc-container { padding-left: 0; }
         }
     </style>
@@ -284,11 +268,6 @@
     </div>
 
 <script>
-    // 1. Force browser to ignore previous scroll position
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
-
     const chars = "ΑΒΓΔΕΖΗΘΙΚΛΜΞΟΠΡΣΤΥΦΧΨΩ0123456789";
     const wheel = document.getElementById('wheel');
     const slides = Array.from(document.querySelectorAll('.slide'));
@@ -301,7 +280,7 @@
     // Boot Logic
     function runBoot() {
         const log = document.getElementById('preloader-log-container');
-        const cmds = ["INIT_CORE", "MOUNT_LOOP_OS", "GRID_SYNC", "READY"];
+        const cmds = ["INIT_CORE", "MOUNT_OS", "GRID_SYNC", "READY"];
         let i = 0;
         let interval = setInterval(() => {
             const l = document.createElement('div'); l.className = 'term-line'; l.innerText = `> ${cmds[i++]}`;
@@ -315,66 +294,29 @@
         }, 150);
     }
 
-    // Function to strictly align to Identity slide
-    function scrollToIdentity() {
-        if(isMobile) {
-            const headerHeight = 55; // --brand-height in CSS
-            const slideHeight = window.innerHeight - headerHeight;
-            // Scroll to exactly 1 slide height to skip the "Contact" clone
-            window.scrollTo({
-                top: slideHeight,
-                behavior: 'instant'
-            });
-        }
-    }
-
     function exitPreloader() {
         if (!isBooted) return;
         
-        // Strictly position before showing content
-        scrollToIdentity();
-        
         preloader.classList.add('exit');
+        if(isMobile) window.scrollTo(0, 0); // Strictly ensure start at top
+
         setTimeout(() => {
             preloader.style.display = 'none';
+            // Start animations for the first section
             const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
             const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
             triggerSkills();
         }, 800);
     }
 
-    // --- REARRANGED MOBILE LOOP ---
-    if(isMobile) {
-        const container = document.getElementById('loop-container');
-        const firstClone = slides[0].cloneNode(true);
-        const lastClone = slides[slides.length - 1].cloneNode(true);
-        
-        container.appendChild(firstClone);
-        container.insertBefore(lastClone, slides[0]);
-
-        window.addEventListener('scroll', () => {
-            const scrollPos = window.scrollY;
-            const headerHeight = 55;
-            const height = window.innerHeight - headerHeight;
-            const totalSlides = slides.length;
-
-            // Loop logic
-            if (scrollPos <= 2) {
-                window.scrollTo(0, height * totalSlides);
-            } 
-            else if (scrollPos >= height * (totalSlides + 1) - 5) {
-                window.scrollTo(0, height);
-            }
-        });
-    }
-
-    // Desktop Navigation
+    // Desktop Navigation (Wheel)
     if(!isMobile) {
         window.onwheel = e => {
             if(!isBooted) return;
             let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
             let targetRot = currentRot - (e.deltaY * 0.4);
             wheel.style.transform = `rotate(${targetRot}deg)`;
+            
             let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
             if (newIdx !== lastIdx) {
                 lastIdx = newIdx;
@@ -388,6 +330,17 @@
                 document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
             }
         };
+    } else {
+        // Mobile Simple Scramble on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const sub = entry.target.querySelector('.scramble-h2'); if(sub) scramble(sub, sub.dataset.orig);
+                    const b = entry.target.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(s => observer.observe(s));
     }
 
     function triggerSkills() { 
@@ -410,13 +363,15 @@
     window.addEventListener('mousedown', exitPreloader);
     window.addEventListener('touchstart', exitPreloader);
     window.addEventListener('load', runBoot);
-    
-    // Safety check: ensure scroll is correct if window resizes
-    window.addEventListener('resize', () => {
-        if(isMobile && !preloader.style.display === 'none') {
-            scrollToIdentity();
-        }
-    });
+
+    // Mouse Tracking (Desktop Only)
+    if(!isMobile) {
+        const cursor = document.getElementById('cursor-main');
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+    }
 </script>
 </body>
 </html>
