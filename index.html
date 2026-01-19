@@ -54,7 +54,7 @@
         #any-key-prompt.visible { opacity: 1; animation: blinker 1s infinite; }
         #preloader.exit { opacity: 0; pointer-events: none; }
 
-        /* Impactful Brand Pillar Styling */
+        /* Brand Pillar */
         .brand-pillar {
             position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
             background: #080808; border-left: 1px solid #1a1a1a;
@@ -74,8 +74,21 @@
         }
         @keyframes pillarPulse { 0%, 100% { color: #555; } 50% { color: #fff; } }
 
+        /* Restoration of Wheel Boundaries Markings */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; transition: 0.8s; }
-        #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
+        .wheel-outer-detail { 
+            position: absolute; inset: -30px; border: 1px dashed rgba(255, 255, 255, 0.1); 
+            border-radius: 50%; pointer-events: none; animation: rotateDetail 60s linear infinite; 
+        }
+        .wheel-outer-detail::before {
+            content: ''; position: absolute; inset: 15px; border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 50%;
+        }
+        @keyframes rotateDetail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        #wheel { position: absolute; inset: 0; border-radius: 50%; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); border: 1px solid rgba(255,255,255,0.05); }
+        .wheel-center-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 2px solid var(--accent-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05); }
+        .hub-data { font-family: var(--mono-font); font-size: 9px; color: #999; letter-spacing: 4px; font-weight: 700; }
+        
         .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.08); display: block; transition: 0.4s; }
         .inner-label.active span { color: #fff; transform: scale(1.6); text-shadow: 0 0 20px rgba(255,255,255,0.4); }
@@ -91,7 +104,6 @@
         .side-info b { color: #888; display: block; margin-bottom: 8px; }
         .desc-container { padding-left: 20px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
 
-        /* Adjusted Spacing for Headings */
         .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; margin-top: 2px; letter-spacing: 5px; text-transform: uppercase;}
         .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; letter-spacing: -2px; line-height: 0.9; text-transform: uppercase; }
         
@@ -114,21 +126,26 @@
                 --header-height: auto;
             }
             body, html { overflow-y: scroll !important; height: 100vh !important; scroll-snap-type: y mandatory; }
-            #cursor-main, .nav-hub { display: none !important; }
+            #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
             
-            /* Enhanced Mobile Brand Pillar */
             .brand-pillar {
                 position: fixed; top: 0; left: 0; right: 0; bottom: auto;
                 width: 100%; height: var(--brand-height);
                 flex-direction: row; padding: 0 15px; border-left: none; border-bottom: 1px solid #1a1a1a;
                 background: #000;
             }
+            /* MOBILE HAZARD LINE WITH 45 DEGREE ANGLE */
             .brand-pillar::after {
                 left: 0; right: 0; bottom: 0; top: auto; width: 100%; height: 6px;
-                background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
-                background-size: 24px 100%; animation: pillarHazardMoveHoriz 0.6s linear infinite;
+                background: linear-gradient(45deg, 
+                    var(--hazard-yellow) 25%, #000 25%, 
+                    #000 50%, var(--hazard-yellow) 50%, 
+                    var(--hazard-yellow) 75%, #000 75%, #000);
+                background-size: 20px 20px; 
+                animation: pillarHazardMoveMobile 0.5s linear infinite;
             }
-            @keyframes pillarHazardMoveHoriz { from { background-position: 0 0; } to { background-position: 24px 0; } }
+            @keyframes pillarHazardMoveMobile { from { background-position: 0 0; } to { background-position: 20px 0; } }
+            
             .brand-letter { font-size: 14px; letter-spacing: 2px; transform: scaleY(1.1); font-weight: 900; color: #fff; }
 
             #viewport { padding-right: 0; padding-top: var(--brand-height); height: auto !important; }
@@ -169,7 +186,9 @@
     </div>
 
     <div class="nav-hub" id="main-nav">
+        <div class="wheel-outer-detail"></div>
         <div id="wheel">
+            <div class="wheel-center-hub"><div class="hub-data">MNLTH</div></div>
             <div class="inner-label active" style="--i:0;"><span>01</span></div>
             <div class="inner-label" style="--i:1;"><span>02</span></div>
             <div class="inner-label" style="--i:2;"><span>03</span></div>
