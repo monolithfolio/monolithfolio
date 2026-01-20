@@ -110,28 +110,27 @@
     }
     .social-link:hover { color: #fff; background: rgba(255,255,255,0.02); padding-left: 10px; }
 
-    /* BACK TO TOP BUTTON (Mobile Only) */
+    /* STATIC BACK TO TOP (Mobile) */
+    .mobile-footer { display: none; padding: 40px 25px 80px 25px; width: 100%; }
     #back-to-top {
-        position: fixed; bottom: 25px; right: 25px;
-        width: 50px; height: 50px; background: #fff; color: #000;
-        display: none; align-items: center; justify-content: center;
-        font-family: var(--mono-font); font-size: 16px; font-weight: 900;
-        z-index: 9000; border: none; cursor: pointer;
-        opacity: 0; transition: opacity 0.4s ease;
+        width: 100%; background: #fff; color: #000;
+        padding: 20px; border: none; cursor: pointer;
+        font-family: var(--mono-font); font-size: 12px; font-weight: 900;
+        text-transform: uppercase; letter-spacing: 2px;
     }
 
     /* MOBILE REWORK */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
+        .mobile-footer { display: block; }
         
-        /* BACKDROP: Centered & Properly Scaled */
         .profile-watermark {
             left: 50%; top: 45%; width: 140vw; height: 140vw;
             opacity: 0.12 !important; 
         }
 
-        /* HEADER: ANGLED HAZARD STRIPS */
+        /* ANGLED HAZARD HEADER */
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
             width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
@@ -147,8 +146,7 @@
         @keyframes mobileHazardMove { from { background-position: 0 0; } to { background-position: 42.42px 0; } }
         .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1.5px; }
 
-        /* CONTENT */
-        #viewport { padding: 110px 25px 80px 25px; height: auto; }
+        #viewport { padding: 110px 25px 0 25px; height: auto; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; padding-bottom: 10px; }
         .stable-h1 { font-size: 2.2rem; }
         
@@ -186,8 +184,6 @@
         <div class="brand-letter">O</div><div class="brand-letter">L</div><div class="brand-letter">I</div>
         <div class="brand-letter">T</div><div class="brand-letter">H</div>
     </header>
-
-    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP</button>
 
     <div class="nav-hub">
         <div id="wheel">
@@ -278,6 +274,10 @@
                 </div>
             </section>
         </div>
+        
+        <footer class="mobile-footer">
+            <button id="back-to-top" onclick="document.getElementById('identity').scrollIntoView({behavior: 'smooth'})">Return to Identity</button>
+        </footer>
     </main>
 
 <script>
@@ -285,7 +285,6 @@
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
     const bg = document.getElementById('global-bg');
-    const btt = document.getElementById('back-to-top');
     let isBooted = false;
 
     function runBoot() {
@@ -352,17 +351,7 @@
     } else {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    triggerContent(entry.target);
-                    // Special logic for the Contact section visibility
-                    if(entry.target.id === 'contact') {
-                        btt.style.display = 'flex';
-                        setTimeout(() => btt.style.opacity = "1", 10);
-                    } else {
-                        // Only hide if we aren't seeing Contact anymore
-                        // (Optional: leave it once it appears)
-                    }
-                }
+                if(entry.isIntersecting) triggerContent(entry.target);
             });
         }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
