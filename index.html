@@ -110,41 +110,42 @@
     }
     .social-link:hover { color: #fff; background: rgba(255,255,255,0.02); padding-left: 10px; }
 
-    /* BACK TO TOP BUTTON (Mobile Only Hidden by Default) */
+    /* BACK TO TOP BUTTON (Mobile Only) */
     #back-to-top {
         position: fixed; bottom: 25px; right: 25px;
-        width: 45px; height: 45px; background: #fff; color: #000;
+        width: 50px; height: 50px; background: #fff; color: #000;
         display: none; align-items: center; justify-content: center;
-        font-family: var(--mono-font); font-size: 14px; font-weight: 900;
+        font-family: var(--mono-font); font-size: 16px; font-weight: 900;
         z-index: 9000; border: none; cursor: pointer;
+        opacity: 0; transition: opacity 0.4s ease;
     }
 
     /* MOBILE REWORK */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
-        #back-to-top { display: flex; }
         
-        /* BACKDROP: Centered & Properly Scaled (140%) */
+        /* BACKDROP: Centered & Properly Scaled */
         .profile-watermark {
             left: 50%; top: 45%; width: 140vw; height: 140vw;
             opacity: 0.12 !important; 
         }
 
-        /* HEADER: FIXED & HAZARD REWORK */
+        /* HEADER: ANGLED HAZARD STRIPS */
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
             width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
-            background: #050505; border: none !important; z-index: 10000;
-            justify-content: center; gap: 8px;
+            background: #000; border: none !important; z-index: 10000;
+            justify-content: center; gap: 6px;
         }
         .brand-pillar::after {
             content: ""; position: absolute; left: 0; bottom: 0; top: auto;
-            width: 100%; height: 6px; 
-            background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 20px, #000 20px, #000 40px);
-            animation: pillarHazardMove 2s linear infinite;
+            width: 100%; height: 8px; 
+            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
+            animation: mobileHazardMove 1.5s linear infinite;
         }
-        .brand-letter { font-size: 14px; transform: none; color: #fff; letter-spacing: 2px; }
+        @keyframes mobileHazardMove { from { background-position: 0 0; } to { background-position: 42.42px 0; } }
+        .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1.5px; }
 
         /* CONTENT */
         #viewport { padding: 110px 25px 80px 25px; height: auto; }
@@ -186,7 +187,7 @@
         <div class="brand-letter">T</div><div class="brand-letter">H</div>
     </header>
 
-    <button id="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP</button>
 
     <div class="nav-hub">
         <div id="wheel">
@@ -284,6 +285,7 @@
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
     const bg = document.getElementById('global-bg');
+    const btt = document.getElementById('back-to-top');
     let isBooted = false;
 
     function runBoot() {
@@ -350,17 +352,20 @@
     } else {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) triggerContent(entry.target);
+                if(entry.isIntersecting) {
+                    triggerContent(entry.target);
+                    // Special logic for the Contact section visibility
+                    if(entry.target.id === 'contact') {
+                        btt.style.display = 'flex';
+                        setTimeout(() => btt.style.opacity = "1", 10);
+                    } else {
+                        // Only hide if we aren't seeing Contact anymore
+                        // (Optional: leave it once it appears)
+                    }
+                }
             });
         }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
-
-        // Back to top visibility logic
-        const btt = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => {
-            btt.style.opacity = window.scrollY > 500 ? "1" : "0";
-            btt.style.pointerEvents = window.scrollY > 500 ? "all" : "none";
-        });
     }
 
     window.addEventListener('mousedown', exitPreloader);
