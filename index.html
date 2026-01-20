@@ -24,7 +24,7 @@
     html { scroll-behavior: smooth; }
     * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    body { overflow-y: hidden; } /* Overridden in mobile media query */
+    body { overflow-y: hidden; }
 
     #cursor-main { 
         position: fixed; width: 12px; height: 12px; border: 1px solid #fff; 
@@ -45,12 +45,6 @@
     @keyframes blinker { 50% { opacity: 0; } }
     #preloader.exit { opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.87, 0, 0.13, 1); }
 
-    /* ANIMATIONS */
-    @keyframes atmosphericEntry {
-        0% { opacity: 0; filter: grayscale(1) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
-        100% { opacity: 0.28; filter: grayscale(1) blur(0px); transform: translate(-50%, -50%) scale(1); }
-    }
-
     /* BACKDROP IMAGE */
     .profile-watermark {
         position: fixed;
@@ -65,11 +59,16 @@
         -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
         mask-image: radial-gradient(circle, black 30%, transparent 80%);
     }
-    .profile-watermark.booted { animation: atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .profile-watermark.booted {
+        animation: atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes atmosphericEntry {
+        0% { opacity: 0; filter: grayscale(1) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
+        100% { opacity: 0.28; filter: grayscale(1) blur(0px); transform: translate(-50%, -50%) scale(1); }
+    }
     .profile-watermark img { width: 100%; height: 100%; object-fit: cover; }
-    body.on-contact .profile-watermark { opacity: 0 !important; transition: 0.5s; }
 
-    /* PILLAR / NAV */
+    /* DESKTOP PILLAR */
     .brand-pillar {
         position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
         background: #080808; border-left: 1px solid #1a1a1a;
@@ -77,32 +76,23 @@
         padding: 40px 0; z-index: 5000;
     }
     .brand-pillar::after {
-        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
-        background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
-        background-size: 100% 28.28px; animation: pillarHazardMove 0.8s linear infinite;
+        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; /* Thicker */
+        background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
+        animation: pillarHazardMove 0.8s linear infinite;
     }
-    @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 28.28px; } }
+    @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 33.94px; } }
     .brand-letter { font-family: var(--title-font); font-weight: 800; font-size: 48px; color: #7e7c7c; line-height: 0.8; transform: scaleY(1.4); }
 
-    .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
-    #wheel { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
-    .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
-    .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; color: rgba(255,255,255,0.1); display: block; }
-    .inner-label.active span { color: #fff; transform: scale(1.6); }
-
-    /* LAYOUT */
-    #viewport { 
-        width: 100%; height: 100vh; position: relative; z-index: 10; 
-        padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap)); 
-    }
+    /* VIEWPORT */
+    #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap)); }
     .text-frame { margin-left: 0; height: 100%; width: 100%; position: relative; z-index: 5; }
-    .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s; transform: translateY(20px); }
+    .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); }
     .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
 
     /* CONTENT STYLING */
     .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
     .content-layout { display: grid; grid-template-columns: 80px 1fr 0.8fr; gap: 15px; width: 100%; max-width: 1100px; }
-    .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; border-right: 1px solid #222; padding-right: 15px; line-height: 2.2; }
+    .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; text-transform: uppercase; line-height: 2.2; border-right: 1px solid #222; padding-right: 15px; }
     .side-info b { color: #888; display: block; margin-bottom: 8px; }
     .desc-container { padding-left: 10px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
     .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; line-height: 0.9; text-transform: uppercase; }
@@ -111,68 +101,53 @@
     .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
     .skill-bar-container { height: 10px; width: 100%; border: 1px solid #222; margin-top: 8px; background: #080808; overflow: hidden; }
     .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); transition: width 1.5s ease; }
-    .social-link { font-family: var(--mono-font); font-size: 10px; color: #444; text-decoration: none; display: block; margin-bottom: 15px; font-weight: 700; transition: 0.3s; }
-    .social-link:hover { color: #fff; transform: translateX(5px); }
 
-    /* --- REWORKED MOBILE STYLES (UNDER 768PX) --- */
+    /* MOBILE REWORK */
     @media (max-width: 768px) {
-        body { overflow-y: auto; overflow-x: hidden; }
-        
-        /* Cursor & Wheel Nav Hidden on Mobile */
+        body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
+        
+        /* BACKDROP: Centered and Larger */
+        .profile-watermark {
+            left: 50%; top: 40%; width: 110vw; height: 110vw;
+            opacity: 0.12 !important; 
+        }
 
-        /* Header becomes a horizontal top-bar */
+        /* HEADER: Thicker Hazard Bar with Angles */
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-            width: 100%; height: 60px; flex-direction: row; 
-            padding: 0 20px; background: #000; border-left: none; 
-            border-bottom: 1px solid #1a1a1a;
+            width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
+            background: #000; border-left: none; border-bottom: 1px solid #1a1a1a;
         }
         .brand-pillar::after {
-            left: 0; top: auto; bottom: 0; width: 100%; height: 4px;
-            background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
-            background-size: 28.28px 100%;
+            left: 0; top: auto; bottom: 0; width: 100%; height: 8px; /* Thicker */
+            background: repeating-linear-gradient(135deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
         }
-        .brand-letter { font-size: 20px; transform: none; letter-spacing: 2px; }
+        .brand-letter { font-size: 18px; transform: none; color: #555; }
 
-        /* Viewport adjustment for vertical scrolling */
-        #viewport { padding: 80px 20px 40px 20px; height: auto; }
+        /* CONTENT: Reduced sizes to prevent congestion */
+        #viewport { padding: 90px 20px 40px 20px; height: auto; }
+        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 60px; padding-bottom: 30px; }
+        .stable-h1 { font-size: 2.2rem; } /* Perfected Heading Size */
+        .scramble-h2 { font-size: 0.55rem; letter-spacing: 3px; }
         
-        .text-frame { margin-left: 0; width: 100%; }
-
-        /* Slides act as vertical sections */
-        .slide {
-            position: relative !important; opacity: 1 !important; 
-            visibility: visible !important; transform: none !important;
-            margin-bottom: 100px; border-bottom: 1px solid #111;
-            padding-bottom: 40px;
+        .content-layout { grid-template-columns: 1fr; gap: 15px; }
+        .side-info { 
+            display: flex; gap: 15px; border-right: none; border-bottom: 1px solid #111; 
+            padding-right: 0; padding-bottom: 8px; line-height: 1; 
         }
-
-        .slide-header { height: auto; margin-bottom: 25px; }
-        .stable-h1 { font-size: 3rem; }
-
-        /* Mobile Grid Layout: Stack side info and description */
-        .content-layout {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        .side-info {
-            display: flex; gap: 20px; border-right: none; 
-            border-bottom: 1px solid #222; padding-right: 0; 
-            padding-bottom: 10px;
-        }
-        .side-info span { display: flex; align-items: center; gap: 5px; }
-        .desc-container { padding-left: 0; font-size: 13px; }
-
-        .skills-grid { grid-template-columns: 1fr; }
-
-        /* Watermark Background: Subtle and centered for mobile */
-        .profile-watermark {
-            width: 300px; height: 300px;
-            left: 50%; top: 30%;
-            opacity: 0.15 !important;
-        }
+        .side-info span { display: flex; align-items: center; gap: 4px; font-size: 7px; }
+        .side-info b { margin-bottom: 0; }
+        
+        .desc-container { padding-left: 0; font-size: 10px; line-height: 1.6; }
+        .skills-grid { gap: 10px; }
     }
+
+    .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
+    #wheel { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
+    .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
+    .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; color: rgba(255,255,255,0.1); display: block; }
+    .inner-label.active span { color: #fff; transform: scale(1.6); }
     </style>
 </head>
 <body>
@@ -315,9 +290,6 @@
         const s = slide.querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
         const b = slide.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
         slide.querySelectorAll('.skill-pole-fill').forEach(bar => bar.style.width = bar.dataset.level);
-        
-        if (slide.id === 'contact') document.body.classList.add('on-contact');
-        else document.body.classList.remove('on-contact');
     }
 
     function scramble(el, txt) {
@@ -329,10 +301,9 @@
             el.innerText = txt.split("").map((l, idx) => idx < i ? txt[idx] : "X0$#"[Math.floor(Math.random()*4)]).join("");
             if (i >= txt.length) clearInterval(el.itv);
             i += txt.length / 10;
-        }, 40);
+        }, 30);
     }
 
-    // Scroll handling
     if(!isMobile) {
         let lastIdx = 0;
         window.onwheel = e => {
@@ -355,14 +326,11 @@
             }
         };
     } else {
-        // Intersection Observer for mobile scrolling
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    triggerContent(entry.target);
-                }
+                if(entry.isIntersecting) triggerContent(entry.target);
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
     }
 
