@@ -93,7 +93,7 @@
     .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; line-height: 0.9; text-transform: uppercase; }
     .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; letter-spacing: 5px; margin-top: 5px;}
 
-    /* SKILLS GRID */
+    /* DESKTOP SKILLS GRID (2 Columns) */
     .skills-grid { 
         display: grid; 
         grid-template-columns: repeat(2, 1fr); 
@@ -136,36 +136,62 @@
         .profile-watermark { left: 50%; top: 45%; width: 140vw; height: 140vw; opacity: 0.12 !important; }
 
         .brand-pillar {
-            position: fixed; top: 0; left: auto; right: 0; bottom: 0;
-            width: 40px; height: 100vh; flex-direction: column; padding: 20px 0;
-            background: #080808; border-left: 1px solid #1a1a1a !important; z-index: 10000;
-            justify-content: space-between; gap: 0;
+            position: fixed; top: 0; left: 0; right: 0; bottom: auto;
+            width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
+            background: #000; border: none !important; z-index: 10000;
+            justify-content: center; gap: 6px;
         }
         .brand-pillar::after {
-            width: 4px; height: 100%; 
-            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 8px, #000 8px, #000 16px);
-            background-size: 12px 12px;
-            animation: pillarHazardMove 0.8s linear infinite;
+            content: ""; position: absolute; left: 0; bottom: 0; top: auto;
+            width: 100%; height: 8px; 
+            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
+            animation: mobileHazardMove 1.5s linear infinite;
         }
-        .brand-letter { font-size: 10px; transform: scaleY(1.2); color: #7e7c7c; }
+        @keyframes mobileHazardMove { from { background-position: 0 0; } to { background-position: 42.42px 0; } }
+        .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1.5px; }
 
-        #viewport { padding: 40px 60px 0 20px; height: auto; }
+        #viewport { padding: 110px 25px 0 25px; height: auto; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; }
         .stable-h1 { font-size: 2.2rem; }
         
-        .desc-container, .scramble-body, .slide .desc-container * { 
-            font-size: 10px !important; line-height: 1.6 !important; color: #888 !important;
+        /* 10PX MOBILE TEXT STYLES */
+        .desc-container, 
+        .scramble-body, 
+        .slide .desc-container *,
+        #identity .scramble-body, 
+        #works .scramble-body { 
+            font-size: 10px !important; 
+            line-height: 1.6 !important; 
+            color: #888 !important;
+            padding: 0 !important;
+            display: block !important;
+            width: 100% !important;
+            font-family: var(--mono-font) !important;
+            -webkit-text-size-adjust: none !important;
+            text-size-adjust: none !important;
         }
 
+        /* MOBILE GRID: 3 COLUMNS, 2 ROWS */
         .skills-grid { 
-            grid-template-columns: 1fr !important; gap: 15px !important; 
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important; 
+            gap: 10px !important; 
+            margin-top: 20px !important; 
+            padding-top: 15px !important;
         }
-        .skill-pole-fill { 
-            background-size: 17px 17px; /* Fix for big yellow blocks */
-        }
+        .skill-icon-wrap { gap: 5px !important; flex-direction: column; align-items: flex-start; }
+        .skill-icon-wrap span { font-size: 7px !important; letter-spacing: 0; }
+        .tech-icon { width: 14px !important; height: 14px !important; }
+        .skill-bar-container { height: 3px !important; border: none !important; background: #111 !important; }
 
-        .side-info { display: none; }
+        .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 8px; }
+        .side-info span { font-size: 7px; color: #444; border-right: 1px solid #222; padding-right: 10px; }
+        
         .content-layout { grid-template-columns: 1fr; gap: 12px; }
+        .social-link { font-size: 9px; padding: 20px 0; }
+        
+        form input, form textarea { font-size: 10px !important; padding: 12px !important; margin-bottom: 8px !important; }
+        form button { font-size: 10px !important; padding: 14px !important; }
     }
 
     /* WHEEL NAVIGATION */
