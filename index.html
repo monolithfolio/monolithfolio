@@ -327,11 +327,11 @@ body, html {
         if (!isBooted) return;
         
         preloader.classList.add('exit');
-        if(isMobile) window.scrollTo(0, 0); // Strictly ensure start at top
+        if(isMobile) window.scrollTo(0, 0); 
 
         setTimeout(() => {
             preloader.style.display = 'none';
-            // Start animations for the first section
+            // Trigger content for first section
             const s = slides[0].querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
             const b = slides[0].querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
             triggerSkills();
@@ -360,7 +360,7 @@ body, html {
             }
         };
     } else {
-        // Mobile Simple Scramble on Scroll
+        // Mobile Simple content trigger on Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -378,6 +378,13 @@ body, html {
 
     function scramble(el, txt) {
         if (!el || !txt) return; 
+
+        // IF MOBILE: Just set the text immediately and skip the animation
+        if (isMobile) {
+            el.innerText = txt;
+            return;
+        }
+
         let i = 0; 
         clearInterval(el.itv);
         el.itv = setInterval(() => {
@@ -393,7 +400,6 @@ body, html {
     window.addEventListener('touchstart', exitPreloader);
     window.addEventListener('load', runBoot);
 
-    // Mouse Tracking (Desktop Only)
     if(!isMobile) {
         const cursor = document.getElementById('cursor-main');
         window.addEventListener('mousemove', (e) => {
