@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +33,7 @@
         mix-blend-mode: difference; transition: width 0.3s; border-radius: 50%; 
     }
 
+    /* PRELOADER */
     #preloader { position: fixed; inset: 0; z-index: 30000; background: #000; display: flex; align-items: center; justify-content: center; }
     .terminal-loader { width: 90%; max-width: 450px; padding: 20px; font-family: var(--mono-font); }
     .term-header { display: flex; justify-content: space-between; color: #333; font-size: 9px; margin-bottom: 20px; border-bottom: 1px solid #111; padding-bottom: 5px; }
@@ -44,6 +46,55 @@
     @keyframes blinker { 50% { opacity: 0; } }
     #preloader.exit { opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.87, 0, 0.13, 1); }
 
+    /* DUST ENTRY ANIMATION */
+    @keyframes atmosphericEntry {
+        0% { 
+            opacity: 0; 
+            filter: grayscale(1) blur(40px) brightness(0.5);
+            transform: translate(-48%, -52%) scale(1.1);
+        }
+        100% { 
+            opacity: 0.28; 
+            filter: grayscale(1) blur(0px) brightness(1);
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    /* SUBTLE FLOATING MOTION */
+    @keyframes dustDrift {
+        0%, 100% { transform: translate(-50%, -50%); }
+        50% { transform: translate(-51%, -49%); }
+    }
+
+    .profile-watermark {
+        position: fixed;
+        top: 50%;
+        left: 70%; /* Deep right anchor */
+        transform: translate(-50%, -50%);
+        width: 700px;
+        height: 700px;
+        z-index: 0;
+        opacity: 0;
+        pointer-events: none;
+        /* Grainy mask to soften edges */
+        -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
+        mask-image: radial-gradient(circle, black 30%, transparent 80%);
+    }
+    
+    /* Triggered via JS after preloader */
+    .profile-watermark.booted {
+        animation: 
+            atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+            dustDrift 12s ease-in-out infinite 3s; /* Starts drifting after reveal */
+    }
+
+    .profile-watermark img {
+        width: 100%; height: 100%; object-fit: cover;
+    }
+    
+    body.on-contact .profile-watermark { opacity: 0 !important; transition: 0.5s; }
+
+    /* LAYOUT & PILLAR */
     .brand-pillar {
         position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
         background: #080808; border-left: 1px solid #1a1a1a;
@@ -64,30 +115,10 @@
     .slide { 
         position: absolute; opacity: 0; visibility: hidden; width: 100%; 
         transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); 
-        scroll-margin-top: 80px; 
     }
     .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
-    
-    /* UPDATED WATERMARK POSITIONING */
-    .profile-watermark {
-        position: fixed;
-        top: 50%;
-        left: 65%; /* Moved further right */
-        transform: translate(-50%, -50%);
-        width: 600px; /* Bigger scale */
-        height: 600px;
-        z-index: 0; /* Behind everything including headings */
-        opacity: 0.25;
-        pointer-events: none;
-        transition: opacity 0.8s ease;
-    }
-    .profile-watermark img {
-        width: 100%; height: 100%; object-fit: cover;
-        filter: grayscale(1) contrast(1.1);
-    }
-    
-    body.on-contact .profile-watermark { opacity: 0; }
 
+    /* CONTENT STYLING */
     .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; position: relative; z-index: 10; }
     .content-layout { display: grid; grid-template-columns: 120px 1fr 0.8fr; gap: 40px; width: 100%; max-width: 1100px; position: relative; z-index: 10; }
     .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; text-transform: uppercase; line-height: 2.2; border-right: 1px solid #111; padding-right: 20px; }
@@ -104,24 +135,14 @@
     .social-link { font-family: var(--mono-font); font-size: 10px; color: #444; text-decoration: none; display: block; margin-bottom: 15px; font-weight: 700; transition: 0.3s; }
     .social-link:hover { color: #fff; transform: translateX(5px); }
 
-    #mobile-top-btn { display: none; }
-
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
         .brand-pillar { position: fixed; top: 0; left: 0; right: 0; bottom: auto; width: 100%; height: 60px; flex-direction: row; padding: 0 20px; background: #000; border-left: none; border-bottom: 1px solid #1a1a1a; }
-        .brand-pillar::after { top: auto; bottom: 0; width: 100%; height: 4px; background-size: 28.28px 28.28px; }
-        .brand-letter { font-size: 12px; transform: none; color: #fff; letter-spacing: 1px; }
         #viewport { padding-right: 0; padding-top: 60px; height: auto; }
         .text-frame { margin-left: 0; width: 100%; padding: 0 25px; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 120px; padding-top: 40px; }
-        .slide-header { height: auto; margin-bottom: 25px; }
-        .content-layout { display: flex; flex-direction: column; gap: 20px; }
-        .side-info { border-right: none; border-bottom: 1px solid #111; padding: 0 0 10px 0; width: 100%; display: flex; gap: 20px; }
-        .desc-container { padding-left: 0; }
-        /* Mobile Watermark positioning */
-        .profile-watermark { position: absolute; width: 350px; height: 350px; top: 100px; left: 60%; transform: translateX(-50%); opacity: 0.2; }
-        #mobile-top-btn { display: block; width: 100%; text-align: center; padding: 60px 0; color: var(--hazard-yellow); font-family: var(--mono-font); font-size: 10px; letter-spacing: 3px; cursor: pointer; text-decoration: none; }
+        .profile-watermark { position: absolute; width: 400px; height: 400px; top: 120px; left: 70%; opacity: 0.2; }
     }
 
     .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
@@ -160,13 +181,12 @@
         </div>
     </div>
 
-    <div class="profile-watermark">
+    <div class="profile-watermark" id="global-bg">
         <img src="profile.jpeg" alt="Backdrop">
     </div>
 
     <main id="viewport">
         <div class="text-frame">
-
             <section class="slide active" id="identity">
                 <div class="slide-header">
                     <h1 class="stable-h1">IDENTITY.</h1>
@@ -233,7 +253,6 @@
                             <textarea placeholder="MESSAGE_DATA" rows="4" style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 15px;"></textarea>
                             <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%;">SEND_TRANSMISSION</button>
                         </form>
-                        <a href="#identity" id="mobile-top-btn">[ BACK_TO_TOP ]</a>
                     </div>
                 </div>
             </section>
@@ -244,6 +263,7 @@
     const isMobile = window.innerWidth <= 768;
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
+    const bg = document.getElementById('global-bg');
     let isBooted = false;
 
     function runBoot() {
@@ -261,7 +281,9 @@
     function exitPreloader() {
         if (!isBooted) return;
         document.getElementById('preloader').classList.add('exit');
+        // Trigger Dust Entry
         setTimeout(() => {
+            bg.classList.add('booted');
             document.getElementById('preloader').style.display = 'none';
             triggerContent(slides[0]);
         }, 800);
