@@ -136,18 +136,21 @@
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; }
         .stable-h1 { font-size: 2.2rem; }
         
-        /* 10PX TARGET FOR ALL MOBILE PARAGRAPHS - FORCED */
+        /* STRICT 10PX OVERRIDE FOR IDENTITY, WORKS, AND ALL OTHER SECTIONS */
         .desc-container, 
         .scramble-body, 
         #identity .scramble-body, 
         #works .scramble-body,
         #stack .scramble-body,
-        #void .scramble-body { 
+        #void .scramble-body,
+        #contact .scramble-body { 
             font-size: 10px !important; 
             line-height: 1.6 !important; 
             color: #888 !important;
             padding: 0 !important;
-            display: block;
+            display: block !important;
+            width: 100% !important;
+            font-family: var(--mono-font) !important;
         }
 
         .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 8px; }
