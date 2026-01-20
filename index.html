@@ -72,12 +72,6 @@
         display: flex; flex-direction: column; justify-content: space-between; align-items: center;
         padding: 40px 0; z-index: 5000; height: 100vh;
     }
-    .brand-pillar::after {
-        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
-        background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
-        animation: pillarHazardMove 0.8s linear infinite;
-    }
-    @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 33.94px; } }
     .brand-letter { font-family: var(--title-font); font-weight: 800; font-size: 48px; color: #7e7c7c; line-height: 0.8; transform: scaleY(1.4); }
 
     /* VIEWPORT & CONTENT */
@@ -93,32 +87,37 @@
     .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; line-height: 0.9; text-transform: uppercase; }
     .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; letter-spacing: 5px; margin-top: 5px;}
 
-    /* SKILLS MATRIX LOGIC */
+    /* REFINED SKILLS MATRIX - FIX FOR MOBILE YELLOW BLOCKS */
     .skills-matrix {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 25px 40px;
+        gap: 30px 20px;
         margin-top: 30px;
         border-top: 1px solid #111;
-        padding-top: 20px;
+        padding-top: 25px;
     }
-    .matrix-item { display: flex; align-items: center; gap: 12px; }
-    .bit-stack { display: flex; gap: 2px; }
+    .matrix-item { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .bit-stack { display: flex; gap: 2px; flex-wrap: nowrap; align-items: center; }
     .bit {
-        width: 5px; height: 12px;
-        background: #111; border: 1px solid #222;
-        transition: background 0.4s ease, border-color 0.4s ease;
+        width: 4px; 
+        height: 10px;
+        background: #111; 
+        border: 1px solid #222;
+        flex-shrink: 0; /* Prevents stretching into big blocks */
+        transition: background 0.3s ease;
     }
     .bit.active {
         background: var(--hazard-yellow);
         border-color: var(--hazard-yellow);
     }
     .skill-label {
-        font-family: var(--mono-font); font-size: 10px;
-        letter-spacing: 1px; color: #eee;
+        font-family: var(--mono-font); 
+        font-size: 9px;
+        letter-spacing: 2px; 
+        color: #555;
+        text-transform: uppercase;
     }
 
-    .work-link-wrapper { margin-top: 20px; border-top: 1px solid #111; }
     .social-link { 
         font-family: var(--mono-font); font-size: 10px; color: #666; 
         text-decoration: none; display: flex; justify-content: space-between;
@@ -136,63 +135,38 @@
         opacity: 0.6; transition: opacity 0.3s;
     }
 
-    /* MOBILE OVERRIDES */
+    /* MOBILE OVERRIDES - CRITICAL FIXES */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
         .mobile-footer { display: block; }
         
-        .profile-watermark { left: 50%; top: 45%; width: 140vw; height: 140vw; opacity: 0.12 !important; }
-
-        .brand-pillar {
-            position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-            width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
-            background: #000; border: none !important; z-index: 10000;
-            justify-content: center; gap: 6px;
-        }
-        .brand-pillar::after {
-            content: ""; position: absolute; left: 0; bottom: 0; top: auto;
-            width: 100%; height: 8px; 
-            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
-            animation: mobileHazardMove 1.5s linear infinite;
-        }
-        @keyframes mobileHazardMove { from { background-position: 0 0; } to { background-position: 42.42px 0; } }
-        .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1.5px; }
-
-        #viewport { padding: 110px 25px 0 25px; height: auto; }
-        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; }
-        .stable-h1 { font-size: 2.2rem; }
+        #viewport { padding: 110px 20px 0 20px; height: auto; }
+        .brand-pillar { height: 60px; position: fixed; width: 100%; top: 0; padding: 0 15px; flex-direction: row; border: none; }
         
-        .desc-container, 
-        .scramble-body, 
-        .slide .desc-container *,
-        #identity .scramble-body, 
-        #works .scramble-body { 
+        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 80px; }
+        .stable-h1 { font-size: 2rem; }
+
+        /* Ensuring text stays at 10px and doesn't warp layout */
+        .desc-container, .scramble-body, .skill-label { 
             font-size: 10px !important; 
             line-height: 1.6 !important; 
-            color: #888 !important;
-            padding: 0 !important;
-            display: block !important;
-            width: 100% !important;
-            font-family: var(--mono-font) !important;
-            -webkit-text-size-adjust: none !important;
-            text-size-adjust: none !important;
         }
 
-        .skills-matrix { grid-template-columns: 1fr 1fr; gap: 15px 10px; }
-        .bit { width: 4px; height: 10px; }
+        .skills-matrix { 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px 10px; 
+        }
+        
+        .bit { 
+            width: 3px; 
+            height: 8px; 
+        }
 
-        .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 8px; }
-        .side-info span { font-size: 7px; color: #444; border-right: 1px solid #222; padding-right: 10px; }
-        
-        .content-layout { grid-template-columns: 1fr; gap: 12px; }
-        .social-link { font-size: 9px; padding: 20px 0; }
-        
-        form input, form textarea { font-size: 10px !important; padding: 12px !important; margin-bottom: 8px !important; }
-        form button { font-size: 10px !important; padding: 14px !important; }
+        .content-layout { grid-template-columns: 1fr; }
+        .side-info { display: none; }
     }
 
-    /* WHEEL NAVIGATION */
     .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
     #wheel { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
     .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
@@ -247,40 +221,40 @@
                         
                         <div class="skills-matrix">
                             <div class="matrix-item">
-                                <div class="bit-stack" data-value="9">
-                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
-                                </div>
                                 <div class="skill-label">JS_CORE</div>
-                            </div>
-                            <div class="matrix-item">
-                                <div class="bit-stack" data-value="8">
-                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
-                                </div>
-                                <div class="skill-label">REACT_OS</div>
-                            </div>
-                            <div class="matrix-item">
-                                <div class="bit-stack" data-value="8">
-                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
-                                </div>
-                                <div class="skill-label">GL_RENDER</div>
-                            </div>
-                            <div class="matrix-item">
                                 <div class="bit-stack" data-value="9">
                                     <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
                                 </div>
-                                <div class="skill-label">ANIM_SYNC</div>
                             </div>
                             <div class="matrix-item">
+                                <div class="skill-label">REACT_OS</div>
+                                <div class="bit-stack" data-value="8">
+                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
+                                </div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="skill-label">GL_RENDER</div>
+                                <div class="bit-stack" data-value="8">
+                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
+                                </div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="skill-label">ANIM_SYNC</div>
+                                <div class="bit-stack" data-value="9">
+                                    <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
+                                </div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="skill-label">NODE_BASE</div>
                                 <div class="bit-stack" data-value="7">
                                     <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
                                 </div>
-                                <div class="skill-label">NODE_BASE</div>
                             </div>
                             <div class="matrix-item">
+                                <div class="skill-label">VER_CNTRL</div>
                                 <div class="bit-stack" data-value="9">
                                     <div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div><div class="bit"></div>
                                 </div>
-                                <div class="skill-label">VER_CNTRL</div>
                             </div>
                         </div>
                     </div>
@@ -345,7 +319,7 @@
         </div>
         
         <footer class="mobile-footer">
-            <button id="back-to-top" onclick="document.getElementById('identity').scrollIntoView({behavior: 'smooth'})">[REINITIALIZE]</button>
+            <button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">[REINITIALIZE]</button>
         </footer>
     </main>
 
@@ -382,15 +356,12 @@
         const s = slide.querySelector('.scramble-h2'); scramble(s, s.dataset.orig);
         const b = slide.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
         
-        // TRIGGER BIT ANIMATION
         slide.querySelectorAll('.bit-stack').forEach(stack => {
             const val = parseInt(stack.dataset.value);
             const bits = stack.querySelectorAll('.bit');
             bits.forEach((bit, i) => {
                 bit.classList.remove('active');
-                setTimeout(() => {
-                    if(i < val) bit.classList.add('active');
-                }, i * 40);
+                setTimeout(() => { if(i < val) bit.classList.add('active'); }, i * 40);
             });
         });
     }
@@ -430,9 +401,7 @@
         };
     } else {
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) triggerContent(entry.target);
-            });
+            entries.forEach(entry => { if(entry.isIntersecting) triggerContent(entry.target); });
         }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
     }
