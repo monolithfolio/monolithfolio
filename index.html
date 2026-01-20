@@ -93,20 +93,18 @@
     .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; line-height: 0.9; text-transform: uppercase; }
     .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; letter-spacing: 5px; margin-top: 5px;}
 
-    /* THE SKILLS GRID - FIXED 3x2 */
+    /* SPECIFIC SKILLS GRID ALIGNMENT */
     .skills-grid { 
         display: grid; 
         grid-template-columns: 1fr 1fr; 
-        grid-template-rows: repeat(3, auto);
-        gap: 30px 20px; 
-        margin-top: 30px; 
+        gap: 25px 40px; 
+        margin-top: 25px; 
         border-top: 1px solid #111; 
-        padding-top: 25px; 
+        padding-top: 20px; 
     }
-    .skill-item { display: flex; flex-direction: column; gap: 10px; }
-    .skill-icon-wrap { display: flex; align-items: center; gap: 12px; }
-    .tech-icon { width: 16px; height: 16px; filter: grayscale(1) brightness(0.8); }
-    .skill-label { font-size: 10px; letter-spacing: 1px; color: #eee; }
+    .skill-item { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .skill-icon-wrap { display: flex; align-items: center; gap: 10px; }
+    .tech-icon { width: 16px; height: 16px; filter: grayscale(1) brightness(0.8); flex-shrink: 0; }
     
     .skill-bar-container { height: 6px; width: 100%; border: 1px solid #222; background: #080808; overflow: hidden; }
     .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); transition: width 1.5s ease; }
@@ -119,7 +117,7 @@
         text-transform: uppercase; letter-spacing: 1px;
     }
 
-    /* FOOTER */
+    /* FOOTER BUTTON */
     .mobile-footer { display: none; padding: 60px 25px 100px 25px; width: 100%; text-align: center; }
     #back-to-top {
         background: transparent; color: var(--text-main);
@@ -135,22 +133,32 @@
         #cursor-main, .nav-hub { display: none !important; }
         .mobile-footer { display: block; }
         
+        .profile-watermark { left: 50%; top: 45%; width: 140vw; height: 140vw; opacity: 0.12 !important; }
+
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
             width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
             background: #000; border: none !important; z-index: 10000;
             justify-content: center; gap: 6px;
         }
+        .brand-pillar::after {
+            content: ""; position: absolute; left: 0; bottom: 0; top: auto;
+            width: 100%; height: 8px; 
+            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
+            animation: mobileHazardMove 1.5s linear infinite;
+        }
+        @keyframes mobileHazardMove { from { background-position: 0 0; } to { background-position: 42.42px 0; } }
+        .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1.5px; }
 
         #viewport { padding: 110px 25px 0 25px; height: auto; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; }
         .stable-h1 { font-size: 2.2rem; }
         
-        /* 10PX MOBILE TEXT STYLES */
         .desc-container, 
         .scramble-body, 
         .slide .desc-container *,
-        .skill-label { 
+        #identity .scramble-body, 
+        #works .scramble-body { 
             font-size: 10px !important; 
             line-height: 1.6 !important; 
             color: #888 !important;
@@ -162,17 +170,18 @@
             text-size-adjust: none !important;
         }
 
-        .skills-grid { 
-            grid-template-columns: 1fr 1fr; 
-            gap: 25px 15px; 
-            margin-top: 25px; 
-        }
-        .tech-icon { width: 14px; height: 14px; }
+        .skills-grid { grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .tech-icon { width: 12px; height: 12px; }
         .skill-bar-container { height: 4px; }
 
         .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 8px; }
         .side-info span { font-size: 7px; color: #444; border-right: 1px solid #222; padding-right: 10px; }
+        
         .content-layout { grid-template-columns: 1fr; gap: 12px; }
+        .social-link { font-size: 9px; padding: 20px 0; }
+        
+        form input, form textarea { font-size: 10px !important; padding: 12px !important; margin-bottom: 8px !important; }
+        form button { font-size: 10px !important; padding: 14px !important; }
     }
 
     /* WHEEL NAVIGATION */
@@ -230,29 +239,29 @@
                         
                         <div class="skills-grid">
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/javascript/eeeeee" alt="JS"><span class="skill-label">JS_CORE</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/javascript/eeeeee" alt="JS"><span>JS_CORE</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="95%"></div></div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/react/eeeeee" alt="React"><span class="skill-label">REACT_OS</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/react/eeeeee" alt="React"><span>REACT_OS</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="90%"></div></div>
                             </div>
 
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/threedotjs/eeeeee" alt="ThreeJS"><span class="skill-label">GL_RENDER</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/threedotjs/eeeeee" alt="ThreeJS"><span>GL_RENDER</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="85%"></div></div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/greensock/eeeeee" alt="GSAP"><span class="skill-label">ANIM_SYNC</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/greensock/eeeeee" alt="GSAP"><span>ANIM_SYNC</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="88%"></div></div>
                             </div>
 
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs/eeeeee" alt="Node"><span class="skill-label">NODE_BASE</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs/eeeeee" alt="Node"><span>NODE_BASE</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="82%"></div></div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/git/eeeeee" alt="Git"><span class="skill-label">VER_CNTRL</span></div>
+                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/git/eeeeee" alt="Git"><span>VER_CNTRL</span></div>
                                 <div class="skill-bar-container"><div class="skill-pole-fill" data-level="92%"></div></div>
                             </div>
                         </div>
