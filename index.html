@@ -21,10 +21,10 @@
         --header-height: 180px;
     }
 
-    * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-
-    /* Force smooth scrolling for anchor jumps */
+    /* Enables smooth sliding when clicking the Back to Top button */
     html { scroll-behavior: smooth; }
+
+    * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
     body, html { 
         margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -33,7 +33,6 @@
         overflow-x: hidden;
     }
 
-    /* Desktop starts locked, Mobile is auto */
     body { overflow-y: hidden; }
 
     #cursor-main { 
@@ -58,7 +57,6 @@
     @keyframes blinker { 50% { opacity: 0; } }
     #preloader.exit { opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.87, 0, 0.13, 1); }
 
-    /* --- BRAND PILLAR --- */
     .brand-pillar {
         position: fixed; right: 0; top: 0; bottom: 0; width: var(--brand-width);
         background: #080808; border-left: 1px solid #1a1a1a;
@@ -77,14 +75,13 @@
         color: #7e7c7c; line-height: 0.8; transform: scaleY(1.4);
     }
 
-    /* --- VIEWPORT & SLIDES --- */
     #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-right: calc(var(--brand-width) + var(--safety-gap)); }
     .text-frame { margin-left: 38%; height: 100%; width: 100%; position: relative; }
     
     .slide { 
         position: absolute; opacity: 0; visibility: hidden; width: 100%; 
         transition: opacity 0.5s, transform 0.6s ease-out; transform: translateY(20px); 
-        scroll-margin-top: 100px;
+        scroll-margin-top: 80px; /* Anchors scroll position nicely on mobile */
     }
     .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
     .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
@@ -108,15 +105,8 @@
     .social-link { font-family: var(--mono-font); font-size: 10px; color: #444; text-decoration: none; display: block; margin-bottom: 15px; font-weight: 700; transition: 0.3s; }
     .social-link:hover { color: #fff; transform: translateX(5px); }
 
-    /* Mobile Back to Top Styles */
-    #mobile-top-btn { 
-        display: none; width: 100%; text-align: center; 
-        padding: 60px 0; color: var(--hazard-yellow); 
-        font-family: var(--mono-font); font-size: 10px; letter-spacing: 3px;
-        cursor: pointer; text-decoration: none; border: none; background: transparent;
-    }
+    #mobile-top-btn { display: none; }
 
-    /* --- MOBILE REWRITE --- */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub, .wheel-outer-detail { display: none !important; }
@@ -126,10 +116,7 @@
             width: 100%; height: 60px; flex-direction: row; padding: 0 20px;
             background: #000; border-left: none; border-bottom: 1px solid #1a1a1a;
         }
-        .brand-pillar::after {
-            top: auto; bottom: 0; width: 100%; height: 4px;
-            background-size: 28.28px 28.28px;
-        }
+        .brand-pillar::after { top: auto; bottom: 0; width: 100%; height: 4px; background-size: 28.28px 28.28px; }
         .brand-letter { font-size: 12px; transform: none; color: #fff; letter-spacing: 1px; }
 
         #viewport { padding-right: 0; padding-top: 60px; height: auto; }
@@ -137,22 +124,23 @@
         
         .slide { 
             position: relative !important; opacity: 1 !important; visibility: visible !important; 
-            transform: none !important; margin-bottom: 120px;
-            padding-top: 40px;
+            transform: none !important; margin-bottom: 120px; padding-top: 40px;
         }
         .slide-header { height: auto; margin-bottom: 25px; }
-
         .content-layout { display: flex; flex-direction: column; gap: 20px; }
         .side-info { border-right: none; border-bottom: 1px solid #111; padding: 0 0 10px 0; width: 100%; display: flex; gap: 20px; }
         .desc-container { padding-left: 0; }
-
         .profile-wrapper { flex-direction: column; gap: 20px; }
         .profile-img-frame { width: 100px; height: 100px; }
 
-        #mobile-top-btn { display: block; }
+        #mobile-top-btn { 
+            display: block; width: 100%; text-align: center; 
+            padding: 60px 0; color: var(--hazard-yellow); 
+            font-family: var(--mono-font); font-size: 10px; letter-spacing: 3px;
+            cursor: pointer; text-decoration: none;
+        }
     }
 
-    /* --- WHEEL (DESKTOP ONLY) --- */
     .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
     #wheel { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
     .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); }
@@ -261,7 +249,7 @@
                             <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%;">SEND_TRANSMISSION</button>
                         </form>
                         
-                        <button id="mobile-top-btn" onclick="scrollToIdentity()">[ BACK_TO_TOP ]</button>
+                        <a href="#identity" id="mobile-top-btn">[ BACK_TO_TOP ]</a>
                     </div>
                 </div>
             </section>
@@ -273,14 +261,6 @@
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
     let isBooted = false;
-
-    // Direct Anchor Function
-    function scrollToIdentity() {
-        const identitySection = document.getElementById('identity');
-        if (identitySection) {
-            identitySection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
 
     function runBoot() {
         const log = document.getElementById('preloader-log-container');
