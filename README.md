@@ -1,16 +1,25 @@
-## Hi there 👋
+# MONOLITH | ARCHIVE v4.2.0
+> **STATUS:** SYSTEM_OPERATIONAL  
+> **ENCRYPTION:** ACTIVE  
+> **STABILITY:** 99.9%
 
-<!--
-**monolithfolio/monolithfolio** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+## 00. OVERVIEW
+MONOLITH is a bespoke, brutalist digital archive designed for high-impact visual identity. It rejects standard web patterns in favor of a "terminal-first" philosophy, utilizing a rotational navigation core and atmospheric depth layering.
 
-Here are some ideas to get you started:
+## 01. DESIGN SPECIFICATIONS
+The interface is built on a "monochromatic-hazard" aesthetic.
+* **Typography:** Syne (Extra Bold) for primary headers; Space Mono for system data.
+* **Motion:** High-inertia scroll physics and atmospheric "dust" entry transitions.
+* **Layering:** Three-tier Z-index architecture (Backdrop > Navigation > UI).
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## 02. SYSTEM ARCHITECTURE
+```text
+[V:] VIEWPORT
+ ├── [H:] BRAND_PILLAR (Persistent)
+ ├── [W:] NAV_WHEEL (Rotational)
+ └── [C:] CONTENT_FRAME
+      ├── IDENTITY (Primary)
+      ├── WORKS (Archive)
+      ├── STACK (Technical)
+      ├── VOID (Experimental)
+      └── CONTACT (Transmission)
