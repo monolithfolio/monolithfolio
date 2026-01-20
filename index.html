@@ -76,7 +76,7 @@
         padding: 40px 0; z-index: 5000;
     }
     .brand-pillar::after {
-        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; /* Thicker */
+        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
         background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
         animation: pillarHazardMove 0.8s linear infinite;
     }
@@ -102,45 +102,57 @@
     .skill-bar-container { height: 10px; width: 100%; border: 1px solid #222; margin-top: 8px; background: #080808; overflow: hidden; }
     .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); transition: width 1.5s ease; }
 
+    /* WORKS LINKS STYLING */
+    .work-link-wrapper { margin-top: 20px; border-top: 1px solid #111; }
+    .social-link { 
+        font-family: var(--mono-font); font-size: 10px; color: #666; 
+        text-decoration: none; display: flex; justify-content: space-between;
+        padding: 15px 0; border-bottom: 1px solid #111; transition: 0.3s;
+        text-transform: uppercase; letter-spacing: 1px;
+    }
+    .social-link::before { content: "[ ACCESS ]"; color: var(--hazard-yellow); opacity: 0; transition: 0.3s; font-size: 8px; }
+    .social-link:hover { color: #fff; padding-left: 10px; }
+    .social-link:hover::before { opacity: 1; }
+
     /* MOBILE REWORK */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
         
-        /* BACKDROP: Centered and Larger */
+        /* BACKDROP: Significantly Larger on Mobile */
         .profile-watermark {
-            left: 50%; top: 40%; width: 110vw; height: 110vw;
-            opacity: 0.12 !important; 
+            left: 50%; top: 45%; width: 180vw; height: 180vw; /* Massive scaling */
+            opacity: 0.1 !important; 
         }
 
-        /* HEADER: Thicker Hazard Bar with Angles */
+        /* HEADER: Strictly ONE Hazard Line */
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-            width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
-            background: #000; border-left: none; border-bottom: 1px solid #1a1a1a;
+            width: 100%; height: 75px; flex-direction: row; padding: 0 25px;
+            background: #000; border: none; z-index: 10000;
         }
         .brand-pillar::after {
-            left: 0; top: auto; bottom: 0; width: 100%; height: 8px; /* Thicker */
-            background: repeating-linear-gradient(135deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
+            content: ""; position: absolute; left: 0; bottom: 0; top: auto;
+            width: 100%; height: 10px; /* Thicker single line */
+            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
+            border-top: 1px solid #000;
         }
-        .brand-letter { font-size: 18px; transform: none; color: #555; }
+        .brand-letter { font-size: 16px; transform: none; color: #444; letter-spacing: 1px; }
 
-        /* CONTENT: Reduced sizes to prevent congestion */
-        #viewport { padding: 90px 20px 40px 20px; height: auto; }
-        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 60px; padding-bottom: 30px; }
-        .stable-h1 { font-size: 2.2rem; } /* Perfected Heading Size */
-        .scramble-h2 { font-size: 0.55rem; letter-spacing: 3px; }
+        /* CONTENT */
+        #viewport { padding: 110px 25px 60px 25px; height: auto; }
+        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 80px; padding-bottom: 20px; }
+        .stable-h1 { font-size: 2rem; }
         
         .content-layout { grid-template-columns: 1fr; gap: 15px; }
-        .side-info { 
-            display: flex; gap: 15px; border-right: none; border-bottom: 1px solid #111; 
-            padding-right: 0; padding-bottom: 8px; line-height: 1; 
-        }
-        .side-info span { display: flex; align-items: center; gap: 4px; font-size: 7px; }
-        .side-info b { margin-bottom: 0; }
+        .side-info { display: flex; gap: 12px; border-right: none; border-bottom: 1px solid #111; padding-bottom: 10px; margin-bottom: 5px; }
+        .side-info span { font-size: 7px; color: #555; }
         
-        .desc-container { padding-left: 0; font-size: 10px; line-height: 1.6; }
-        .skills-grid { gap: 10px; }
+        .desc-container { padding-left: 0; font-size: 10px; line-height: 1.7; }
+
+        /* Link display for mobile */
+        .social-link { font-size: 9px; padding: 20px 0; color: #888; }
+        .social-link::before { display: none; } /* Hide hover element for touch */
     }
 
     .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
@@ -211,7 +223,10 @@
                     <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
                         <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency."></div>
-                        <div style="margin-top:25px;"><a href="#" class="social-link">01 // PILLAR_PROJECT</a><a href="#" class="social-link">02 // VOID_CORE</a></div>
+                        <div class="work-link-wrapper">
+                            <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
+                            <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
+                        </div>
                     </div>
                 </div>
             </section>
