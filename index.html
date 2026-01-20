@@ -110,10 +110,20 @@
     }
     .social-link:hover { color: #fff; background: rgba(255,255,255,0.02); padding-left: 10px; }
 
+    /* BACK TO TOP BUTTON (Mobile Only Hidden by Default) */
+    #back-to-top {
+        position: fixed; bottom: 25px; right: 25px;
+        width: 45px; height: 45px; background: #fff; color: #000;
+        display: none; align-items: center; justify-content: center;
+        font-family: var(--mono-font); font-size: 14px; font-weight: 900;
+        z-index: 9000; border: none; cursor: pointer;
+    }
+
     /* MOBILE REWORK */
     @media (max-width: 768px) {
         body { overflow-y: auto; }
         #cursor-main, .nav-hub { display: none !important; }
+        #back-to-top { display: flex; }
         
         /* BACKDROP: Centered & Properly Scaled (140%) */
         .profile-watermark {
@@ -121,24 +131,25 @@
             opacity: 0.12 !important; 
         }
 
-        /* HEADER: FIXED & NO INTERNAL BORDERS */
+        /* HEADER: FIXED & HAZARD REWORK */
         .brand-pillar {
             position: fixed; top: 0; left: 0; right: 0; bottom: auto;
-            width: 100%; height: 75px; flex-direction: row; padding: 0 25px;
-            background: #000; border: none !important; z-index: 10000;
+            width: 100%; height: 70px; flex-direction: row; padding: 0 25px;
+            background: #050505; border: none !important; z-index: 10000;
+            justify-content: center; gap: 8px;
         }
         .brand-pillar::after {
             content: ""; position: absolute; left: 0; bottom: 0; top: auto;
-            width: 100%; height: 10px; /* One solid thick hazard bar */
-            background: repeating-linear-gradient(135deg, var(--hazard-yellow), var(--hazard-yellow) 15px, #000 15px, #000 30px);
-            border: none;
+            width: 100%; height: 6px; 
+            background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 20px, #000 20px, #000 40px);
+            animation: pillarHazardMove 2s linear infinite;
         }
-        .brand-letter { font-size: 16px; transform: none; color: #555; letter-spacing: 1px; }
+        .brand-letter { font-size: 14px; transform: none; color: #fff; letter-spacing: 2px; }
 
         /* CONTENT */
-        #viewport { padding: 115px 25px 60px 25px; height: auto; }
+        #viewport { padding: 110px 25px 80px 25px; height: auto; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; margin-bottom: 70px; padding-bottom: 10px; }
-        .stable-h1 { font-size: 1.8rem; }
+        .stable-h1 { font-size: 2.2rem; }
         
         .content-layout { grid-template-columns: 1fr; gap: 12px; }
         .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 5px; }
@@ -174,6 +185,8 @@
         <div class="brand-letter">O</div><div class="brand-letter">L</div><div class="brand-letter">I</div>
         <div class="brand-letter">T</div><div class="brand-letter">H</div>
     </header>
+
+    <button id="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
 
     <div class="nav-hub">
         <div id="wheel">
@@ -341,6 +354,13 @@
             });
         }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
+
+        // Back to top visibility logic
+        const btt = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            btt.style.opacity = window.scrollY > 500 ? "1" : "0";
+            btt.style.pointerEvents = window.scrollY > 500 ? "all" : "none";
+        });
     }
 
     window.addEventListener('mousedown', exitPreloader);
