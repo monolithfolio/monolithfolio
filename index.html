@@ -43,7 +43,6 @@
         .sys-white { color: #fff; }
         .sys-yellow { color: var(--hazard-yellow); }
 
-        /* RAW TERMINAL PROMPT (NO BUTTON) */
         #final-prompt { 
             margin-top: 30px; 
             display: none; 
@@ -114,7 +113,6 @@
         }
         #viewport.ready { opacity: 1; }
 
-        /* CONTENT SLIDES */
         .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: 0.8s; transform: translateY(20px); }
         .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
         .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; }
@@ -125,18 +123,50 @@
         .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; letter-spacing: 5px; margin-top: 5px;}
         .social-link { font-family: var(--mono-font); font-size: 10px; color: #666; text-decoration: none; display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid #111; transition: 0.3s; text-transform: uppercase; }
 
-        /* WHEEL NAVIGATION */
         .nav-hub { position: fixed; left: calc(var(--wheel-size) / -2.1); top: 50%; transform: translateY(-50%); width: var(--wheel-size); height: var(--wheel-size); z-index: 2000; }
         #wheel { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
         .inner-label { position: absolute; left: 50%; top: 50%; transform-origin: 0% 0%; transform: rotate(calc(72deg * var(--i))) translateX(240px); transition: 0.5s; }
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; color: rgba(255,255,255,0.1); }
         .inner-label.active span { color: #fff; transform: scale(1.6); }
 
+        /* --- MOBILE RE-ARCHITECTURE --- */
         @media (max-width: 768px) {
-            body { overflow-y: auto; }
-            #viewport { padding: 110px 25px 0 25px; height: auto; }
-            .profile-watermark { left: 50%; top: 45%; width: 140vw; height: 140vw; opacity: 0.4 !important; }
-            .brand-pillar { height: 70px; width: 100%; flex-direction: row; top: 0; left: 0; }
+            body, html { overflow-y: auto !important; height: auto; }
+            
+            #preloader { padding: 25px; }
+            #terminal-content { font-size: 12px; } /* Slightly bigger for readability */
+            
+            /* Hide the wheel on mobile */
+            .nav-hub { display: none; }
+            
+            /* Reposition Brand Pillar to the top */
+            .brand-pillar {
+                height: 60px; width: 100%; top: 0; left: 0; border-left: none;
+                border-bottom: 1px solid #1a1a1a; flex-direction: row; 
+                padding: 0 20px;
+            }
+            .brand-pillar::after { width: 100%; height: 4px; bottom: 0; top: auto; }
+            .brand-letter { font-size: 20px; }
+
+            /* Viewport Adjustments */
+            #viewport { 
+                padding: 100px 20px 100px 20px; 
+                height: auto; 
+                display: flex;
+                flex-direction: column;
+            }
+
+            .slide { position: relative; opacity: 1; visibility: visible; transform: none; margin-bottom: 80px; }
+            .slide-header { height: auto; margin-bottom: 20px; }
+            .content-layout { grid-template-columns: 1fr; gap: 20px; }
+            .side-info { border-right: none; border-left: 2px solid var(--hazard-yellow); padding-left: 15px; padding-right: 0; margin-bottom: 10px; }
+            .stable-h1 { font-size: 3rem; }
+            .desc-container { padding-left: 0; max-width: 100%; }
+
+            .profile-watermark { 
+                left: 50%; top: 30%; width: 150vw; height: 150vw; 
+                opacity: 0.3 !important; 
+            }
         }
     </style>
 </head>
@@ -273,13 +303,18 @@
             div.className = 'terminal-line';
             div.innerHTML = line;
             termLinesContainer.appendChild(div);
-            // Slower typing speed (avg 300ms)
             await new Promise(r => setTimeout(r, Math.random() * 200 + 200));
         }
         
         bg.classList.add('booted');
         viewport.classList.add('ready');
-        if(!isMobile) triggerContent(slides[0]);
+        
+        // On mobile, trigger all scrambles at once since they all appear on scroll
+        if(isMobile) {
+            slides.forEach(s => triggerContent(s));
+        } else {
+            triggerContent(slides[0]);
+        }
 
         const finalPrompt = document.getElementById('final-prompt');
         const promptText = document.getElementById('prompt-text');
