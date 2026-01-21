@@ -493,12 +493,31 @@
                     }
                 });
                 document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
+                
+                // Hide backdrop on contact page (index 4)
+                if (newIdx === 4) {
+                    bg.style.opacity = '0';
+                    bg.style.transition = 'opacity 0.5s ease';
+                } else {
+                    bg.style.opacity = '';
+                    bg.style.transition = 'opacity 0.5s ease';
+                }
             }
         };
     } else {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) triggerContent(entry.target);
+                if(entry.isIntersecting) {
+                    triggerContent(entry.target);
+                    // Hide backdrop on contact page
+                    if(entry.target.id === 'contact') {
+                        bg.style.opacity = '0';
+                        bg.style.transition = 'opacity 0.5s ease';
+                    } else {
+                        bg.style.opacity = '';
+                        bg.style.transition = 'opacity 0.5s ease';
+                    }
+                }
             });
         }, { threshold: 0.1 });
         slides.forEach(s => observer.observe(s));
