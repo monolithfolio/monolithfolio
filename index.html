@@ -109,6 +109,67 @@
     .skill-bar-container { height: 6px; width: 100%; border: 1px solid #222; background: #080808; overflow: hidden; }
     .skill-pole-fill { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 6px, #000 6px, #000 12px); transition: width 1.5s ease; }
 
+    /* TECH MATRIX STYLING */
+    .tech-matrix { 
+        margin-top: 25px; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 20px; 
+        border-top: 1px solid #111; 
+        padding-top: 20px; 
+    }
+    .tech-category { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 10px; 
+    }
+    .cat-label { 
+        font-family: var(--mono-font); 
+        font-size: 8px; 
+        color: #555; 
+        letter-spacing: 2px; 
+        text-transform: uppercase; 
+        padding-bottom: 5px; 
+        border-bottom: 1px solid #1a1a1a; 
+    }
+    .tech-pills { 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 8px; 
+    }
+    .tech-pill { 
+        font-family: var(--mono-font); 
+        font-size: 9px; 
+        color: #888; 
+        background: #0a0a0a; 
+        border: 1px solid #1a1a1a; 
+        padding: 6px 12px; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .tech-pill::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 2px;
+        background: var(--hazard-yellow);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    .tech-pill:hover {
+        color: #fff;
+        border-color: #333;
+        background: #111;
+    }
+    .tech-pill:hover::before {
+        transform: translateX(0);
+    }
+
     .work-link-wrapper { margin-top: 20px; border-top: 1px solid #111; }
     .social-link { 
         font-family: var(--mono-font); font-size: 10px; color: #666; 
@@ -183,6 +244,24 @@
         .skill-icon-wrap span { font-size: 7px !important; letter-spacing: 0; }
         .tech-icon { width: 14px !important; height: 14px !important; }
         .skill-bar-container { height: 3px !important; border: none !important; background: #111 !important; }
+
+        /* MOBILE TECH MATRIX */
+        .tech-matrix { 
+            margin-top: 15px !important; 
+            gap: 15px !important; 
+        }
+        .cat-label { 
+            font-size: 7px !important; 
+            padding-bottom: 8px !important; 
+        }
+        .tech-pills { 
+            gap: 6px !important; 
+        }
+        .tech-pill { 
+            font-size: 7px !important; 
+            padding: 5px 10px !important; 
+            letter-spacing: 0.5px !important; 
+        }
 
         .side-info { display: flex; gap: 12px; border: none; padding: 0; margin-bottom: 8px; }
         .side-info span { font-size: 7px; color: #444; border-right: 1px solid #222; padding-right: 10px; }
@@ -301,7 +380,48 @@
                 </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>CORE</b>JS</span><span><b>VER</b>4.2</span></div>
-                    <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div></div>
+                    <div class="desc-container">
+                        <div class="scramble-body" data-txt="Core systems and frameworks optimized for high-performance execution."></div>
+                        
+                        <div class="tech-matrix">
+                            <div class="tech-category">
+                                <div class="cat-label">FRONTEND_SYS</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">REACT</span>
+                                    <span class="tech-pill">NEXT.JS</span>
+                                    <span class="tech-pill">TYPESCRIPT</span>
+                                    <span class="tech-pill">TAILWIND</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="cat-label">VISUAL_ENGINE</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">THREE.JS</span>
+                                    <span class="tech-pill">GSAP</span>
+                                    <span class="tech-pill">WEBGL</span>
+                                    <span class="tech-pill">GLSL</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="cat-label">BACKEND_CORE</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">NODE.JS</span>
+                                    <span class="tech-pill">EXPRESS</span>
+                                    <span class="tech-pill">MONGODB</span>
+                                    <span class="tech-pill">REST_API</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="cat-label">TOOLS_PROTO</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">GIT</span>
+                                    <span class="tech-pill">FIGMA</span>
+                                    <span class="tech-pill">VSCODE</span>
+                                    <span class="tech-pill">WEBPACK</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
