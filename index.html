@@ -81,7 +81,7 @@
         #preloader.exit #terminal-content { opacity: 0; transition: 0.2s; pointer-events: none; }
         #preloader.finished { display: none; }
 
-        /* MAIN SITE ELEMENTS - UNTOUCHED FOR DESKTOP */
+        /* MAIN SITE ELEMENTS - DESKTOP (UNTOUCHED) */
         .profile-watermark {
             position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%);
             width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none;
@@ -129,55 +129,63 @@
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; color: rgba(255,255,255,0.1); }
         .inner-label.active span { color: #fff; transform: scale(1.6); }
 
-        /* HIDE MOBILE FOOTER ON DESKTOP */
         .mobile-footer { display: none; }
 
-        /* --- MOBILE-ONLY OVERRIDES --- */
+        /* --- MOBILE RE-ARCHITECTURE (FITTED) --- */
         @media (max-width: 768px) {
-            body, html { overflow-y: auto !important; height: auto; }
+            * { box-sizing: border-box; } /* Strict containment */
+            body, html { overflow-y: auto !important; height: auto; position: relative; width: 100vw; overflow-x: hidden; }
+            
+            #preloader { padding: 30px 20px; width: 100vw; }
+            #terminal-content { font-size: 10px; width: 100%; max-width: 100%; }
             .nav-hub { display: none; }
             
+            /* Header Fit */
             .brand-pillar {
-                height: 70px; width: 100%; top: 0; left: 0; border-left: none;
+                height: 60px; width: 100vw; top: 0; left: 0; border-left: none;
                 border-bottom: 1px solid #1a1a1a; flex-direction: row; 
-                padding: 0 20px; box-sizing: border-box; justify-content: space-around;
+                padding: 0 15px; justify-content: space-between;
+                background: #000;
             }
             .brand-pillar::after { 
-                width: 100%; height: 4px; bottom: 0; top: auto; left: 0;
+                width: 100%; height: 3px; bottom: 0; top: auto; left: 0;
                 background: var(--hazard-yellow); animation: none; 
             }
-            .brand-letter { font-size: 16px; transform: none; color: #fff; }
+            .brand-letter { font-size: 13px; transform: none; color: #666; letter-spacing: 1px; }
 
+            /* Viewport Containment */
             #viewport { 
-                padding: 120px 25px 80px 25px; 
-                height: auto; width: 100%; box-sizing: border-box;
+                padding: 100px 20px 60px 20px; 
+                height: auto; width: 100vw; opacity: 1;
+                padding-left: 20px; padding-right: 20px;
             }
             .slide { 
                 position: relative; opacity: 1; visibility: visible; 
-                transform: none; margin-bottom: 180px;
+                transform: none; margin-bottom: 120px; width: 100%;
             }
-            .slide-header { height: auto; margin-bottom: 20px; }
-            .stable-h1 { font-size: 3rem; }
+            .slide-header { height: auto; margin-bottom: 15px; }
+            .stable-h1 { font-size: 2.8rem; width: 100%; line-height: 1.1; }
 
-            .content-layout { display: flex; flex-direction: column; gap: 20px; }
-            .side-info { border-right: none; border-left: 1px solid #1a1a1a; padding: 5px 15px; color: #222; font-size: 7px; }
-            
-            .profile-watermark { left: 50%; top: 30%; width: 160vw; opacity: 0.2 !important; }
+            /* Simplified Mobile Layout */
+            .content-layout { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+            .side-info { 
+                border-right: none; border-left: 1px solid #222; 
+                padding: 5px 0 5px 12px; color: #222; font-size: 7px;
+                display: flex; flex-direction: row; gap: 20px;
+            }
+            .desc-container { padding-left: 0; width: 100%; }
+            .desc-container .scramble-body { font-size: 11px; }
 
-            /* SHOW MOBILE FOOTER ONLY ON MOBILE */
+            .profile-watermark { 
+                left: 50%; top: 35%; width: 140vw; height: 140vw; 
+                opacity: 0.15 !important; 
+            }
+
             .mobile-footer { 
-                display: block; 
-                padding: 40px 0 100px 0; 
-                text-align: center; 
-                border-top: 1px solid #111; 
+                display: block; width: 100%; padding: 40px 0 80px 0; 
+                text-align: center; border-top: 1px solid #111; 
             }
-            .back-top { 
-                font-family: var(--mono-font); 
-                font-size: 10px; 
-                color: var(--hazard-yellow); 
-                text-decoration: none; 
-                letter-spacing: 4px; 
-            }
+            .back-top { font-family: var(--mono-font); font-size: 9px; color: var(--hazard-yellow); letter-spacing: 3px; }
         }
     </style>
 </head>
@@ -219,10 +227,10 @@
                 <div class="scramble-h2" data-orig="SYSTEM_INIT_IDENTITY">SYSTEM_INIT_IDENTITY</div>
             </div>
             <div class="content-layout">
-                <div class="side-info"><span><b>LOC</b> EARTH</span><span><b>SYS</b> 01</span></div>
                 <div class="desc-container">
                     <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals."></div>
                 </div>
+                <div class="side-info"><span><b>LOC</b> EARTH</span><span><b>SYS</b> 01</span></div>
             </div>
         </section>
 
@@ -232,12 +240,14 @@
                 <div class="scramble-h2" data-orig="ARCHIVE_ACCESS_WORKS">ARCHIVE_ACCESS_WORKS</div>
             </div>
             <div class="content-layout">
-                <div class="side-info"><span><b>UNITS</b> 04</span><span><b>ARC</b> 2026</span></div>
                 <div class="desc-container">
                     <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void."></div>
-                    <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
-                    <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
+                    <div style="margin-top: 15px;">
+                        <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
+                        <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
+                    </div>
                 </div>
+                <div class="side-info"><span><b>UNITS</b> 04</span><span><b>ARC</b> 2026</span></div>
             </div>
         </section>
 
@@ -247,8 +257,10 @@
                 <div class="scramble-h2" data-orig="HARDWARE_SYNC_STACK">HARDWARE_SYNC_STACK</div>
             </div>
             <div class="content-layout">
+                <div class="desc-container">
+                    <div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div>
+                </div>
                 <div class="side-info"><span><b>CORE</b> JS</span><span><b>VER</b> 4.2</span></div>
-                <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div></div>
             </div>
         </section>
 
@@ -258,8 +270,10 @@
                 <div class="scramble-h2" data-orig="SYSTEM_VOID">SYSTEM_VOID</div>
             </div>
             <div class="content-layout">
+                <div class="desc-container">
+                    <div class="scramble-body" data-txt="This sector is currently under construction. Check back for system updates or check the logs."></div>
+                </div>
                 <div class="side-info"><span><b>STAT</b> NULL</span><span><b>CHNL</b> 04</span></div>
-                <div class="desc-container"><div class="scramble-body" data-txt="This sector is currently under construction. Check back for system updates or check the logs."></div></div>
             </div>
         </section>
 
@@ -269,14 +283,14 @@
                 <div class="scramble-h2" data-orig="TRANSMISSION_OPEN_CONTACT">TRANSMISSION_OPEN_CONTACT</div>
             </div>
             <div class="content-layout">
-                <div class="side-info"><span><b>MODE</b> OPEN</span><span><b>FREQ</b> 99.1</span></div>
                 <div class="desc-container">
                     <form>
-                        <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
-                        <textarea placeholder="MESSAGE_DATA" rows="4" style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 15px;"></textarea>
-                        <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%;">SEND_TRANSMISSION</button>
+                        <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px; border-radius: 0;">
+                        <textarea placeholder="MESSAGE_DATA" rows="4" style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 15px; border-radius: 0;"></textarea>
+                        <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%; border-radius: 0;">SEND_TRANSMISSION</button>
                     </form>
                 </div>
+                <div class="side-info"><span><b>MODE</b> OPEN</span><span><b>FREQ</b> 99.1</span></div>
             </div>
         </section>
 
