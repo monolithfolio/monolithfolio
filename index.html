@@ -54,14 +54,14 @@
     /* BACKDROP */
     .profile-watermark {
         position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%);
-        width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none;
+        width: 550px; height: 550px; z-index: 0; opacity: 0; pointer-events: none;
         -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
         mask-image: radial-gradient(circle, black 30%, transparent 80%);
     }
     .profile-watermark.booted { animation: atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes atmosphericEntry {
-        0% { opacity: 0; filter: grayscale(1) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
-        100% { opacity: 0.28; filter: grayscale(1) blur(0px); transform: translate(-50%, -50%) scale(1); }
+        0% { opacity: 0; filter: grayscale(0.7) blur(40px) brightness(1.2); transform: translate(-50%, -50%) scale(1.1); }
+        100% { opacity: 0.45; filter: grayscale(0.7) blur(0px) brightness(1.2); transform: translate(-50%, -50%) scale(1); }
     }
     .profile-watermark img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -326,30 +326,25 @@
                     <div class="desc-container">
                         <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals."></div>
                         
-                        <div class="skills-grid">
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/javascript/eeeeee" alt="JS"><span>JS_CORE</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="95%"></div></div>
+                        <div class="tech-matrix">
+                            <div class="tech-category">
+                                <div class="cat-label">CORE_STACK</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">JAVASCRIPT</span>
+                                    <span class="tech-pill">REACT</span>
+                                    <span class="tech-pill">NODE.JS</span>
+                                    <span class="tech-pill">TYPESCRIPT</span>
+                                    <span class="tech-pill">NEXT.JS</span>
+                                </div>
                             </div>
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/react/eeeeee" alt="React"><span>REACT_OS</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="90%"></div></div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/threedotjs/eeeeee" alt="ThreeJS"><span>GL_RENDER</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="85%"></div></div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/greensock/eeeeee" alt="GSAP"><span>ANIM_SYNC</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="88%"></div></div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs/eeeeee" alt="Node"><span>NODE_BASE</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="82%"></div></div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon-wrap"><img class="tech-icon" src="https://cdn.simpleicons.org/git/eeeeee" alt="Git"><span>VER_CNTRL</span></div>
-                                <div class="skill-bar-container"><div class="skill-pole-fill" data-level="92%"></div></div>
+                            <div class="tech-category">
+                                <div class="cat-label">VISUAL_SYS</div>
+                                <div class="tech-pills">
+                                    <span class="tech-pill">THREE.JS</span>
+                                    <span class="tech-pill">GSAP</span>
+                                    <span class="tech-pill">WEBGL</span>
+                                    <span class="tech-pill">TAILWIND</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -380,48 +375,7 @@
                 </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>CORE</b>JS</span><span><b>VER</b>4.2</span></div>
-                    <div class="desc-container">
-                        <div class="scramble-body" data-txt="Core systems and frameworks optimized for high-performance execution."></div>
-                        
-                        <div class="tech-matrix">
-                            <div class="tech-category">
-                                <div class="cat-label">FRONTEND_SYS</div>
-                                <div class="tech-pills">
-                                    <span class="tech-pill">REACT</span>
-                                    <span class="tech-pill">NEXT.JS</span>
-                                    <span class="tech-pill">TYPESCRIPT</span>
-                                    <span class="tech-pill">TAILWIND</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="cat-label">VISUAL_ENGINE</div>
-                                <div class="tech-pills">
-                                    <span class="tech-pill">THREE.JS</span>
-                                    <span class="tech-pill">GSAP</span>
-                                    <span class="tech-pill">WEBGL</span>
-                                    <span class="tech-pill">GLSL</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="cat-label">BACKEND_CORE</div>
-                                <div class="tech-pills">
-                                    <span class="tech-pill">NODE.JS</span>
-                                    <span class="tech-pill">EXPRESS</span>
-                                    <span class="tech-pill">MONGODB</span>
-                                    <span class="tech-pill">REST_API</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="cat-label">TOOLS_PROTO</div>
-                                <div class="tech-pills">
-                                    <span class="tech-pill">GIT</span>
-                                    <span class="tech-pill">FIGMA</span>
-                                    <span class="tech-pill">VSCODE</span>
-                                    <span class="tech-pill">WEBPACK</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div></div>
                 </div>
             </section>
 
