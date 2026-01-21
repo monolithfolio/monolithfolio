@@ -496,11 +496,9 @@
                 
                 // Hide backdrop on contact page (index 4)
                 if (newIdx === 4) {
-                    bg.style.opacity = '0';
-                    bg.style.transition = 'opacity 0.5s ease';
+                    bg.style.setProperty('opacity', '0', 'important');
                 } else {
-                    bg.style.opacity = '';
-                    bg.style.transition = 'opacity 0.5s ease';
+                    bg.style.setProperty('opacity', '0.45', 'important');
                 }
             }
         };
@@ -511,11 +509,9 @@
                     triggerContent(entry.target);
                     // Hide backdrop on contact page
                     if(entry.target.id === 'contact') {
-                        bg.style.opacity = '0';
-                        bg.style.transition = 'opacity 0.5s ease';
+                        bg.style.setProperty('opacity', '0', 'important');
                     } else {
-                        bg.style.opacity = '';
-                        bg.style.transition = 'opacity 0.5s ease';
+                        bg.style.setProperty('opacity', '0.45', 'important');
                     }
                 }
             });
