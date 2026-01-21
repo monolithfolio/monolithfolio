@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* -----------------------------------------------------------
-           DESKTOP STYLES - DO NOT TOUCH
-        -------------------------------------------------------------- */
         :root {
             --bg-color: #050505;
             --text-main: #eeeeee;
@@ -26,33 +23,94 @@
 
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        #preloader { position: fixed; inset: 0; z-index: 999999; background: transparent; padding: 40px; display: flex; flex-direction: column; }
-        #terminal-content { position: relative; z-index: 100; font-family: var(--mono-font); font-size: 11px; color: #666; line-height: 1.6; max-width: 600px; }
+        /* COMMAND PROMPT LOADER */
+        #preloader { 
+            position: fixed; inset: 0; z-index: 999999; background: transparent; 
+            padding: 40px; display: flex; flex-direction: column;
+        }
+        
+        #terminal-content {
+            position: relative;
+            z-index: 100; 
+            font-family: var(--mono-font);
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
         .terminal-line { margin-bottom: 2px; letter-spacing: 0.5px; }
         .sys-white { color: #fff; }
-        #final-prompt { margin-top: 30px; display: none; color: #fff; letter-spacing: 2px; }
-        .prompt-symbol { color: var(--hazard-yellow); margin-right: 10px; font-weight: bold; }
-        #cursor { display: inline-block; width: 8px; height: 12px; background: #fff; margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
+        .sys-yellow { color: var(--hazard-yellow); }
+
+        #final-prompt { 
+            margin-top: 30px; 
+            display: none; 
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .prompt-symbol {
+            color: var(--hazard-yellow);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        #cursor { 
+            display: inline-block; 
+            width: 8px; 
+            height: 12px; 
+            background: #fff; 
+            margin-left: 5px; 
+            animation: blink 0.8s infinite; 
+            vertical-align: middle;
+        }
         @keyframes blink { 50% { opacity: 0; } }
 
-        #preloader::before, #preloader::after { content: ""; position: absolute; left: 0; width: 100%; height: 50%; background: #000; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 50; }
+        /* REVEAL CURTAINS */
+        #preloader::before, #preloader::after {
+            content: ""; position: absolute; left: 0; width: 100%; height: 50%;
+            background: #000; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
+        }
         #preloader::before { top: 0; border-bottom: 1px solid #1a1a1a; }
         #preloader::after { bottom: 0; border-top: 1px solid #1a1a1a; }
+
         #preloader.exit::before { transform: translateY(-100%); }
         #preloader.exit::after { transform: translateY(100%); }
         #preloader.exit #terminal-content { opacity: 0; transition: 0.2s; pointer-events: none; }
         #preloader.finished { display: none; }
 
-        .profile-watermark { position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%); width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none; -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%); mask-image: radial-gradient(circle, black 30%, transparent 80%); transition: opacity 1s ease; }
+        /* MAIN SITE ELEMENTS */
+        .profile-watermark {
+            position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%);
+            width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none;
+            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
+            mask-image: radial-gradient(circle, black 30%, transparent 80%);
+            transition: opacity 1s ease;
+        }
         .profile-watermark.booted { opacity: 0.6; }
         .profile-watermark img { width: 100%; height: 100%; object-fit: cover; }
 
-        .brand-pillar { position: fixed; right: 0; top: 0; width: var(--brand-width); background: #080808; border-left: 1px solid #1a1a1a; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 40px 0; z-index: 5000; height: 100vh; }
-        .brand-pillar::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px); animation: pillarHazardMove 0.8s linear infinite; }
+        .brand-pillar {
+            position: fixed; right: 0; top: 0; width: var(--brand-width);
+            background: #080808; border-left: 1px solid #1a1a1a;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 40px 0; z-index: 5000; height: 100vh;
+        }
+        .brand-pillar::after {
+            content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
+            animation: pillarHazardMove 0.8s linear infinite;
+        }
         @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 33.94px; } }
         .brand-letter { font-family: var(--title-font); font-weight: 800; font-size: 48px; color: #7e7c7c; line-height: 0.8; transform: scaleY(1.4); }
 
-        #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap)); opacity: 0; }
+        #viewport { 
+            width: 100%; height: 100vh; position: relative; z-index: 10; 
+            padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap));
+            opacity: 0;
+        }
         #viewport.ready { opacity: 1; }
 
         .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: 0.8s; transform: translateY(20px); }
@@ -71,53 +129,44 @@
         .inner-label span { font-family: var(--mono-font); font-size: 0.85rem; color: rgba(255,255,255,0.1); }
         .inner-label.active span { color: #fff; transform: scale(1.6); }
 
-        .mobile-footer { display: none; }
-
-        /* -----------------------------------------------------------
-           MOBILE STYLES - ISOLATED FIXES
-        -------------------------------------------------------------- */
+        /* --- MOBILE RE-ARCHITECTURE --- */
         @media (max-width: 768px) {
-            html, body { overflow-y: auto !important; height: auto; width: 100vw; overflow-x: hidden; }
-            .nav-hub { display: none; }
-
-            /* Header Fit & Fix */
-            .brand-pillar {
-                height: 60px; width: 100vw; top: 0; left: 0; border-left: none;
-                border-bottom: 1px solid #1a1a1a; flex-direction: row; 
-                padding: 0 15px; justify-content: space-between; background: #000;
-            }
-            .brand-pillar::after { 
-                width: 100%; height: 3px; bottom: 0; top: auto; left: 0;
-                background: var(--hazard-yellow); animation: none; 
-            }
-            .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1px; }
-
-            /* Viewport Spacing */
-            #viewport { 
-                padding: 100px 20px 60px 20px; height: auto; width: 100vw; opacity: 1; 
-                display: block; box-sizing: border-box;
-            }
-            .slide { 
-                position: relative; opacity: 1; visibility: visible; 
-                transform: none; margin-bottom: 150px; width: 100%;
-            }
-            .slide-header { height: auto; margin-bottom: 15px; }
-            .stable-h1 { font-size: 3.2rem; line-height: 1; }
-
-            /* Layout Clean-up */
-            .content-layout { display: flex; flex-direction: column; gap: 25px; width: 100%; }
-            .side-info { 
-                border-right: none; border-left: 1px solid #1a1a1a; 
-                padding: 5px 0 5px 12px; color: #222; font-size: 7px;
-                display: flex; gap: 20px;
-            }
-            .desc-container { padding-left: 0; max-width: 100%; }
+            body, html { overflow-y: auto !important; height: auto; }
             
-            .profile-watermark { left: 50%; top: 35%; width: 150vw; opacity: 0.15 !important; }
+            #preloader { padding: 25px; }
+            #terminal-content { font-size: 12px; } /* Slightly bigger for readability */
+            
+            /* Hide the wheel on mobile */
+            .nav-hub { display: none; }
+            
+            /* Reposition Brand Pillar to the top */
+            .brand-pillar {
+                height: 60px; width: 100%; top: 0; left: 0; border-left: none;
+                border-bottom: 1px solid #1a1a1a; flex-direction: row; 
+                padding: 0 20px;
+            }
+            .brand-pillar::after { width: 100%; height: 4px; bottom: 0; top: auto; }
+            .brand-letter { font-size: 20px; }
 
-            /* Footer */
-            .mobile-footer { display: block; width: 100%; padding: 40px 0 80px 0; text-align: center; border-top: 1px solid #111; }
-            .back-top { font-family: var(--mono-font); font-size: 10px; color: var(--hazard-yellow); text-decoration: none; letter-spacing: 4px; }
+            /* Viewport Adjustments */
+            #viewport { 
+                padding: 100px 20px 100px 20px; 
+                height: auto; 
+                display: flex;
+                flex-direction: column;
+            }
+
+            .slide { position: relative; opacity: 1; visibility: visible; transform: none; margin-bottom: 80px; }
+            .slide-header { height: auto; margin-bottom: 20px; }
+            .content-layout { grid-template-columns: 1fr; gap: 20px; }
+            .side-info { border-right: none; border-left: 2px solid var(--hazard-yellow); padding-left: 15px; padding-right: 0; margin-bottom: 10px; }
+            .stable-h1 { font-size: 3rem; }
+            .desc-container { padding-left: 0; max-width: 100%; }
+
+            .profile-watermark { 
+                left: 50%; top: 30%; width: 150vw; height: 150vw; 
+                opacity: 0.3 !important; 
+            }
         }
     </style>
 </head>
@@ -153,93 +202,87 @@
     </div>
 
     <main id="viewport">
-        <section class="slide active" id="identity">
-            <div class="slide-header">
-                <h1 class="stable-h1">IDENTITY.</h1>
-                <div class="scramble-h2" data-orig="SYSTEM_INIT_IDENTITY">SYSTEM_INIT_IDENTITY</div>
-            </div>
-            <div class="content-layout">
-                <div class="desc-container">
-                    <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals."></div>
+        <div class="text-frame">
+            <section class="slide active" id="identity">
+                <div class="slide-header">
+                    <h1 class="stable-h1">IDENTITY.</h1>
+                    <div class="scramble-h2" data-orig="SYSTEM_INIT_IDENTITY">SYSTEM_INIT_IDENTITY</div>
                 </div>
-                <div class="side-info"><span><b>LOC</b> EARTH</span><span><b>SYS</b> 01</span></div>
-            </div>
-        </section>
-
-        <section class="slide" id="works">
-            <div class="slide-header">
-                <h1 class="stable-h1">WORKS.</h1>
-                <div class="scramble-h2" data-orig="ARCHIVE_ACCESS_WORKS">ARCHIVE_ACCESS_WORKS</div>
-            </div>
-            <div class="content-layout">
-                <div class="desc-container">
-                    <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void."></div>
-                    <div style="margin-top:20px">
-                        <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
-                        <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals."></div>
                     </div>
                 </div>
-                <div class="side-info"><span><b>UNITS</b> 04</span><span><b>ARC</b> 2026</span></div>
-            </div>
-        </section>
+            </section>
 
-        <section class="slide" id="stack">
-            <div class="slide-header">
-                <h1 class="stable-h1">STACK.</h1>
-                <div class="scramble-h2" data-orig="HARDWARE_SYNC_STACK">HARDWARE_SYNC_STACK</div>
-            </div>
-            <div class="content-layout">
-                <div class="desc-container">
-                    <div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div>
+            <section class="slide" id="works">
+                <div class="slide-header">
+                    <h1 class="stable-h1">WORKS.</h1>
+                    <div class="scramble-h2" data-orig="ARCHIVE_ACCESS_WORKS">ARCHIVE_ACCESS_WORKS</div>
                 </div>
-                <div class="side-info"><span><b>CORE</b> JS</span><span><b>VER</b> 4.2</span></div>
-            </div>
-        </section>
-
-        <section class="slide" id="void">
-            <div class="slide-header">
-                <h1 class="stable-h1">VOID.</h1>
-                <div class="scramble-h2" data-orig="SYSTEM_VOID">SYSTEM_VOID</div>
-            </div>
-            <div class="content-layout">
-                <div class="desc-container">
-                    <div class="scramble-body" data-txt="This sector is currently under construction. Check back for system updates or check the logs."></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void."></div>
+                        <div class="work-link-wrapper">
+                            <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
+                            <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="side-info"><span><b>STAT</b> NULL</span><span><b>CHNL</b> 04</span></div>
-            </div>
-        </section>
+            </section>
 
-        <section class="slide" id="contact">
-            <div class="slide-header">
-                <h1 class="stable-h1">CONTACT.</h1>
-                <div class="scramble-h2" data-orig="TRANSMISSION_OPEN_CONTACT">TRANSMISSION_OPEN_CONTACT</div>
-            </div>
-            <div class="content-layout">
-                <div class="desc-container">
-                    <form>
-                        <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px; border-radius: 0;">
-                        <textarea placeholder="MESSAGE_DATA" rows="4" style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 15px; border-radius: 0;"></textarea>
-                        <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%; border-radius: 0;">SEND_TRANSMISSION</button>
-                    </form>
+            <section class="slide" id="stack">
+                <div class="slide-header">
+                    <h1 class="stable-h1">STACK.</h1>
+                    <div class="scramble-h2" data-orig="HARDWARE_SYNC_STACK">HARDWARE_SYNC_STACK</div>
                 </div>
-                <div class="side-info"><span><b>MODE</b> OPEN</span><span><b>FREQ</b> 99.1</span></div>
-            </div>
-        </section>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>CORE</b>JS</span><span><b>VER</b>4.2</span></div>
+                    <div class="desc-container"><div class="scramble-body" data-txt="Integrated frameworks for real-time visualization: Three.js, GSAP, and Custom GLSL. All systems optimized for low-latency feedback."></div></div>
+                </div>
+            </section>
 
-        <div class="mobile-footer">
-            <a href="#" class="back-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">[ BACK_TO_TOP ]</a>
+            <section class="slide" id="void">
+                <div class="slide-header">
+                    <h1 class="stable-h1">VOID.</h1>
+                    <div class="scramble-h2" data-orig="SYSTEM_VOID">SYSTEM_VOID</div>
+                </div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>STAT</b>NULL</span><span><b>CHNL</b>04</span></div>
+                    <div class="desc-container"><div class="scramble-body" data-txt="This sector is currently under construction. Check back for system updates or check the logs."></div></div>
+                </div>
+            </section>
+
+            <section class="slide" id="contact">
+                <div class="slide-header">
+                    <h1 class="stable-h1">CONTACT.</h1>
+                    <div class="scramble-h2" data-orig="TRANSMISSION_OPEN_CONTACT">TRANSMISSION_OPEN_CONTACT</div>
+                </div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>MODE</b>OPEN</span><span><b>FREQ</b>99.1</span></div>
+                    <div class="desc-container">
+                        <form style="width: 100%;">
+                            <input type="text" placeholder="IDENTITY_NAME" required style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 10px;">
+                            <textarea placeholder="MESSAGE_DATA" rows="4" style="background: #0a0a0a; border: 1px solid #111; color: #fff; padding: 15px; font-family: var(--mono-font); font-size: 10px; width: 100%; margin-bottom: 15px;"></textarea>
+                            <button type="submit" style="background: #fff; color: #000; border: none; padding: 15px; font-family: var(--mono-font); font-size: 10px; font-weight: 900; width: 100%;">SEND_TRANSMISSION</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
 <script>
-    /* JS Logic remains the same to preserve Desktop wheel interaction */
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
     const bg = document.getElementById('global-bg');
     const viewport = document.getElementById('viewport');
     const preloader = document.getElementById('preloader');
     const termLinesContainer = document.getElementById('terminal-lines');
+    
     let isReady = false;
 
     const bootLines = [
@@ -247,11 +290,11 @@
         "SYSTEM CHECK.................. OK",
         "KERNEL INIT................... LOADED",
         "MAPPING VIRTUAL_DRIVE......... 0xA4F2",
-        "HANDSHAKE PROTOCOL............ SECURE",
-        "SYNCING GL_RENDERER........... ESTABLISHED",
-        "DECRYPTING IDENTITY........... COMPLETE",
+        "HANDSHAKE PROTOCOL............ <span class='sys-yellow'>SECURE</span>",
+        "SYNCING GL_RENDERER........... <span class='sys-yellow'>ESTABLISHED</span>",
+        "DECRYPTING ARCHIVE_IDENTITY.... COMPLETE",
         "--------------------------------------",
-        "<span class='sys-white'>STATUS: READY TO PROCEED</span>"
+        "<span class='sys-white'>STATUS: ALL SYSTEMS OPERATIONAL</span>"
     ];
 
     async function startBoot() {
@@ -260,27 +303,37 @@
             div.className = 'terminal-line';
             div.innerHTML = line;
             termLinesContainer.appendChild(div);
-            await new Promise(r => setTimeout(r, 150));
+            await new Promise(r => setTimeout(r, Math.random() * 200 + 200));
         }
+        
         bg.classList.add('booted');
         viewport.classList.add('ready');
-        if(isMobile) slides.forEach(s => triggerContent(s));
-        else triggerContent(slides[0]);
+        
+        // On mobile, trigger all scrambles at once since they all appear on scroll
+        if(isMobile) {
+            slides.forEach(s => triggerContent(s));
+        } else {
+            triggerContent(slides[0]);
+        }
 
         const finalPrompt = document.getElementById('final-prompt');
         const promptText = document.getElementById('prompt-text');
         finalPrompt.style.display = 'block';
-        promptText.innerText = isMobile ? "TAP SCREEN TO RESUME" : "PRESS [ENTER] TO RESUME";
         
-        const eventType = isMobile ? 'touchstart' : 'keydown';
-        window.addEventListener(eventType, (e) => {
-            if(!isMobile && e.key !== "Enter") return;
-            exitSequence();
-        }, {once: true});
+        if (isMobile) {
+            promptText.innerText = "SYSTEM_WAITING: TAP SCREEN TO RESUME";
+            window.addEventListener('touchstart', exitSequence, {once: true});
+        } else {
+            promptText.innerText = "SYSTEM_WAITING: PRESS [ENTER] TO RESUME";
+            window.addEventListener('keydown', (e) => {
+                if(e.key === "Enter") exitSequence();
+            }, {once: true});
+        }
         isReady = true;
     }
 
     function exitSequence() {
+        if (!isReady) return;
         preloader.classList.add('exit');
         setTimeout(() => preloader.classList.add('finished'), 400);
     }
@@ -296,11 +349,12 @@
         if (!el || !txt || el.classList.contains('scrambled')) return;
         el.classList.add('scrambled');
         let i = 0;
+        clearInterval(el.itv);
         el.itv = setInterval(() => {
             el.innerText = txt.split("").map((l, idx) => idx < i ? txt[idx] : "X0$#"[Math.floor(Math.random()*4)]).join("");
             if (i >= txt.length) clearInterval(el.itv);
             i += txt.length / 10;
-        }, 30);
+        }, 20);
     }
 
     if(!isMobile) {
@@ -315,7 +369,11 @@
                 lastIdx = newIdx;
                 slides.forEach((s, i) => {
                     s.classList.toggle('active', i === newIdx);
-                    if (i === newIdx) triggerContent(s);
+                    if (i === newIdx) {
+                        s.querySelector('.scramble-h2').classList.remove('scrambled');
+                        if(s.querySelector('.scramble-body')) s.querySelector('.scramble-body').classList.remove('scrambled');
+                        triggerContent(s);
+                    }
                 });
                 document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
             }
