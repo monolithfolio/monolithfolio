@@ -131,16 +131,15 @@
 
         .mobile-footer { display: none; }
 
-        /* --- MOBILE RE-ARCHITECTURE (FITTED) --- */
+        /* --- MOBILE OVERRIDES --- */
         @media (max-width: 768px) {
-            * { box-sizing: border-box; } /* Strict containment */
+            * { box-sizing: border-box; }
             body, html { overflow-y: auto !important; height: auto; position: relative; width: 100vw; overflow-x: hidden; }
             
             #preloader { padding: 30px 20px; width: 100vw; }
             #terminal-content { font-size: 10px; width: 100%; max-width: 100%; }
             .nav-hub { display: none; }
             
-            /* Header Fit */
             .brand-pillar {
                 height: 60px; width: 100vw; top: 0; left: 0; border-left: none;
                 border-bottom: 1px solid #1a1a1a; flex-direction: row; 
@@ -153,28 +152,39 @@
             }
             .brand-letter { font-size: 13px; transform: none; color: #666; letter-spacing: 1px; }
 
-            /* Viewport Containment */
             #viewport { 
                 padding: 100px 20px 60px 20px; 
                 height: auto; width: 100vw; opacity: 1;
-                padding-left: 20px; padding-right: 20px;
             }
             .slide { 
                 position: relative; opacity: 1; visibility: visible; 
                 transform: none; margin-bottom: 120px; width: 100%;
             }
             .slide-header { height: auto; margin-bottom: 15px; }
-            .stable-h1 { font-size: 2.8rem; width: 100%; line-height: 1.1; }
+            
+            /* Heading Fix: Responsive font size and word wrapping */
+            .stable-h1 { 
+                font-size: clamp(2rem, 12vw, 3.5rem); 
+                width: 100%; 
+                line-height: 1.1; 
+                overflow-wrap: break-word;
+            }
 
-            /* Simplified Mobile Layout */
             .content-layout { display: flex; flex-direction: column; gap: 20px; width: 100%; }
             .side-info { 
                 border-right: none; border-left: 1px solid #222; 
                 padding: 5px 0 5px 12px; color: #222; font-size: 7px;
                 display: flex; flex-direction: row; gap: 20px;
             }
-            .desc-container { padding-left: 0; width: 100%; }
-            .desc-container .scramble-body { font-size: 11px; }
+            
+            /* Form Fix: Ensure container and children stay in view */
+            .desc-container { padding-left: 0; width: 100%; max-width: 100%; }
+            form { width: 100%; }
+            input, textarea, button {
+                max-width: 100%;
+                width: 100%;
+                box-sizing: border-box;
+            }
 
             .profile-watermark { 
                 left: 50%; top: 35%; width: 140vw; height: 140vw; 
