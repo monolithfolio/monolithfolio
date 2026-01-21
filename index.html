@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* -----------------------------------------------------------
+           DESKTOP STYLES - DO NOT TOUCH
+        -------------------------------------------------------------- */
         :root {
             --bg-color: #050505;
             --text-main: #eeeeee;
@@ -23,94 +26,33 @@
 
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* COMMAND PROMPT LOADER */
-        #preloader { 
-            position: fixed; inset: 0; z-index: 999999; background: transparent; 
-            padding: 40px; display: flex; flex-direction: column;
-        }
-        
-        #terminal-content {
-            position: relative;
-            z-index: 100; 
-            font-family: var(--mono-font);
-            font-size: 11px;
-            color: #666;
-            line-height: 1.6;
-            max-width: 600px;
-        }
-
+        #preloader { position: fixed; inset: 0; z-index: 999999; background: transparent; padding: 40px; display: flex; flex-direction: column; }
+        #terminal-content { position: relative; z-index: 100; font-family: var(--mono-font); font-size: 11px; color: #666; line-height: 1.6; max-width: 600px; }
         .terminal-line { margin-bottom: 2px; letter-spacing: 0.5px; }
         .sys-white { color: #fff; }
-        .sys-yellow { color: var(--hazard-yellow); }
-
-        #final-prompt { 
-            margin-top: 30px; 
-            display: none; 
-            color: #fff;
-            letter-spacing: 2px;
-        }
-
-        .prompt-symbol {
-            color: var(--hazard-yellow);
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        #cursor { 
-            display: inline-block; 
-            width: 8px; 
-            height: 12px; 
-            background: #fff; 
-            margin-left: 5px; 
-            animation: blink 0.8s infinite; 
-            vertical-align: middle;
-        }
+        #final-prompt { margin-top: 30px; display: none; color: #fff; letter-spacing: 2px; }
+        .prompt-symbol { color: var(--hazard-yellow); margin-right: 10px; font-weight: bold; }
+        #cursor { display: inline-block; width: 8px; height: 12px; background: #fff; margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* REVEAL CURTAINS */
-        #preloader::before, #preloader::after {
-            content: ""; position: absolute; left: 0; width: 100%; height: 50%;
-            background: #000; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 50;
-        }
+        #preloader::before, #preloader::after { content: ""; position: absolute; left: 0; width: 100%; height: 50%; background: #000; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 50; }
         #preloader::before { top: 0; border-bottom: 1px solid #1a1a1a; }
         #preloader::after { bottom: 0; border-top: 1px solid #1a1a1a; }
-
         #preloader.exit::before { transform: translateY(-100%); }
         #preloader.exit::after { transform: translateY(100%); }
         #preloader.exit #terminal-content { opacity: 0; transition: 0.2s; pointer-events: none; }
         #preloader.finished { display: none; }
 
-        /* MAIN SITE ELEMENTS - DESKTOP (UNTOUCHED) */
-        .profile-watermark {
-            position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%);
-            width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none;
-            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
-            mask-image: radial-gradient(circle, black 30%, transparent 80%);
-            transition: opacity 1s ease;
-        }
+        .profile-watermark { position: fixed; top: 50%; left: 72%; transform: translate(-50%, -50%); width: 700px; height: 700px; z-index: 0; opacity: 0; pointer-events: none; -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%); mask-image: radial-gradient(circle, black 30%, transparent 80%); transition: opacity 1s ease; }
         .profile-watermark.booted { opacity: 0.6; }
         .profile-watermark img { width: 100%; height: 100%; object-fit: cover; }
 
-        .brand-pillar {
-            position: fixed; right: 0; top: 0; width: var(--brand-width);
-            background: #080808; border-left: 1px solid #1a1a1a;
-            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 40px 0; z-index: 5000; height: 100vh;
-        }
-        .brand-pillar::after {
-            content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
-            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
-            animation: pillarHazardMove 0.8s linear infinite;
-        }
+        .brand-pillar { position: fixed; right: 0; top: 0; width: var(--brand-width); background: #080808; border-left: 1px solid #1a1a1a; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 40px 0; z-index: 5000; height: 100vh; }
+        .brand-pillar::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px); animation: pillarHazardMove 0.8s linear infinite; }
         @keyframes pillarHazardMove { from { background-position: 0 0; } to { background-position: 0 33.94px; } }
         .brand-letter { font-family: var(--title-font); font-weight: 800; font-size: 48px; color: #7e7c7c; line-height: 0.8; transform: scaleY(1.4); }
 
-        #viewport { 
-            width: 100%; height: 100vh; position: relative; z-index: 10; 
-            padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap));
-            opacity: 0;
-        }
+        #viewport { width: 100%; height: 100vh; position: relative; z-index: 10; padding-left: 320px; padding-right: calc(var(--brand-width) + var(--safety-gap)); opacity: 0; }
         #viewport.ready { opacity: 1; }
 
         .slide { position: absolute; opacity: 0; visibility: hidden; width: 100%; transition: 0.8s; transform: translateY(20px); }
@@ -131,71 +73,51 @@
 
         .mobile-footer { display: none; }
 
-        /* --- MOBILE OVERRIDES --- */
+        /* -----------------------------------------------------------
+           MOBILE STYLES - ISOLATED FIXES
+        -------------------------------------------------------------- */
         @media (max-width: 768px) {
-            * { box-sizing: border-box; }
-            body, html { overflow-y: auto !important; height: auto; position: relative; width: 100vw; overflow-x: hidden; }
-            
-            #preloader { padding: 30px 20px; width: 100vw; }
-            #terminal-content { font-size: 10px; width: 100%; max-width: 100%; }
+            html, body { overflow-y: auto !important; height: auto; width: 100vw; overflow-x: hidden; }
             .nav-hub { display: none; }
-            
+
+            /* Header Fit & Fix */
             .brand-pillar {
                 height: 60px; width: 100vw; top: 0; left: 0; border-left: none;
                 border-bottom: 1px solid #1a1a1a; flex-direction: row; 
-                padding: 0 15px; justify-content: space-between;
-                background: #000;
+                padding: 0 15px; justify-content: space-between; background: #000;
             }
             .brand-pillar::after { 
                 width: 100%; height: 3px; bottom: 0; top: auto; left: 0;
                 background: var(--hazard-yellow); animation: none; 
             }
-            .brand-letter { font-size: 13px; transform: none; color: #666; letter-spacing: 1px; }
+            .brand-letter { font-size: 14px; transform: none; color: #eee; letter-spacing: 1px; }
 
+            /* Viewport Spacing */
             #viewport { 
-                padding: 100px 20px 60px 20px; 
-                height: auto; width: 100vw; opacity: 1;
+                padding: 100px 20px 60px 20px; height: auto; width: 100vw; opacity: 1; 
+                display: block; box-sizing: border-box;
             }
             .slide { 
                 position: relative; opacity: 1; visibility: visible; 
-                transform: none; margin-bottom: 120px; width: 100%;
+                transform: none; margin-bottom: 150px; width: 100%;
             }
             .slide-header { height: auto; margin-bottom: 15px; }
-            
-            /* Heading Fix: Responsive font size and word wrapping */
-            .stable-h1 { 
-                font-size: clamp(2rem, 12vw, 3.5rem); 
-                width: 100%; 
-                line-height: 1.1; 
-                overflow-wrap: break-word;
-            }
+            .stable-h1 { font-size: 3.2rem; line-height: 1; }
 
-            .content-layout { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+            /* Layout Clean-up */
+            .content-layout { display: flex; flex-direction: column; gap: 25px; width: 100%; }
             .side-info { 
-                border-right: none; border-left: 1px solid #222; 
+                border-right: none; border-left: 1px solid #1a1a1a; 
                 padding: 5px 0 5px 12px; color: #222; font-size: 7px;
-                display: flex; flex-direction: row; gap: 20px;
+                display: flex; gap: 20px;
             }
+            .desc-container { padding-left: 0; max-width: 100%; }
             
-            /* Form Fix: Ensure container and children stay in view */
-            .desc-container { padding-left: 0; width: 100%; max-width: 100%; }
-            form { width: 100%; }
-            input, textarea, button {
-                max-width: 100%;
-                width: 100%;
-                box-sizing: border-box;
-            }
+            .profile-watermark { left: 50%; top: 35%; width: 150vw; opacity: 0.15 !important; }
 
-            .profile-watermark { 
-                left: 50%; top: 35%; width: 140vw; height: 140vw; 
-                opacity: 0.15 !important; 
-            }
-
-            .mobile-footer { 
-                display: block; width: 100%; padding: 40px 0 80px 0; 
-                text-align: center; border-top: 1px solid #111; 
-            }
-            .back-top { font-family: var(--mono-font); font-size: 9px; color: var(--hazard-yellow); letter-spacing: 3px; }
+            /* Footer */
+            .mobile-footer { display: block; width: 100%; padding: 40px 0 80px 0; text-align: center; border-top: 1px solid #111; }
+            .back-top { font-family: var(--mono-font); font-size: 10px; color: var(--hazard-yellow); text-decoration: none; letter-spacing: 4px; }
         }
     </style>
 </head>
@@ -252,7 +174,7 @@
             <div class="content-layout">
                 <div class="desc-container">
                     <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void."></div>
-                    <div style="margin-top: 15px;">
+                    <div style="margin-top:20px">
                         <a href="#" class="social-link"><span>01 // PILLAR_PROJECT</span><span>MOD_v1</span></a>
                         <a href="#" class="social-link"><span>02 // VOID_CORE</span><span>MOD_v2</span></a>
                     </div>
@@ -310,6 +232,7 @@
     </main>
 
 <script>
+    /* JS Logic remains the same to preserve Desktop wheel interaction */
     const isMobile = window.innerWidth <= 768;
     const slides = document.querySelectorAll('.slide');
     const wheel = document.getElementById('wheel');
@@ -326,7 +249,7 @@
         "MAPPING VIRTUAL_DRIVE......... 0xA4F2",
         "HANDSHAKE PROTOCOL............ SECURE",
         "SYNCING GL_RENDERER........... ESTABLISHED",
-        "DECRYPTING ARCHIVE_IDENTITY.... COMPLETE",
+        "DECRYPTING IDENTITY........... COMPLETE",
         "--------------------------------------",
         "<span class='sys-white'>STATUS: READY TO PROCEED</span>"
     ];
@@ -337,7 +260,7 @@
             div.className = 'terminal-line';
             div.innerHTML = line;
             termLinesContainer.appendChild(div);
-            await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 150));
         }
         bg.classList.add('booted');
         viewport.classList.add('ready');
