@@ -103,7 +103,9 @@
     .map-container img { width: 100%; height: 100%; object-fit: cover; }
     .map-container::after { content: "MAP_DATA_UNLOCKED"; position: absolute; bottom: 10px; right: 10px; font-family: var(--mono-font); font-size: 8px; color: #fff; background: rgba(0,0,0,0.5); padding: 2px 5px; }
 
-    .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; text-transform: uppercase; line-height: 2.2; padding-right: 15px; border-right: 1px solid #222; }
+    /* SIDE INFO (Line Removed) */
+    .side-info { font-family: var(--mono-font); font-size: 8px; color: #444; text-transform: uppercase; line-height: 2.2; padding-right: 15px; }
+    
     .desc-container { padding-left: 10px; font-family: var(--mono-font); font-size: 11px; color: #888; line-height: 1.8; text-transform: uppercase; }
     .stable-h1 { font-family: var(--title-font); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; line-height: 0.9; text-transform: uppercase; }
     .scramble-h2 { font-family: var(--mono-font); font-size: 0.65rem; color: #555; letter-spacing: 5px; margin-top: 5px;}
@@ -153,20 +155,6 @@
     #project-detail .stable-h1 { position: absolute; top: 20px; left: 20px; margin: 0; z-index: 20; }
     #project-detail .desc-container { margin-top: 140px; margin-left: 20px; color: #666; max-width: 500px; padding-left: 0; }
 
-    /* GREEK BINARY PILLAR */
-    .binary-pillar {
-        position: absolute; right: 0; top: 0; bottom: 0; width: 120px;
-        background: #000; border-left: 1px solid #111; overflow: hidden;
-        display: flex; flex-direction: column; align-items: center;
-    }
-    .binary-stream {
-        font-family: var(--mono-font); font-size: 14px; color: #1a1a1a;
-        line-height: 1.2; word-break: break-all; text-align: center;
-        animation: streamDown 20s linear infinite; white-space: pre-wrap;
-    }
-    @keyframes streamDown { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
-    .binary-stream span.highlight { color: #333; }
-
     .close-project { 
         position: absolute; bottom: 40px; left: 20px; 
         font-family: var(--mono-font); font-size: 10px; color: var(--hazard-yellow); 
@@ -174,7 +162,7 @@
     }
 
     @media (max-width: 768px) {
-        .nav-hub, #cursor-main, .binary-pillar { display: none !important; }
+        .nav-hub, #cursor-main { display: none !important; }
         #viewport { padding: 110px 25px 0 25px; height: auto; position: relative; overflow-y: auto; }
         .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 70px; }
         #project-detail { clip-path: none !important; display: none; }
@@ -288,11 +276,6 @@
         <p class="desc-container">
             DATA_EXTRACTED: SYSTEM ARCHITECTURE REVEALED. IMMERSIVE MODULES LOADED INTO PRIMARY BUFFER. SYSTEM STABLE. EVERY LINE OF CODE IS A STRUCTURAL CHOICE IN THE PURSUIT OF DIGITAL PERMANENCE.
         </p>
-        
-        <div class="binary-pillar">
-            <div class="binary-stream" id="bin-stream"></div>
-        </div>
-
         <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
     </section>
 
@@ -306,20 +289,6 @@
     const viewport = document.getElementById('viewport');
     const cursor = document.getElementById('cursor-main');
     let isBooted = false;
-
-    // GENERATE BINARY STREAM
-    const binPillar = document.getElementById('bin-stream');
-    function generateBinary() {
-        const chars = "01ΔΘΛΞΠΣΦΨΩ01";
-        let str = "";
-        for(let i=0; i<500; i++) {
-            const char = chars[Math.floor(Math.random()*chars.length)];
-            str += Math.random() > 0.8 ? `<span class="highlight">${char}</span>` : char;
-            if(i % 2 === 0) str += " ";
-        }
-        binPillar.innerHTML = str + str; // Double for seamless loop
-    }
-    generateBinary();
 
     // PROJECT LOGIC
     function openProject(name) {
