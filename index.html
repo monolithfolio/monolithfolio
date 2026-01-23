@@ -185,10 +185,11 @@
         .text-frame { height: auto; }
         .slide { 
             position: relative; opacity: 1 !important; visibility: visible !important; 
-            transform: none !important; height: auto; margin-bottom: 100px; 
+            transform: none !important; height: auto; margin-bottom: 80px; 
         }
         .slide-header { height: auto; margin-bottom: 20px; }
-        .stable-h1 { font-size: 3rem; }
+        .stable-h1 { font-size: 2.2rem; } /* Decreased heading size */
+        
         .content-layout { 
             display: flex; flex-direction: column; 
             gap: 20px; max-width: 100%; 
@@ -196,12 +197,23 @@
         .side-info { padding: 0; display: flex; gap: 15px; }
         .desc-container { padding: 0; font-size: 13px; }
         
-        /* Disable Scramble logic handled in JS, but force static text via CSS if needed */
         .scramble-h2, .scramble-body { opacity: 1 !important; visibility: visible !important; }
 
-        .profile-watermark { display: none; }
+        .profile-watermark { 
+            display: block; position: fixed; width: 300px; height: 300px; 
+            top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            z-index: -1; opacity: 0.2 !important; filter: grayscale(1);
+        }
         #cursor-main { display: none !important; }
+
+        #back-to-top {
+            display: block; margin: 40px auto; 
+            font-family: var(--mono-font); font-size: 10px; color: var(--hazard-yellow); 
+            border: 1px solid #222; padding: 15px; width: fit-content; text-align: center;
+        }
     }
+
+    #back-to-top { display: none; }
     </style>
 </head>
 <body>
@@ -299,6 +311,8 @@
                     </div>
                 </div>
             </section>
+            
+            <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">[ RETURN_TO_TOP ]</div>
         </div>
     </main>
 
@@ -332,7 +346,7 @@
             setTimeout(() => { viewport.style.opacity = '0'; }, 650); 
         } else {
             detail.classList.add('visible');
-            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
         }
     }
 
@@ -354,6 +368,7 @@
             });
         } else {
             detail.classList.remove('visible');
+            document.body.style.overflow = 'auto';
         }
     }
 
@@ -374,12 +389,11 @@
         if (!isBooted) return;
         document.getElementById('preloader').classList.add('exit');
         setTimeout(() => {
-            if(!isMobile) bg.classList.add('booted');
+            bg.classList.add('booted');
             document.getElementById('preloader').style.display = 'none';
             if(!isMobile) {
                 triggerContent(slides[0]);
             } else {
-                // Static display for mobile: Ensure text is visible immediately
                 slides.forEach(s => {
                     const h = s.querySelector('.scramble-h2'); if(h) h.innerText = h.dataset.orig;
                     const b = s.querySelector('.scramble-body'); if(b) b.innerText = b.dataset.txt;
@@ -390,7 +404,7 @@
 
     // INTERACTION LOGIC
     function triggerContent(slide) {
-        if(isMobile) return; // Skip scramble on mobile
+        if(isMobile) return; 
         const s = slide.querySelector('.scramble-h2'); if(s) scramble(s, s.dataset.orig);
         const b = slide.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
     }
