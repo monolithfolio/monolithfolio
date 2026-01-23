@@ -122,7 +122,6 @@
         position: fixed; left: 0; top: 50%; transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg); 
         width: var(--wheel-size); height: var(--wheel-size); z-index: 8500;
         transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-        touch-action: none;
     }
     .nav-hub.cartwheel-active {
         transition: transform var(--wheel-travel-speed) cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -158,48 +157,50 @@
         cursor: pointer; letter-spacing: 2px; border: 1px solid #222; padding: 15px; width: fit-content; 
     }
 
-    /* MOBILE OVERRIDES (Enhanced to keep Wheel functionality) */
+    /* MOBILE VERSION OVERRIDES */
     @media (max-width: 768px) {
-        :root {
-            --wheel-size: 380px; /* Smaller wheel for mobile */
-            --brand-width: 60px;
-            --safety-gap: 20px;
-            --header-height: 120px;
-        }
+        body, html { overflow-y: auto !important; height: auto; }
         
-        #cursor-main { display: none !important; }
+        .brand-pillar {
+            position: fixed; top: 0; left: 0; right: 0; bottom: auto;
+            width: 100%; height: 60px; flex-direction: row; 
+            padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a;
+            justify-content: center; gap: 10px;
+        }
+        .brand-pillar::after {
+            left: 0; right: 0; top: auto; bottom: 0;
+            width: 100%; height: 6px;
+            background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
+            animation: pillarHazardMoveHorizontal 0.8s linear infinite;
+        }
+        @keyframes pillarHazardMoveHorizontal { 0% { background-position: 0 0; } 100% { background-position: 34px 0; } }
+        .brand-letter { font-size: 24px; transform: none; }
 
-        .brand-pillar { width: var(--brand-width); padding: 20px 0; }
-        .brand-letter { font-size: 24px; }
+        .nav-hub { display: none !important; }
 
         #viewport { 
-            padding-left: 50px; /* Reduced to show wheel edge */
-            padding-right: calc(var(--brand-width) + 15px); 
+            position: relative; padding: 80px 20px 40px 20px; 
+            height: auto; width: 100%; overflow: visible; 
         }
-
-        .nav-hub { 
-            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -1.6)) rotate(0deg); 
-            z-index: 9500; /* Bring above viewport for touch */
+        .text-frame { height: auto; }
+        .slide { 
+            position: relative; opacity: 1 !important; visibility: visible !important; 
+            transform: none !important; height: auto; margin-bottom: 100px; 
         }
-
-        .inner-label { transform: rotate(calc(72deg * var(--i))) translateX(150px); }
-
+        .slide-header { height: auto; margin-bottom: 20px; }
+        .stable-h1 { font-size: 3rem; }
         .content-layout { 
-            grid-template-columns: 1fr; 
-            gap: 20px; 
-            overflow-y: auto; 
-            padding-bottom: 40px;
+            display: flex; flex-direction: column; 
+            gap: 20px; max-width: 100%; 
         }
-        .contact-layout { grid-template-columns: 1fr; }
-        .side-info { display: flex; gap: 20px; border-bottom: 1px solid #111; padding-bottom: 10px; margin-bottom: 10px; }
-        .desc-container { padding-left: 0; font-size: 10px; }
-        .map-container { height: 200px; }
+        .side-info { padding: 0; display: flex; gap: 15px; }
+        .desc-container { padding: 0; font-size: 13px; }
+        
+        /* Disable Scramble logic handled in JS, but force static text via CSS if needed */
+        .scramble-h2, .scramble-body { opacity: 1 !important; visibility: visible !important; }
 
-        .profile-watermark { width: 400px; height: 400px; left: 50%; }
-
-        /* Project detail mobile adjustments */
-        #project-detail .stable-h1 { position: relative; top: 20px; left: 20px; font-size: 2rem; }
-        #project-detail .desc-container { margin-top: 40px; }
+        .profile-watermark { display: none; }
+        #cursor-main { display: none !important; }
     }
     </style>
 </head>
@@ -319,35 +320,41 @@
     const viewport = document.getElementById('viewport');
     const cursor = document.getElementById('cursor-main');
     let isBooted = false;
-    let lastIdx = 0;
 
     // PROJECT LOGIC
     function openProject(name) {
         document.getElementById('detail-title').innerText = name;
-        navTrigger.classList.remove('reverse-wipe');
-        detail.classList.remove('wipe-return');
-        navTrigger.classList.add('cartwheel-active');
-        detail.classList.add('visible');
-        setTimeout(() => { viewport.style.opacity = '0'; }, 650); 
+        if(!isMobile) {
+            navTrigger.classList.remove('reverse-wipe');
+            detail.classList.remove('wipe-return');
+            navTrigger.classList.add('cartwheel-active');
+            detail.classList.add('visible');
+            setTimeout(() => { viewport.style.opacity = '0'; }, 650); 
+        } else {
+            detail.classList.add('visible');
+            window.scrollTo(0, 0);
+        }
     }
 
     function closeProject() {
-        navTrigger.style.transition = "none";
-        const travelPos = isMobile ? "calc(100vw + (var(--wheel-size) / 2))" : "calc(100vw + (var(--wheel-size) / 2))";
-        navTrigger.style.transform = `translateY(-50%) translateX(${travelPos}) rotate(var(--full-rotation))`;
-        
-        requestAnimationFrame(() => {
-            navTrigger.style.transition = ""; 
-            navTrigger.classList.remove('cartwheel-active');
-            navTrigger.classList.add('reverse-wipe');
-            detail.classList.add('wipe-return');
-            setTimeout(() => { viewport.style.opacity = '1'; }, 850);
-            setTimeout(() => {
-                detail.classList.remove('visible', 'wipe-return');
-                navTrigger.classList.remove('reverse-wipe');
-                navTrigger.style.transform = ""; 
-            }, 1700); 
-        });
+        if(!isMobile) {
+            navTrigger.style.transition = "none";
+            navTrigger.style.transform = "translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation))";
+            requestAnimationFrame(() => {
+                navTrigger.style.transition = ""; 
+                navTrigger.classList.remove('cartwheel-active');
+                navTrigger.classList.add('reverse-wipe');
+                detail.classList.add('wipe-return');
+                setTimeout(() => { viewport.style.opacity = '1'; }, 850);
+                setTimeout(() => {
+                    detail.classList.remove('visible', 'wipe-return');
+                    navTrigger.classList.remove('reverse-wipe');
+                    navTrigger.style.transform = ""; 
+                }, 1700); 
+            });
+        } else {
+            detail.classList.remove('visible');
+        }
     }
 
     // BOOT LOGIC
@@ -359,11 +366,7 @@
             const l = document.createElement('div'); l.className = 'term-line'; l.innerText = `> ${cmds[i++]}`;
             log.prepend(l);
             document.getElementById('pre-bar').style.width = (i/cmds.length)*100+"%";
-            if(i==cmds.length){ 
-                clearInterval(interval); 
-                isBooted = true; 
-                document.getElementById('any-key-prompt').classList.add('visible'); 
-            }
+            if(i==cmds.length){ clearInterval(interval); isBooted = true; document.getElementById('any-key-prompt').classList.add('visible'); }
         }, 150);
     }
 
@@ -371,14 +374,23 @@
         if (!isBooted) return;
         document.getElementById('preloader').classList.add('exit');
         setTimeout(() => {
-            bg.classList.add('booted');
+            if(!isMobile) bg.classList.add('booted');
             document.getElementById('preloader').style.display = 'none';
-            triggerContent(slides[0]);
+            if(!isMobile) {
+                triggerContent(slides[0]);
+            } else {
+                // Static display for mobile: Ensure text is visible immediately
+                slides.forEach(s => {
+                    const h = s.querySelector('.scramble-h2'); if(h) h.innerText = h.dataset.orig;
+                    const b = s.querySelector('.scramble-body'); if(b) b.innerText = b.dataset.txt;
+                });
+            }
         }, 800);
     }
 
-    // SCRAMBLE LOGIC
+    // INTERACTION LOGIC
     function triggerContent(slide) {
+        if(isMobile) return; // Skip scramble on mobile
         const s = slide.querySelector('.scramble-h2'); if(s) scramble(s, s.dataset.orig);
         const b = slide.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
     }
@@ -394,56 +406,38 @@
         }, 30);
     }
 
-    // NAVIGATION SHARED LOGIC
-    function updateNavigation(rotation) {
-        wheel.style.transform = `rotate(${rotation}deg)`;
-        let newIdx = (Math.round(-rotation / 72) % 5 + 5) % 5;
-        if (newIdx !== lastIdx) {
-            lastIdx = newIdx;
-            slides.forEach((s, i) => {
-                s.classList.toggle('active', i === newIdx);
-                if (i === newIdx) triggerContent(s);
-            });
-            document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
-            bg.classList.toggle('hidden-bg', lastIdx === 4);
-        }
+    // NAVIGATION
+    if(!isMobile) {
+        let lastIdx = 0;
+        navTrigger.onwheel = e => {
+            if(!isBooted || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
+            e.preventDefault();
+            let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
+            let targetRot = currentRot - (e.deltaY * 0.4);
+            wheel.style.transform = `rotate(${targetRot}deg)`;
+            let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
+            if (newIdx !== lastIdx) {
+                lastIdx = newIdx;
+                slides.forEach((s, i) => {
+                    s.classList.toggle('active', i === newIdx);
+                    if (i === newIdx) triggerContent(s);
+                });
+                document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
+                bg.classList.toggle('hidden-bg', lastIdx === 4);
+            }
+        };
     }
-
-    // WHEEL DESKTOP
-    navTrigger.onwheel = e => {
-        if(!isBooted || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
-        e.preventDefault();
-        let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
-        updateNavigation(currentRot - (e.deltaY * 0.4));
-    };
-
-    // TOUCH NAVIGATION (MOBILE)
-    let touchStart = 0;
-    let currentRotation = 0;
-    navTrigger.addEventListener('touchstart', e => {
-        touchStart = e.touches[0].clientY;
-        const style = window.getComputedStyle(wheel);
-        const matrix = new WebKitCSSMatrix(style.transform);
-        currentRotation = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI)) || currentRotation;
-    });
-
-    navTrigger.addEventListener('touchmove', e => {
-        if(!isBooted || navTrigger.classList.contains('cartwheel-active')) return;
-        let touchMove = e.touches[0].clientY;
-        let diff = (touchStart - touchMove) * 0.5;
-        updateNavigation(currentRotation - diff);
-    });
 
     // CURSOR & EVENT LISTENERS
     window.addEventListener('mousedown', exitPreloader);
     window.addEventListener('touchstart', exitPreloader);
     window.addEventListener('load', runBoot);
-    
+        
     window.addEventListener('mousemove', (e) => {
         if(isMobile) return;
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
-        
+                
         const target = e.target;
         const isInteractive = target.closest('a, button, input, textarea, [onclick], .close-project');
         if (isInteractive) {
