@@ -71,7 +71,7 @@
     }
     .profile-watermark img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* BRAND PILLAR - Highest Z-Index */
+    /* BRAND PILLAR */
     .brand-pillar {
         position: fixed; right: 0; top: 0; bottom: auto; width: var(--brand-width);
         background: var(--bg-color); border-left: 1px solid #1a1a1a;
@@ -114,11 +114,12 @@
     button:hover { background: var(--hazard-yellow); }
 
     /* ICON LINKS */
-    .icon-social-wrap { display: flex; gap: 25px; margin-top: 25px; }
-    .icon-link { color: #444; font-size: 18px; transition: 0.3s; text-decoration: none; }
-    .icon-link:hover { color: #fff; transform: translateY(-3px); }
+    .icon-social-wrap { display: flex; align-items: center; gap: 25px; margin-top: 25px; }
+    .icon-link { color: var(--hazard-yellow); font-size: 18px; transition: 0.3s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    .icon-link:hover { opacity: 0.7; transform: translateY(-3px); }
+    .icon-link.text-link { font-family: var(--mono-font); font-size: 10px; font-weight: 700; letter-spacing: 1px; }
 
-    /* WHEEL NAVIGATION - Lower Z-Index than Brand Pillar */
+    /* WHEEL NAVIGATION */
     .nav-hub { 
         position: fixed; left: 0; top: 50%; transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg); 
         width: var(--wheel-size); height: var(--wheel-size); z-index: 8500;
@@ -246,19 +247,19 @@
                 </div>
             </section>
 
-            <section class="slide" id="contact">
-                <div class="slide-header"><h1 class="stable-h1">CONTACT.</h1><div class="scramble-h2" data-orig="SECURE_CHANNEL_INIT">SECURE_CHANNEL_INIT</div></div>
+            <section class="slide" id="link-up">
+                <div class="slide-header"><h1 class="stable-h1">LINK UP.</h1><div class="scramble-h2" data-orig="SECURE_CHANNEL_INIT">SECURE_CHANNEL_INIT</div></div>
                 <div class="content-layout contact-layout">
                     <div class="side-info"><span><b>SEC</b>LVL5</span><span><b>KEY</b>RSA</span></div>
                     <div class="desc-container">
-                        <input type="text" placeholder="IDENTITY_LABEL">
-                        <textarea placeholder="TRANSMISSION_DATA" rows="4"></textarea>
+                        <input type="text" placeholder="NAME">
+                        <input type="email" placeholder="EMAIL">
+                        <textarea placeholder="MESSAGE" rows="4"></textarea>
                         <button>EXECUTE_SEND</button>
                         <div class="icon-social-wrap">
+                            <a href="#" class="icon-link"><i class="fa-brands fa-instagram"></i></a>
                             <a href="#" class="icon-link"><i class="fa-brands fa-github"></i></a>
                             <a href="#" class="icon-link"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" class="icon-link"><i class="fa-brands fa-x-twitter"></i></a>
-                            <a href="#" class="icon-link"><i class="fa-brands fa-instagram"></i></a>
                         </div>
                     </div>
                     <div class="map-container">
@@ -270,7 +271,7 @@
     </main>
 
     <section id="project-detail">
-        <h1 class="stable-h1" id="detail-title">PROJECT_NAME</h1>
+        <h1 class="stable-h1" id="detail-title">PROJECT</h1>
         <p class="desc-container">
             DATA_EXTRACTED: SYSTEM ARCHITECTURE REVEALED. IMMERSIVE MODULES LOADED INTO PRIMARY BUFFER. SYSTEM STABLE. EVERY LINE OF CODE IS A STRUCTURAL CHOICE IN THE PURSUIT OF DIGITAL PERMANENCE.
         </p>
