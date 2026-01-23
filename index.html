@@ -199,10 +199,20 @@
         
         .scramble-h2, .scramble-body { opacity: 1 !important; visibility: visible !important; }
 
+        /* BACKDROP RE-ENABLED FOR MOBILE */
         .profile-watermark { 
-            display: block; position: fixed; width: 300px; height: 300px; 
-            top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            z-index: -1; opacity: 0.2 !important; filter: grayscale(1);
+            display: block !important; 
+            position: fixed !important; 
+            width: 320px !important; 
+            height: 320px !important; 
+            top: 50% !important; 
+            left: 50% !important; 
+            transform: translate(-50%, -50%) !important; 
+            z-index: -1 !important; 
+            opacity: 0.3 !important; /* Visible but subtle */
+            filter: grayscale(1) brightness(0.8) !important;
+            pointer-events: none;
+            animation: none !important;
         }
         #cursor-main { display: none !important; }
 
@@ -389,7 +399,8 @@
         if (!isBooted) return;
         document.getElementById('preloader').classList.add('exit');
         setTimeout(() => {
-            bg.classList.add('booted');
+            // Only play desktop animation if not mobile
+            if(!isMobile) bg.classList.add('booted');
             document.getElementById('preloader').style.display = 'none';
             if(!isMobile) {
                 triggerContent(slides[0]);
