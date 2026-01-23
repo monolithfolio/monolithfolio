@@ -39,7 +39,6 @@
         pointer-events: none; z-index: 99999; transform: translate(-50%, -50%); 
         mix-blend-mode: difference; transition: width 0.3s, height 0.3s, background 0.3s; border-radius: 50%; 
     }
-    
     #cursor-main.active { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: 1px solid var(--hazard-yellow); }
 
     /* PRELOADER */
@@ -94,7 +93,6 @@
 
     .slide-header { height: var(--header-height); display: flex; flex-direction: column; justify-content: flex-end; margin-bottom: 30px; flex-shrink: 0; }
     .content-layout { display: grid; grid-template-columns: 80px 1fr 0.8fr; gap: 15px; width: 100%; max-width: 1100px; flex-grow: 1; min-height: 0; }
-    
     .contact-layout { grid-template-columns: 80px 1fr 1fr; }
     .map-container { 
         width: 100%; height: 310px; background: #0a0a0a; border: 1px solid #111; 
@@ -124,6 +122,7 @@
         position: fixed; left: 0; top: 50%; transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg); 
         width: var(--wheel-size); height: var(--wheel-size); z-index: 8500;
         transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        touch-action: none;
     }
     .nav-hub.cartwheel-active {
         transition: transform var(--wheel-travel-speed) cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -150,7 +149,6 @@
         transition: clip-path var(--return-speed) cubic-bezier(0.4, 0, 0.2, 1);
         clip-path: inset(0 100% 0 0); 
     }
-    
     #project-detail .stable-h1 { position: absolute; top: 20px; left: 20px; margin: 0; z-index: 20; }
     #project-detail .desc-container { margin-top: 140px; margin-left: 20px; color: #666; max-width: 500px; padding-left: 0; }
 
@@ -160,15 +158,48 @@
         cursor: pointer; letter-spacing: 2px; border: 1px solid #222; padding: 15px; width: fit-content; 
     }
 
+    /* MOBILE OVERRIDES (Enhanced to keep Wheel functionality) */
     @media (max-width: 768px) {
-        .nav-hub, #cursor-main { display: none !important; }
-        #viewport { padding: 110px 25px 0 25px; height: auto; position: relative; overflow-y: auto; }
-        .slide { position: relative !important; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 70px; }
-        #project-detail { clip-path: none !important; display: none; }
-        #project-detail.visible { display: flex; }
-        #project-detail .stable-h1 { position: relative; top: 0; left: 0; padding: 25px; }
-        #project-detail .desc-container { margin-top: 0; padding: 25px; }
-        .close-project { position: relative; bottom: 0; left: 25px; margin-bottom: 50px; }
+        :root {
+            --wheel-size: 380px; /* Smaller wheel for mobile */
+            --brand-width: 60px;
+            --safety-gap: 20px;
+            --header-height: 120px;
+        }
+        
+        #cursor-main { display: none !important; }
+
+        .brand-pillar { width: var(--brand-width); padding: 20px 0; }
+        .brand-letter { font-size: 24px; }
+
+        #viewport { 
+            padding-left: 50px; /* Reduced to show wheel edge */
+            padding-right: calc(var(--brand-width) + 15px); 
+        }
+
+        .nav-hub { 
+            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -1.6)) rotate(0deg); 
+            z-index: 9500; /* Bring above viewport for touch */
+        }
+
+        .inner-label { transform: rotate(calc(72deg * var(--i))) translateX(150px); }
+
+        .content-layout { 
+            grid-template-columns: 1fr; 
+            gap: 20px; 
+            overflow-y: auto; 
+            padding-bottom: 40px;
+        }
+        .contact-layout { grid-template-columns: 1fr; }
+        .side-info { display: flex; gap: 20px; border-bottom: 1px solid #111; padding-bottom: 10px; margin-bottom: 10px; }
+        .desc-container { padding-left: 0; font-size: 10px; }
+        .map-container { height: 200px; }
+
+        .profile-watermark { width: 400px; height: 400px; left: 50%; }
+
+        /* Project detail mobile adjustments */
+        #project-detail .stable-h1 { position: relative; top: 20px; left: 20px; font-size: 2rem; }
+        #project-detail .desc-container { margin-top: 40px; }
     }
     </style>
 </head>
@@ -288,6 +319,7 @@
     const viewport = document.getElementById('viewport');
     const cursor = document.getElementById('cursor-main');
     let isBooted = false;
+    let lastIdx = 0;
 
     // PROJECT LOGIC
     function openProject(name) {
@@ -301,7 +333,8 @@
 
     function closeProject() {
         navTrigger.style.transition = "none";
-        navTrigger.style.transform = "translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation))";
+        const travelPos = isMobile ? "calc(100vw + (var(--wheel-size) / 2))" : "calc(100vw + (var(--wheel-size) / 2))";
+        navTrigger.style.transform = `translateY(-50%) translateX(${travelPos}) rotate(var(--full-rotation))`;
         
         requestAnimationFrame(() => {
             navTrigger.style.transition = ""; 
@@ -326,7 +359,11 @@
             const l = document.createElement('div'); l.className = 'term-line'; l.innerText = `> ${cmds[i++]}`;
             log.prepend(l);
             document.getElementById('pre-bar').style.width = (i/cmds.length)*100+"%";
-            if(i==cmds.length){ clearInterval(interval); isBooted = true; document.getElementById('any-key-prompt').classList.add('visible'); }
+            if(i==cmds.length){ 
+                clearInterval(interval); 
+                isBooted = true; 
+                document.getElementById('any-key-prompt').classList.add('visible'); 
+            }
         }, 150);
     }
 
@@ -336,11 +373,11 @@
         setTimeout(() => {
             bg.classList.add('booted');
             document.getElementById('preloader').style.display = 'none';
-            if(!isMobile) triggerContent(slides[0]);
+            triggerContent(slides[0]);
         }, 800);
     }
 
-    // INTERACTION LOGIC
+    // SCRAMBLE LOGIC
     function triggerContent(slide) {
         const s = slide.querySelector('.scramble-h2'); if(s) scramble(s, s.dataset.orig);
         const b = slide.querySelector('.scramble-body'); if(b) scramble(b, b.dataset.txt);
@@ -357,27 +394,45 @@
         }, 30);
     }
 
-    // NAVIGATION
-    if(!isMobile) {
-        let lastIdx = 0;
-        navTrigger.onwheel = e => {
-            if(!isBooted || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
-            e.preventDefault();
-            let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
-            let targetRot = currentRot - (e.deltaY * 0.4);
-            wheel.style.transform = `rotate(${targetRot}deg)`;
-            let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
-            if (newIdx !== lastIdx) {
-                lastIdx = newIdx;
-                slides.forEach((s, i) => {
-                    s.classList.toggle('active', i === newIdx);
-                    if (i === newIdx) triggerContent(s);
-                });
-                document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
-                bg.classList.toggle('hidden-bg', lastIdx === 4);
-            }
-        };
+    // NAVIGATION SHARED LOGIC
+    function updateNavigation(rotation) {
+        wheel.style.transform = `rotate(${rotation}deg)`;
+        let newIdx = (Math.round(-rotation / 72) % 5 + 5) % 5;
+        if (newIdx !== lastIdx) {
+            lastIdx = newIdx;
+            slides.forEach((s, i) => {
+                s.classList.toggle('active', i === newIdx);
+                if (i === newIdx) triggerContent(s);
+            });
+            document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
+            bg.classList.toggle('hidden-bg', lastIdx === 4);
+        }
     }
+
+    // WHEEL DESKTOP
+    navTrigger.onwheel = e => {
+        if(!isBooted || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
+        e.preventDefault();
+        let currentRot = parseFloat(wheel.style.transform.replace('rotate(','')) || 0;
+        updateNavigation(currentRot - (e.deltaY * 0.4));
+    };
+
+    // TOUCH NAVIGATION (MOBILE)
+    let touchStart = 0;
+    let currentRotation = 0;
+    navTrigger.addEventListener('touchstart', e => {
+        touchStart = e.touches[0].clientY;
+        const style = window.getComputedStyle(wheel);
+        const matrix = new WebKitCSSMatrix(style.transform);
+        currentRotation = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI)) || currentRotation;
+    });
+
+    navTrigger.addEventListener('touchmove', e => {
+        if(!isBooted || navTrigger.classList.contains('cartwheel-active')) return;
+        let touchMove = e.touches[0].clientY;
+        let diff = (touchStart - touchMove) * 0.5;
+        updateNavigation(currentRotation - diff);
+    });
 
     // CURSOR & EVENT LISTENERS
     window.addEventListener('mousedown', exitPreloader);
@@ -385,6 +440,7 @@
     window.addEventListener('load', runBoot);
     
     window.addEventListener('mousemove', (e) => {
+        if(isMobile) return;
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
         
