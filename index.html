@@ -849,17 +849,31 @@
         const cursor = document.getElementById('cursor-main');
         let isBooted = false;
 
-        // LIVE VISITOR COUNTER LOGIC
+        // UPDATED LIVE VISITOR COUNTER LOGIC (Using Hiyoko API)
         async function fetchVisitorCount() {
             try {
-                const namespace = "monolith-folio-v4";
-                const key = "visitor-log-prod";
-                const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                // Using your unique site name as the key
+                const siteID = "monolith-portfolio-jack-2026";
+                let apiUrl = `https://api.hiyoko.dev/count/v1/${siteID}`;
+                
+                // SESSION GUARD: Only 'hit' the counter if this user hasn't visited in this browser session
+                if (!localStorage.getItem('monolith_visited')) {
+                    apiUrl += "/hit"; // Increases count
+                    localStorage.setItem('monolith_visited', 'true');
+                } else {
+                    apiUrl += "/get"; // Just retrieves current count without increasing
+                }
+
+                const response = await fetch(apiUrl);
                 const data = await response.json();
-                const count = data.value.toString().padStart(6, '0');
-                document.getElementById('count-output').innerText = count;
+                
+                if (data && data.value) {
+                    const count = data.value.toString().padStart(6, '0');
+                    document.getElementById('count-output').innerText = count;
+                }
             } catch (err) {
-                document.getElementById('count-output').innerText = "000000";
+                console.error("Traffic Log Sync Failed", err);
+                document.getElementById('count-output').innerText = "OFFLINE";
             }
         }
 
@@ -888,7 +902,6 @@
             emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params)
                 .then(() => {
                     btn.innerText = "SIGNAL_SENT";
-                    // Reset fields
                     document.getElementById('user_name').value = "";
                     document.getElementById('user_email').value = "";
                     document.getElementById('user_message').value = "";
@@ -897,7 +910,6 @@
                         btn.disabled = false;
                     }, 3000);
                 }, (error) => {
-                    console.error("FAILED", error);
                     btn.innerText = "ERR_CONNECTION_LOST";
                     btn.style.background = "#ff0000";
                     setTimeout(() => {
