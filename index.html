@@ -336,29 +336,6 @@
             padding-right: 15px;
         }
 
-        .simple-counter {
-            margin-top: 30px;
-            padding-left: 10px;
-            border-left: 1px solid var(--hazard-yellow);
-        }
-
-        .counter-label {
-            font-family: var(--mono-font);
-            font-size: 8px;
-            color: #555;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .counter-value {
-            font-family: var(--mono-font);
-            font-size: 16px;
-            color: var(--text-main);
-            letter-spacing: 4px;
-            font-weight: 700;
-        }
-
         .desc-container {
             padding-left: 10px;
             font-family: var(--mono-font);
@@ -805,10 +782,6 @@
                 <div class="content-layout contact-layout">
                     <div class="side-info">
                         <span><b>SEC</b>LVL5</span><span><b>KEY</b>RSA</span>
-                        <div class="simple-counter">
-                            <span class="counter-label">TRAFFIC_LOG</span>
-                            <span class="counter-value" id="count-output">000000</span>
-                        </div>
                     </div>
                     <div class="desc-container">
                         <input type="text" id="user_name" placeholder="NAME">
@@ -848,34 +821,6 @@
         const viewport = document.getElementById('viewport');
         const cursor = document.getElementById('cursor-main');
         let isBooted = false;
-
-        // UPDATED LIVE VISITOR COUNTER LOGIC (Using Hiyoko API)
-        async function fetchVisitorCount() {
-            try {
-                // Using your unique site name as the key
-                const siteID = "monolith-portfolio-jack-2026";
-                let apiUrl = `https://api.hiyoko.dev/count/v1/${siteID}`;
-                
-                // SESSION GUARD: Only 'hit' the counter if this user hasn't visited in this browser session
-                if (!localStorage.getItem('monolith_visited')) {
-                    apiUrl += "/hit"; // Increases count
-                    localStorage.setItem('monolith_visited', 'true');
-                } else {
-                    apiUrl += "/get"; // Just retrieves current count without increasing
-                }
-
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                
-                if (data && data.value) {
-                    const count = data.value.toString().padStart(6, '0');
-                    document.getElementById('count-output').innerText = count;
-                }
-            } catch (err) {
-                console.error("Traffic Log Sync Failed", err);
-                document.getElementById('count-output').innerText = "OFFLINE";
-            }
-        }
 
         // EMAILJS SEND LOGIC
         function sendMail() {
@@ -972,8 +917,6 @@
                     document.getElementById('any-key-prompt').classList.add('visible'); 
                 }
             }, 150);
-            
-            fetchVisitorCount();
         }
 
         function exitPreloader() {
