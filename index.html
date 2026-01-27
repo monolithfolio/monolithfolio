@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Replace with your actual EmailJS Public Key
             emailjs.init("YOUR_PUBLIC_KEY");
         })();
     </script>
@@ -334,6 +334,8 @@
             text-transform: uppercase;
             line-height: 2.2;
             padding-right: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
         .desc-container {
@@ -359,6 +361,94 @@
             color: #555;
             letter-spacing: 5px;
             margin-top: 5px;
+        }
+
+        /* BENTO BOX GRID STYLES */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .bento-box {
+            background: #080808;
+            border: 1px solid #111;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.3s ease;
+        }
+
+        .bento-box:hover {
+            border-color: #222;
+        }
+
+        .bento-box .box-tag {
+            font-size: 8px;
+            color: #444;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bento-box .box-tag .status-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--hazard-yellow);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .bento-box .box-title {
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .bento-box .box-list {
+            color: #666;
+            font-size: 9px;
+            line-height: 1.5;
+        }
+
+        /* Large box (Full width) */
+        .bento-box.full {
+            grid-column: span 2;
+        }
+
+        /* SYSTEM STATUS MODULE */
+        .status-module {
+            margin-top: 25px;
+            border-top: 1px solid #111;
+            padding-top: 15px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 8px;
+            font-family: var(--mono-font);
+            color: #555;
+        }
+
+        .status-bar-bg {
+            height: 1px;
+            background: #111;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .status-bar-fill {
+            height: 100%;
+            background: #444;
         }
 
         /* FORM */
@@ -484,6 +574,24 @@
             color: var(--hazard-yellow);
             scale: 1.5;
             text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+        }
+
+        /* SCROLL NOTICE */
+        #scroll-hint {
+            margin-top: 25px;
+            font-family: var(--mono-font);
+            font-size: 8px;
+            color: var(--hazard-yellow);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            animation: blinker 2.5s infinite;
+            transition: opacity 0.5s ease;
+            opacity: 0.5;
+        }
+
+        #scroll-hint.hidden {
+            opacity: 0;
         }
 
         /* PROJECT DETAIL */
@@ -628,16 +736,12 @@
                 padding: 0;
                 display: flex;
                 gap: 15px;
+                flex-direction: row;
             }
 
             .desc-container {
                 padding: 0;
                 font-size: 13px;
-            }
-
-            .scramble-h2, .scramble-body {
-                opacity: 1 !important;
-                visibility: visible !important;
             }
 
             .profile-watermark {
@@ -677,6 +781,17 @@
                 padding: 15px;
                 width: fit-content;
                 text-align: center;
+            }
+
+            #scroll-hint {
+                display: none !important;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .bento-box.full {
+                grid-column: span 1;
             }
         }
 
@@ -727,12 +842,16 @@
             <section class="slide active" id="identity">
                 <div class="slide-header">
                     <h1 class="stable-h1">IDENTITY.</h1>
-                    <div class="scramble-h2" data-orig="SYSTEM_INIT_IDENTITY">SYSTEM_INIT_IDENTITY</div>
+                    <div class="scramble-h2">SYSTEM_INIT_IDENTITY</div>
                 </div>
                 <div class="content-layout">
-                    <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
+                    <div class="side-info">
+                        <span><b>LOC</b>EARTH</span>
+                        <span><b>SYS</b>01</span>
+                    </div>
                     <div class="desc-container">
-                        <div class="scramble-body" data-txt="Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting. Every line of code is a structural choice in the pursuit of digital permanence."></div>
+                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting. Every line of code is a structural choice in the pursuit of digital permanence.</div>
+                        <div id="scroll-hint">SCROLL_TO_NAVIGATE</div>
                     </div>
                 </div>
             </section>
@@ -740,12 +859,12 @@
             <section class="slide" id="works">
                 <div class="slide-header">
                     <h1 class="stable-h1">WORKS.</h1>
-                    <div class="scramble-h2" data-orig="ARCHIVE_ACCESS_WORKS">ARCHIVE_ACCESS_WORKS</div>
+                    <div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div>
                 </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body" data-txt="Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void."></div>
+                        <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void.</div>
                         <div style="margin-top:20px;">
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('PILLAR_PROJECT')"><span>01 // PILLAR_PROJECT</span></div>
                             <div style="cursor:pointer; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')"><span>02 // VOID_CORE</span></div>
@@ -757,12 +876,61 @@
             <section class="slide" id="stack">
                 <div class="slide-header">
                     <h1 class="stable-h1">STACK.</h1>
-                    <div class="scramble-h2" data-orig="TECH_SPEC_REVEAL">TECH_SPEC_REVEAL</div>
+                    <div class="scramble-h2">TECH_SPEC_REVEAL</div>
                 </div>
                 <div class="content-layout">
-                    <div class="side-info"><span><b>TYPE</b>FULL</span><span><b>VER</b>8.4</span></div>
+                    <div class="side-info">
+                        <span><b>TYPE</b>FULL</span>
+                        <span><b>VER</b>8.4</span>
+                    </div>
                     <div class="desc-container">
-                        <div class="scramble-body" data-txt="Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic for visual fidelity."></div>
+                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic for visual fidelity. System architecture optimized for stability and responsive interaction.</div>
+                        
+                        <div class="bento-grid">
+                            <div class="bento-box">
+                                <div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">FRONT_END</div>
+                                <div class="box-list">REACT / NEXT.JS / GSAP / TAILWIND</div>
+                            </div>
+                            
+                            <div class="bento-box">
+                                <div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">GRAPHICS</div>
+                                <div class="box-list">THREE.JS / GLSL / BLENDER</div>
+                            </div>
+
+                            <div class="bento-box full">
+                                <div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">ENGINEERING & TOOLS</div>
+                                <div class="box-list">NODE.JS / PYTHON / GIT / DOCKER / AWS / FIREBASE</div>
+                            </div>
+
+                            <div class="bento-box">
+                                <div class="box-tag"><span>VIS_LANG</span> <span class="status-dot"></span></div>
+                                <div class="box-title">AESTHETIC</div>
+                                <div class="box-list">BRUTALIST / CYBERNETIC</div>
+                            </div>
+
+                            <div class="bento-box">
+                                <div class="box-tag"><span>OPT_ENG</span> <span class="status-dot"></span></div>
+                                <div class="box-title">PERFORMANCE</div>
+                                <div class="box-list">60FPS / WEVGL_OPT / COMPRESSION</div>
+                            </div>
+                        </div>
+
+                        <div class="status-module">
+                            <div class="status-row">
+                                <span>SYSTEM_INTEGRITY</span>
+                                <span>98%</span>
+                            </div>
+                            <div class="status-bar-bg"><div class="status-bar-fill" style="width: 98%;"></div></div>
+                            
+                            <div class="status-row" style="margin-top:10px;">
+                                <span>DATA_THROUGHPUT</span>
+                                <span>OPTIMIZED</span>
+                            </div>
+                            <div class="status-bar-bg"><div class="status-bar-fill" style="width: 85%;"></div></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -770,12 +938,12 @@
             <section class="slide" id="void">
                 <div class="slide-header">
                     <h1 class="stable-h1">VOID.</h1>
-                    <div class="scramble-h2" data-orig="NULL_SPACE_MONITOR">NULL_SPACE_MONITOR</div>
+                    <div class="scramble-h2">NULL_SPACE_MONITOR</div>
                 </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body" data-txt="Entering the vacuum. Data persistence is non-guaranteed in this sector. All outbound signals are encrypted through the sub-strata layer."></div>
+                        <div class="scramble-body">Entering the vacuum. Data persistence is non-guaranteed in this sector. All outbound signals are encrypted through the sub-strata layer.</div>
                     </div>
                 </div>
             </section>
@@ -783,7 +951,7 @@
             <section class="slide" id="link-up">
                 <div class="slide-header">
                     <h1 class="stable-h1">LINK UP.</h1>
-                    <div class="scramble-h2" data-orig="SECURE_CHANNEL_INIT">SECURE_CHANNEL_INIT</div>
+                    <div class="scramble-h2">SECURE_CHANNEL_INIT</div>
                 </div>
                 <div class="content-layout contact-layout">
                     <div class="side-info">
@@ -826,7 +994,9 @@
         const detail = document.getElementById('project-detail');
         const viewport = document.getElementById('viewport');
         const cursor = document.getElementById('cursor-main');
+        const scrollHint = document.getElementById('scroll-hint');
         let isBooted = false;
+        let interacted = false;
 
         // EMAILJS SEND LOGIC
         function sendMail() {
@@ -931,33 +1101,9 @@
                 if (!isMobile) bg.classList.add('booted');
                 document.getElementById('preloader').style.display = 'none';
                 if (!isMobile) {
-                    triggerContent(slides[0]);
                     updateUprightNumbers(0);
-                } else {
-                    slides.forEach(s => {
-                        const h = s.querySelector('.scramble-h2'); if (h) h.innerText = h.dataset.orig;
-                        const b = s.querySelector('.scramble-body'); if (b) b.innerText = b.dataset.txt;
-                    });
                 }
             }, 800);
-        }
-
-        // INTERACTION LOGIC
-        function triggerContent(slide) {
-            if (isMobile) return;
-            const s = slide.querySelector('.scramble-h2'); if (s) scramble(s, s.dataset.orig);
-            const b = slide.querySelector('.scramble-body'); if (b) scramble(b, b.dataset.txt);
-        }
-
-        function scramble(el, txt) {
-            if (!el || !txt || el.classList.contains('scrambled')) return;
-            el.classList.add('scrambled');
-            let i = 0;
-            el.itv = setInterval(() => {
-                el.innerText = txt.split("").map((l, idx) => idx < i ? txt[idx] : "X0$#"[Math.floor(Math.random() * 4)]).join("");
-                if (i >= txt.length) clearInterval(el.itv);
-                i += txt.length / 10;
-            }, 30);
         }
 
         function updateUprightNumbers(rotation) {
@@ -972,9 +1118,14 @@
         // NAVIGATION
         if (!isMobile) {
             let lastIdx = 0;
-            navTrigger.onwheel = e => {
-                if (!isBooted || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
-                e.preventDefault();
+            window.onwheel = e => {
+                if (!isBooted || detail.classList.contains('visible') || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
+                
+                if (!interacted) {
+                    interacted = true;
+                    scrollHint.classList.add('hidden');
+                }
+
                 let currentRot = parseFloat(wheel.style.transform.replace('rotate(', '')) || 0;
                 let targetRot = currentRot - (e.deltaY * 0.4);
 
@@ -986,7 +1137,6 @@
                     lastIdx = newIdx;
                     slides.forEach((s, i) => {
                         s.classList.toggle('active', i === newIdx);
-                        if (i === newIdx) triggerContent(s);
                     });
                     document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
                     bg.classList.toggle('hidden-bg', lastIdx === 4);
