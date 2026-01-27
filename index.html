@@ -12,7 +12,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Replace "YOUR_PUBLIC_KEY" with your actual EmailJS Public Key
+            // Replace with your actual EmailJS Public Key
             emailjs.init("YOUR_PUBLIC_KEY");
         })();
     </script>
@@ -430,6 +430,8 @@
             height: var(--wheel-size);
             z-index: 8500;
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
         }
 
         .nav-hub.cartwheel-active {
@@ -446,9 +448,12 @@
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            border: 1px solid #111;
+            border: 2px solid #1a1a1a;
             background: #050505;
-            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9), 20px 0 100px rgba(0, 0, 0, 0.8);
+            box-shadow: 
+                inset 0 0 80px rgba(0, 0, 0, 0.9), 
+                20px 0 100px rgba(0, 0, 0, 0.8),
+                0 0 0 10px rgba(255, 255, 255, 0.02);
         }
 
         .inner-label {
@@ -465,9 +470,10 @@
             font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.15);
             display: block;
-            transition: all 0.4s ease;
+            transition: color 0.4s ease, scale 0.4s ease, text-shadow 0.4s ease;
             letter-spacing: 4px;
             font-weight: 700;
+            transform-origin: center;
         }
 
         .inner-label.active {
@@ -843,7 +849,6 @@
                 message: msg
             };
 
-            // Replace ServiceID and TemplateID with your actual EmailJS IDs
             emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params)
                 .then(() => {
                     btn.innerText = "SIGNAL_SENT";
@@ -959,8 +964,8 @@
             const labels = document.querySelectorAll('.inner-label');
             labels.forEach((label, i) => {
                 const span = label.querySelector('span');
-                const containerRot = 72 * i;
-                span.style.transform = `rotate(${- (containerRot + rotation)}deg)`;
+                const labelInherentRotation = 72 * i;
+                span.style.transform = `rotate(${- (labelInherentRotation + rotation)}deg)`;
             });
         }
 
