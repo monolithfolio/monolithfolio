@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,6 +58,7 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow: hidden;
+            transition: background 0.5s ease;
         }
 
         #cursor-main {
@@ -81,7 +81,7 @@
             border: 1px solid var(--hazard-yellow);
         }
 
-        /* PRELOADER */
+        /* REDESIGNED PRELOADER: CALIBRATION SEQ */
         #preloader {
             position: fixed;
             inset: 0;
@@ -90,61 +90,56 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        .terminal-loader {
-            width: 90%;
-            max-width: 450px;
-            padding: 20px;
-            font-family: var(--mono-font);
-        }
-
-        .term-header {
+        .calibration-wrap {
+            width: 400px;
             display: flex;
-            justify-content: space-between;
-            color: #333;
-            font-size: 9px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #111;
-            padding-bottom: 5px;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        #preloader-log-container {
-            height: 180px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column-reverse;
-        }
-
-        .term-line {
-            font-size: 10px;
-            line-height: 1.5;
-            color: #555;
-            margin-bottom: 2px;
-        }
-
-        .term-bar-bg {
+        .scan-line {
             height: 2px;
-            width: 100%;
-            background: #111;
-            position: relative;
-            margin-top: 25px;
-        }
-
-        #pre-bar {
-            height: 100%;
+            background: var(--hazard-yellow);
             width: 0%;
-            background: #fff;
+            box-shadow: 0 0 15px var(--hazard-yellow);
             transition: width 0.1s linear;
         }
 
-        #any-key-prompt {
-            margin-top: 20px;
+        .hex-stream {
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: #222;
+            height: 40px;
+            overflow: hidden;
+            word-break: break-all;
+            line-height: 1;
+        }
+
+        .loader-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--mono-font);
             font-size: 10px;
             color: #fff;
             letter-spacing: 2px;
+        }
+
+        #preloader.exit {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #any-key-prompt {
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: var(--hazard-yellow);
+            letter-spacing: 3px;
             opacity: 0;
             text-align: center;
+            margin-top: 10px;
         }
 
         #any-key-prompt.visible {
@@ -154,12 +149,6 @@
 
         @keyframes blinker {
             50% { opacity: 0; }
-        }
-
-        #preloader.exit {
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.8s cubic-bezier(0.87, 0, 0.13, 1);
         }
 
         /* BACKDROP */
@@ -264,8 +253,8 @@
             opacity: 0;
             visibility: hidden;
             width: 100%;
-            transition: opacity 0.5s, transform 0.6s ease-out;
-            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1), transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(40px);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -282,14 +271,14 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             flex-shrink: 0;
         }
 
         .content-layout {
             display: grid;
-            grid-template-columns: 80px 1fr 0.8fr;
-            gap: 15px;
+            grid-template-columns: 60px 1fr 0.8fr;
+            gap: 10px;
             width: 100%;
             max-width: 1100px;
             flex-grow: 1;
@@ -297,7 +286,7 @@
         }
 
         .contact-layout {
-            grid-template-columns: 80px 1fr 1fr;
+            grid-template-columns: 60px 1fr 1fr;
         }
 
         .map-container {
@@ -323,8 +312,7 @@
             font-family: var(--mono-font);
             font-size: 8px;
             color: #fff;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2px 5px;
+            background: rgba(0, 0, 0, 0.5);            padding: 2px 5px;
         }
 
         .side-info {
@@ -332,18 +320,18 @@
             font-size: 8px;
             color: #444;
             text-transform: uppercase;
-            line-height: 2.2;
-            padding-right: 15px;
+            line-height: 1.8;
+            padding-right: 10px;
             display: flex;
             flex-direction: column;
         }
 
         .desc-container {
-            padding-left: 10px;
+            padding-left: 0;
             font-family: var(--mono-font);
             font-size: 11px;
             color: #888;
-            line-height: 1.8;
+            line-height: 1.6;
             text-transform: uppercase;
         }
 
@@ -353,6 +341,7 @@
             margin: 0;
             line-height: 0.9;
             text-transform: uppercase;
+            transition: all 0.5s ease;
         }
 
         .scramble-h2 {
@@ -363,92 +352,65 @@
             margin-top: 5px;
         }
 
-        /* BENTO BOX GRID STYLES */
+        /* BENTO GRID */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: auto auto auto;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 10px;
             width: 100%;
+            max-width: 500px;
         }
 
         .bento-box {
-            background: #080808;
-            border: 1px solid #111;
-            padding: 15px;
+            background: rgba(8, 8, 8, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .bento-box:hover {
-            border-color: #222;
+            border-color: var(--hazard-yellow);
+            background: rgba(8, 8, 8, 0.8);
         }
 
         .bento-box .box-tag {
-            font-size: 8px;
+            font-size: 7px;
             color: #444;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: flex;
             justify-content: space-between;
+            letter-spacing: 1px;
         }
 
         .bento-box .box-tag .status-dot {
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             background: var(--hazard-yellow);
             border-radius: 50%;
             display: inline-block;
-            margin-right: 5px;
         }
 
         .bento-box .box-title {
             color: #fff;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .bento-box .box-list {
             color: #666;
-            font-size: 9px;
-            line-height: 1.5;
+            font-size: 8px;
+            line-height: 1.3;
         }
 
-        /* Large box (Full width) */
         .bento-box.full {
             grid-column: span 2;
-        }
-
-        /* SYSTEM STATUS MODULE */
-        .status-module {
-            margin-top: 25px;
-            border-top: 1px solid #111;
-            padding-top: 15px;
-        }
-
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 8px;
-            font-family: var(--mono-font);
-            color: #555;
-        }
-
-        .status-bar-bg {
-            height: 1px;
-            background: #111;
-            width: 100%;
-            margin-top: 4px;
-        }
-
-        .status-bar-fill {
-            height: 100%;
-            background: #444;
         }
 
         /* FORM */
@@ -456,11 +418,11 @@
             background: #0a0a0a;
             border: 1px solid #111;
             color: #fff;
-            padding: 15px;
+            padding: 12px;
             font-family: var(--mono-font);
             font-size: 10px;
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             border-radius: 0;
         }
 
@@ -487,29 +449,6 @@
             cursor: not-allowed;
         }
 
-        /* ICON LINKS */
-        .icon-social-wrap {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            margin-top: 25px;
-        }
-
-        .icon-link {
-            color: var(--hazard-yellow);
-            font-size: 18px;
-            transition: 0.3s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-link:hover {
-            opacity: 0.7;
-            transform: translateY(-3px);
-        }
-
         /* SOLID NAV WHEEL */
         .nav-hub {
             position: fixed;
@@ -519,7 +458,7 @@
             width: var(--wheel-size);
             height: var(--wheel-size);
             z-index: 8500;
-            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: transform 0.1s linear; /* Fast for smooth updates */
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 50%;
         }
@@ -544,6 +483,7 @@
                 inset 0 0 80px rgba(0, 0, 0, 0.9), 
                 20px 0 100px rgba(0, 0, 0, 0.8),
                 0 0 0 10px rgba(255, 255, 255, 0.02);
+            transition: transform 0.1s linear;
         }
 
         .inner-label {
@@ -578,7 +518,7 @@
 
         /* SCROLL NOTICE */
         #scroll-hint {
-            margin-top: 25px;
+            margin-top: 15px;
             font-family: var(--mono-font);
             font-size: 8px;
             color: var(--hazard-yellow);
@@ -605,7 +545,7 @@
             flex-direction: column;
             justify-content: flex-start;
             clip-path: inset(0 100% 0 0);
-            transition: clip-path var(--reveal-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            transition: clip-path var(--reveal-speed) cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
         }
 
         #project-detail.visible {
@@ -617,24 +557,33 @@
             clip-path: inset(0 100% 0 0);
         }
 
-        #project-detail .stable-h1 {
+        .detail-header-wrap {
             position: absolute;
             top: 20px;
             left: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 30px;
+            z-index: 50;
+        }
+
+        #project-detail .stable-h1 {
             margin: 0;
-            z-index: 20;
+            line-height: 0.9;
         }
 
         #project-detail .desc-container {
             margin-top: 140px;
             margin-left: 20px;
             color: #666;
-            max-width: 500px;
+            width: calc(100vw - 320px - var(--brand-width) - var(--safety-gap));
+            max-width: 1200px;
             padding-left: 0;
+            transition: all 0.5s ease;
         }
 
         .close-project {
-            position: absolute;
+            position: absolute !important;
             bottom: 40px;
             left: 20px;
             font-family: var(--mono-font);
@@ -645,6 +594,8 @@
             border: 1px solid #222;
             padding: 15px;
             width: fit-content;
+            z-index: 100;
+            background: var(--bg-color);
         }
 
         /* MOBILE VERSION OVERRIDES */
@@ -656,173 +607,54 @@
 
             .brand-pillar {
                 position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: auto;
-                width: 100%;
-                height: 60px;
-                flex-direction: row;
-                padding: 0 20px;
-                border-left: none;
-                border-bottom: 1px solid #1a1a1a;
-                justify-content: center;
-                gap: 10px;
+                top: 0; left: 0; right: 0;
+                width: 100%; height: 60px;
+                flex-direction: row; padding: 0 20px;
+                border-left: none; border-bottom: 1px solid #1a1a1a;
+                justify-content: center; gap: 10px;
             }
 
-            .brand-pillar::after {
-                left: 0;
-                right: 0;
-                top: auto;
-                bottom: 0;
-                width: 100%;
-                height: 6px;
-                background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
-                animation: pillarHazardMoveHorizontal 0.8s linear infinite;
-            }
+            .brand-letter { font-size: 24px; transform: none; }
+            .nav-hub { display: none !important; }
 
-            @keyframes pillarHazardMoveHorizontal {
-                0% { background-position: 0 0; }
-                100% { background-position: 34px 0; }
-            }
+            #viewport { position: relative; padding: 80px 20px 40px 20px; height: auto; width: 100%; overflow: visible; }
+            .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
+            .stable-h1 { font-size: 2.2rem; }
+            .content-layout { display: flex; flex-direction: column; gap: 20px; max-width: 100%; }
+            .desc-container { padding: 0; font-size: 13px; width: 100% !important; }
+            #cursor-main { display: none !important; }
 
-            .brand-letter {
-                font-size: 24px;
-                transform: none;
-            }
-
-            .nav-hub {
-                display: none !important;
-            }
-
-            #viewport {
-                position: relative;
-                padding: 80px 20px 40px 20px;
-                height: auto;
-                width: 100%;
-                overflow: visible;
-            }
-
-            .text-frame {
-                height: auto;
-            }
-
-            .slide {
-                position: relative;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
-                height: auto;
-                margin-bottom: 80px;
-            }
-
-            .slide-header {
-                height: auto;
-                margin-bottom: 20px;
-            }
-
-            .stable-h1 {
-                font-size: 2.2rem;
-            }
-
-            .content-layout {
-                display: flex;
+            .detail-header-wrap { flex-direction: column; align-items: flex-start; gap: 10px; }
+            #project-detail .desc-container {
+                width: calc(100% - 40px);
+                margin-top: 180px;
+                display: flex !important;
                 flex-direction: column;
-                gap: 20px;
-                max-width: 100%;
             }
 
-            .side-info {
-                padding: 0;
-                display: flex;
-                gap: 15px;
-                flex-direction: row;
-            }
-
-            .desc-container {
-                padding: 0;
-                font-size: 13px;
-            }
-
-            .profile-watermark {
-                display: block !important;
-                position: fixed !important;
-                width: 100% !important;
-                height: 100% !important;
-                top: 0 !important;
-                left: 0 !important;
-                transform: none !important;
-                z-index: -1 !important;
-                opacity: 0.25 !important;
-                filter: grayscale(1) brightness(0.6) !important;
-                -webkit-mask-image: radial-gradient(circle, black 20%, transparent 90%) !important;
-                mask-image: radial-gradient(circle, black 20%, transparent 90%) !important;
-                pointer-events: none;
-                animation: none !important;
-            }
-
-            .profile-watermark img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-            }
-
-            #cursor-main {
-                display: none !important;
-            }
-
-            #back-to-top {
-                display: block;
-                margin: 40px auto;
-                font-family: var(--mono-font);
-                font-size: 10px;
-                color: var(--hazard-yellow);
-                border: 1px solid #222;
-                padding: 15px;
-                width: fit-content;
-                text-align: center;
-            }
-
-            #scroll-hint {
-                display: none !important;
-            }
-
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-            .bento-box.full {
-                grid-column: span 1;
-            }
-        }
-
-        #back-to-top {
-            display: none;
+            .bento-grid { grid-template-columns: 1fr; }
+            .close-project { position: relative !important; bottom: 0 !important; left: 0 !important; margin-top: 20px; margin-left: 20px; margin-bottom: 40px; }
         }
     </style>
 </head>
 
 <body>
     <div id="cursor-main"></div>
+    
     <div id="preloader">
-        <div class="terminal-loader">
-            <div class="term-header"><span>MNLTH_OS_v4.2.0</span><span>SYS_READY</span></div>
-            <div id="preloader-log-container"></div>
-            <div class="term-bar-bg">
-                <div id="pre-bar"></div>
+        <div class="calibration-wrap">
+            <div class="loader-meta">
+                <span>SYSTEM_CALIBRATION</span>
+                <span id="loader-perc">000%</span>
             </div>
-            <div id="any-key-prompt">TAP_TO_INITIALIZE</div>
+            <div class="scan-line" id="scan-line"></div>
+            <div class="hex-stream" id="hex-stream"></div>
+            <div id="any-key-prompt">RUN_INITIALIZATION</div>
         </div>
     </div>
 
     <header class="brand-pillar">
-        <div class="brand-letter">M</div>
-        <div class="brand-letter">O</div>
-        <div class="brand-letter">N</div>
-        <div class="brand-letter">O</div>
-        <div class="brand-letter">L</div>
-        <div class="brand-letter">I</div>
-        <div class="brand-letter">T</div>
-        <div class="brand-letter">H</div>
+        <div class="brand-letter">M</div><div class="brand-letter">O</div><div class="brand-letter">N</div><div class="brand-letter">O</div><div class="brand-letter">L</div><div class="brand-letter">I</div><div class="brand-letter">T</div><div class="brand-letter">H</div>
     </header>
 
     <div class="nav-hub" id="nav-trigger">
@@ -840,15 +672,9 @@
     <main id="viewport">
         <div class="text-frame">
             <section class="slide active" id="identity">
-                <div class="slide-header">
-                    <h1 class="stable-h1">IDENTITY.</h1>
-                    <div class="scramble-h2">SYSTEM_INIT_IDENTITY</div>
-                </div>
+                <div class="slide-header"><h1 class="stable-h1">IDENTITY.</h1><div class="scramble-h2">SYSTEM_INIT_IDENTITY</div></div>
                 <div class="content-layout">
-                    <div class="side-info">
-                        <span><b>LOC</b>EARTH</span>
-                        <span><b>SYS</b>01</span>
-                    </div>
+                    <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
                         <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting. Every line of code is a structural choice in the pursuit of digital permanence.</div>
                         <div id="scroll-hint">SCROLL_TO_NAVIGATE</div>
@@ -857,132 +683,70 @@
             </section>
 
             <section class="slide" id="works">
-                <div class="slide-header">
-                    <h1 class="stable-h1">WORKS.</h1>
-                    <div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div>
-                </div>
+                <div class="slide-header"><h1 class="stable-h1">WORKS.</h1><div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div></div>
                 <div class="content-layout">
-                    <div class="side-info"><span><b>UNITS</b>04</span><span><b>ARC</b>2026</span></div>
+                    <div class="side-info"><span><b>UNITS</b>03</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
                         <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void.</div>
-                        <div style="margin-top:20px;">
+                        <div style="margin-top:10px;">
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('PILLAR_PROJECT')"><span>01 // PILLAR_PROJECT</span></div>
-                            <div style="cursor:pointer; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')"><span>02 // VOID_CORE</span></div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')"><span>02 // VOID_CORE</span></div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('iGLOO')"><span>03 // iGLOO</span></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="slide" id="stack">
-                <div class="slide-header">
-                    <h1 class="stable-h1">STACK.</h1>
-                    <div class="scramble-h2">TECH_SPEC_REVEAL</div>
-                </div>
+                <div class="slide-header"><h1 class="stable-h1">STACK.</h1><div class="scramble-h2">TECH_SPEC_REVEAL</div></div>
                 <div class="content-layout">
-                    <div class="side-info">
-                        <span><b>TYPE</b>FULL</span>
-                        <span><b>VER</b>8.4</span>
-                    </div>
+                    <div class="side-info"><span><b>TYPE</b>FULL</span><span><b>VER</b>8.4</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic for visual fidelity. System architecture optimized for stability and responsive interaction.</div>
-                        
+                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic for visual fidelity.</div>
                         <div class="bento-grid">
-                            <div class="bento-box">
-                                <div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div>
-                                <div class="box-title">FRONT_END</div>
-                                <div class="box-list">REACT / NEXT.JS / GSAP / TAILWIND</div>
-                            </div>
-                            
-                            <div class="bento-box">
-                                <div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div>
-                                <div class="box-title">GRAPHICS</div>
-                                <div class="box-list">THREE.JS / GLSL / BLENDER</div>
-                            </div>
-
-                            <div class="bento-box full">
-                                <div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div>
-                                <div class="box-title">ENGINEERING & TOOLS</div>
-                                <div class="box-list">NODE.JS / PYTHON / GIT / DOCKER / AWS / FIREBASE</div>
-                            </div>
-
-                            <div class="bento-box">
-                                <div class="box-tag"><span>VIS_LANG</span> <span class="status-dot"></span></div>
-                                <div class="box-title">AESTHETIC</div>
-                                <div class="box-list">BRUTALIST / CYBERNETIC</div>
-                            </div>
-
-                            <div class="bento-box">
-                                <div class="box-tag"><span>OPT_ENG</span> <span class="status-dot"></span></div>
-                                <div class="box-title">PERFORMANCE</div>
-                                <div class="box-list">60FPS / WEVGL_OPT / COMPRESSION</div>
-                            </div>
-                        </div>
-
-                        <div class="status-module">
-                            <div class="status-row">
-                                <span>SYSTEM_INTEGRITY</span>
-                                <span>98%</span>
-                            </div>
-                            <div class="status-bar-bg"><div class="status-bar-fill" style="width: 98%;"></div></div>
-                            
-                            <div class="status-row" style="margin-top:10px;">
-                                <span>DATA_THROUGHPUT</span>
-                                <span>OPTIMIZED</span>
-                            </div>
-                            <div class="status-bar-bg"><div class="status-bar-fill" style="width: 85%;"></div></div>
+                            <div class="bento-box"><div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div><div class="box-title">FRONT_END</div><div class="box-list">REACT / NEXT.JS / GSAP</div></div>
+                            <div class="bento-box"><div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div><div class="box-title">GRAPHICS</div><div class="box-list">THREE.JS / GLSL</div></div>
+                            <div class="bento-box full"><div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div><div class="box-title">SYSTEMS</div><div class="box-list">NODE.JS / AWS / DOCKER</div></div>
+                            <div class="bento-box full"><div class="box-tag"><span>EXP_LOG</span> <span class="status-dot"></span></div><div class="box-title">YEARS_OF_EXPERIENCE</div><div class="box-list">5+ YEARS ACTIVE DEVELOPMENT / MULTI-DISCIPLINARY ARCHITECTURE</div></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="slide" id="void">
-                <div class="slide-header">
-                    <h1 class="stable-h1">VOID.</h1>
-                    <div class="scramble-h2">NULL_SPACE_MONITOR</div>
-                </div>
+                <div class="slide-header"><h1 class="stable-h1">VOID.</h1><div class="scramble-h2">NULL_SPACE_MONITOR</div></div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Entering the vacuum. Data persistence is non-guaranteed in this sector. All outbound signals are encrypted through the sub-strata layer.</div>
+                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM, THIS PLATFORM SERVES AS A REPOSITORY FOR EXPERIMENTAL CODE AND ARCHITECTURAL DESIGN. THE SYSTEM UTILIZES ADVANCED INTERACTIVE LOGIC TO BRIDGE THE GAP BETWEEN USER INTERFACE AND CORE FUNCTIONALITY. EVERY COMPONENT IS OPTIMIZED FOR RAW PERFORMANCE, ENSURING A SEAMLESS DEEP-DIVE INTO THE DIGITAL VOID. WELCOME TO THE CORE.</div>
                     </div>
                 </div>
             </section>
 
             <section class="slide" id="link-up">
-                <div class="slide-header">
-                    <h1 class="stable-h1">LINK UP.</h1>
-                    <div class="scramble-h2">SECURE_CHANNEL_INIT</div>
-                </div>
+                <div class="slide-header"><h1 class="stable-h1">LINK UP.</h1><div class="scramble-h2">SECURE_CHANNEL_INIT</div></div>
                 <div class="content-layout contact-layout">
-                    <div class="side-info">
-                        <span><b>SEC</b>LVL5</span><span><b>KEY</b>RSA</span>
-                    </div>
+                    <div class="side-info"><span><b>SEC</b>LVL5</span><span><b>KEY</b>RSA</span></div>
                     <div class="desc-container">
                         <input type="text" id="user_name" placeholder="NAME">
                         <input type="email" id="user_email" placeholder="EMAIL">
                         <textarea id="user_message" placeholder="MESSAGE" rows="4"></textarea>
                         <button id="send-btn" onclick="sendMail()">EXECUTE_SEND</button>
-                        <div class="icon-social-wrap">
-                            <a href="https://www.instagram.com/jax.s.o.n?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="icon-link"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://github.com/monolithfolio" class="icon-link"><i class="fa-brands fa-github"></i></a>
-                            <a href="https://www.linkedin.com/in/jack-joseph-purathoor" class="icon-link"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
                     </div>
-                    <div class="map-container">
-                        <img src="map.png" alt="Operational Area">
-                    </div>
+                    <div class="map-container"><img src="map.png" alt="Map"></div>
                 </div>
             </section>
-            <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">[ RETURN_TO_TOP ]</div>
         </div>
     </main>
 
     <section id="project-detail">
-        <h1 class="stable-h1" id="detail-title">PROJECT</h1>
-        <p class="desc-container">
-            DATA_EXTRACTED: SYSTEM ARCHITECTURE REVEALED. IMMERSIVE MODULES LOADED INTO PRIMARY BUFFER. SYSTEM STABLE. EVERY LINE OF CODE IS A STRUCTURAL CHOICE IN THE PURSUIT OF DIGITAL PERMANENCE.
-        </p>
-        <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
+        <div class="detail-header-wrap">
+            <h1 class="stable-h1" id="detail-title">PROJECT</h1>
+        </div>
+        <div class="desc-container" id="detail-desc-container">
+            <p id="detail-desc">DATA_EXTRACTED: SYSTEM ARCHITECTURE REVEALED. IMMERSIVE MODULES LOADED INTO PRIMARY BUFFER. SYSTEM STABLE.</p>
+        </div>
+        <div class="close-project" id="close-project-btn" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
     </section>
 
     <script>
@@ -995,52 +759,22 @@
         const viewport = document.getElementById('viewport');
         const cursor = document.getElementById('cursor-main');
         const scrollHint = document.getElementById('scroll-hint');
+        
         let isBooted = false;
         let interacted = false;
 
-        // EMAILJS SEND LOGIC
-        function sendMail() {
-            const btn = document.getElementById('send-btn');
-            const name = document.getElementById('user_name').value;
-            const email = document.getElementById('user_email').value;
-            const msg = document.getElementById('user_message').value;
+        /* SMOOTH SCROLLING ENGINE */
+        let targetRotation = 0;
+        let currentRotation = 0;
+        const lerpFactor = 0.08; // Control smoothness
 
-            if (!name || !email || !msg) {
-                alert("ERR: FIELD_EMPTY");
-                return;
-            }
+        window.addEventListener('mousemove', (e) => {
+            if (isMobile) return;
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            const target = e.target;
+            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
+        });
 
-            btn.innerText = "TRANSMITTING...";
-            btn.disabled = true;
-
-            const params = {
-                from_name: name,
-                from_email: email,
-                message: msg
-            };
-
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params)
-                .then(() => {
-                    btn.innerText = "SIGNAL_SENT";
-                    document.getElementById('user_name').value = "";
-                    document.getElementById('user_email').value = "";
-                    document.getElementById('user_message').value = "";
-                    setTimeout(() => {
-                        btn.innerText = "EXECUTE_SEND";
-                        btn.disabled = false;
-                    }, 3000);
-                }, (error) => {
-                    btn.innerText = "ERR_CONNECTION_LOST";
-                    btn.style.background = "#ff0000";
-                    setTimeout(() => {
-                        btn.innerText = "EXECUTE_SEND";
-                        btn.disabled = false;
-                        btn.style.background = "#fff";
-                    }, 3000);
-                });
-        }
-
-        // PROJECT LOGIC
         function openProject(name) {
             document.getElementById('detail-title').innerText = name;
             if (!isMobile) {
@@ -1065,11 +799,7 @@
                     navTrigger.classList.add('reverse-wipe');
                     detail.classList.add('wipe-return');
                     setTimeout(() => { viewport.style.opacity = '1'; }, 850);
-                    setTimeout(() => {
-                        detail.classList.remove('visible', 'wipe-return');
-                        navTrigger.classList.remove('reverse-wipe');
-                        navTrigger.style.transform = "";
-                    }, 1700);
+                    setTimeout(() => { detail.classList.remove('visible', 'wipe-return'); navTrigger.classList.remove('reverse-wipe'); navTrigger.style.transform = ""; }, 1700);
                 });
             } else {
                 detail.classList.remove('visible');
@@ -1077,90 +807,85 @@
             }
         }
 
-        // BOOT LOGIC
+        /* REDESIGNED CALIBRATION LOADER */
         function runBoot() {
-            const log = document.getElementById('preloader-log-container');
-            const cmds = ["LOAD_CORE", "SYNC_ARCHIVE", "GRID_STABLE", "READY"];
-            let i = 0;
+            const scan = document.getElementById('scan-line');
+            const perc = document.getElementById('loader-perc');
+            const stream = document.getElementById('hex-stream');
+            let progress = 0;
+
+            const hexChars = '0123456789ABCDEF';
+            
             let interval = setInterval(() => {
-                const l = document.createElement('div'); l.className = 'term-line'; l.innerText = `> ${cmds[i++]}`;
-                log.prepend(l);
-                document.getElementById('pre-bar').style.width = (i / cmds.length) * 100 + "%";
-                if (i == cmds.length) { 
-                    clearInterval(interval); 
-                    isBooted = true; 
-                    document.getElementById('any-key-prompt').classList.add('visible'); 
+                if(progress < 100) {
+                    progress += Math.random() * 2;
+                    if(progress > 100) progress = 100;
+                    
+                    scan.style.width = progress + "%";
+                    perc.innerText = Math.floor(progress).toString().padStart(3, '0') + "%";
+                    
+                    // Hex stream effect
+                    let hex = '';
+                    for(let i=0; i<80; i++) hex += hexChars[Math.floor(Math.random()*16)];
+                    stream.innerText = hex;
+                } else {
+                    clearInterval(interval);
+                    isBooted = true;
+                    document.getElementById('any-key-prompt').classList.add('visible');
                 }
-            }, 150);
+            }, 50);
         }
 
         function exitPreloader() {
             if (!isBooted) return;
             document.getElementById('preloader').classList.add('exit');
-            setTimeout(() => {
-                if (!isMobile) bg.classList.add('booted');
-                document.getElementById('preloader').style.display = 'none';
-                if (!isMobile) {
-                    updateUprightNumbers(0);
-                }
+            setTimeout(() => { 
+                if (!isMobile) bg.classList.add('booted'); 
+                document.getElementById('preloader').style.display = 'none'; 
+                requestAnimationFrame(scrollLoop); // Start smooth scroll loop
             }, 800);
         }
 
+        function scrollLoop() {
+            if (isMobile || detail.classList.contains('visible')) return;
+
+            // Interpolate rotation
+            currentRotation += (targetRotation - currentRotation) * lerpFactor;
+            
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            updateUprightNumbers(currentRotation);
+
+            // Calculate active index
+            let newIdx = (Math.round(-currentRotation / 72) % 5 + 5) % 5;
+            slides.forEach((s, i) => s.classList.toggle('active', i === newIdx));
+            document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
+            
+            // Dynamic Blur Effect based on rotation speed
+            const speed = Math.abs(targetRotation - currentRotation);
+            bg.style.filter = `grayscale(0.5) brightness(1.2) blur(${speed * 0.1}px)`;
+            bg.classList.toggle('hidden-bg', newIdx === 4);
+
+            requestAnimationFrame(scrollLoop);
+        }
+
         function updateUprightNumbers(rotation) {
-            const labels = document.querySelectorAll('.inner-label');
-            labels.forEach((label, i) => {
+            document.querySelectorAll('.inner-label').forEach((label, i) => {
                 const span = label.querySelector('span');
-                const labelInherentRotation = 72 * i;
-                span.style.transform = `rotate(${- (labelInherentRotation + rotation)}deg)`;
+                span.style.transform = `rotate(${- ( (72 * i) + rotation)}deg)`;
             });
         }
 
-        // NAVIGATION
-        if (!isMobile) {
-            let lastIdx = 0;
-            window.onwheel = e => {
-                if (!isBooted || detail.classList.contains('visible') || navTrigger.classList.contains('cartwheel-active') || navTrigger.classList.contains('reverse-wipe')) return;
-                
-                if (!interacted) {
-                    interacted = true;
-                    scrollHint.classList.add('hidden');
-                }
+        window.onwheel = e => {
+            if (!isBooted || isMobile || detail.classList.contains('visible')) return;
+            if (!interacted) { interacted = true; scrollHint.classList.add('hidden'); }
+            
+            // Increment target based on scroll
+            targetRotation -= e.deltaY * 0.3;
+        };
 
-                let currentRot = parseFloat(wheel.style.transform.replace('rotate(', '')) || 0;
-                let targetRot = currentRot - (e.deltaY * 0.4);
-
-                wheel.style.transform = `rotate(${targetRot}deg)`;
-                updateUprightNumbers(targetRot);
-
-                let newIdx = (Math.round(-targetRot / 72) % 5 + 5) % 5;
-                if (newIdx !== lastIdx) {
-                    lastIdx = newIdx;
-                    slides.forEach((s, i) => {
-                        s.classList.toggle('active', i === newIdx);
-                    });
-                    document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === lastIdx));
-                    bg.classList.toggle('hidden-bg', lastIdx === 4);
-                }
-            };
-        }
-
-        // CURSOR & EVENT LISTENERS
         window.addEventListener('mousedown', exitPreloader);
         window.addEventListener('touchstart', exitPreloader);
         window.addEventListener('load', runBoot);
-        window.addEventListener('mousemove', (e) => {
-            if (isMobile) return;
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-
-            const target = e.target;
-            const isInteractive = target.closest('a, button, input, textarea, [onclick], .close-project');
-            if (isInteractive) {
-                cursor.classList.add('active');
-            } else {
-                cursor.classList.remove('active');
-            }
-        });
     </script>
 </body>
 
