@@ -29,12 +29,11 @@
             --header-height: 180px;
             --reveal-speed: 1.3s;
             --wheel-travel-speed: 1.7s;
-            --return-speed: 1.7s;
-            --wheel-return-speed: 1.3s;
+            --wheel-return-speed: 1.5s;
             --full-rotation: 1080deg;
         }
 
-        /* GLOBAL CURSOR HIDE */
+        /* Global cursor styling */
         *, body, html, a, button, input, textarea, [onclick], .close-project {
             cursor: none !important;
         }
@@ -81,7 +80,7 @@
             border: 1px solid var(--hazard-yellow);
         }
 
-        /* REDESIGNED PRELOADER: CALIBRATION SEQ */
+        /* System Preloader */
         #preloader {
             position: fixed;
             inset: 0;
@@ -151,7 +150,7 @@
             50% { opacity: 0; }
         }
 
-        /* BACKDROP */
+        /* Profile Backdrop */
         .profile-watermark {
             position: fixed;
             top: 50%;
@@ -187,12 +186,12 @@
             object-fit: cover;
         }
 
-        /* BRAND PILLAR */
+        /* Brand Pillar with Animated Hazard Line */
         .brand-pillar {
             position: fixed;
             right: 0;
             top: 0;
-            bottom: auto;
+            bottom: 0;
             width: var(--brand-width);
             background: var(--bg-color);
             border-left: 1px solid #1a1a1a;
@@ -202,23 +201,29 @@
             align-items: center;
             padding: 40px 0;
             z-index: 9000;
-            height: 100vh;
         }
 
-        .brand-pillar::after {
+        .brand-pillar::before {
             content: "";
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 8px;
-            background: repeating-linear-gradient(45deg, var(--hazard-yellow), var(--hazard-yellow) 12px, #000 12px, #000 24px);
-            animation: pillarHazardMove 0.8s linear infinite;
+            width: 6px;
+            background: repeating-linear-gradient(
+                -45deg,
+                var(--hazard-yellow),
+                var(--hazard-yellow) 10px,
+                #000 10px,
+                #000 20px
+            );
+            background-size: 200% 200%;
+            animation: hazardSlide 2s linear infinite;
         }
 
-        @keyframes pillarHazardMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 34px; }
+        @keyframes hazardSlide {
+            from { background-position: 0 0; }
+            to { background-position: 0 40px; }
         }
 
         .brand-letter {
@@ -230,7 +235,7 @@
             transform: scaleY(1.4);
         }
 
-        /* VIEWPORT */
+        /* Main Viewport */
         #viewport {
             width: 100%;
             height: 100vh;
@@ -238,7 +243,7 @@
             z-index: 10;
             padding-left: 320px;
             padding-right: calc(var(--brand-width) + var(--safety-gap));
-            transition: opacity 0.8s ease;
+            transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .text-frame {
@@ -273,8 +278,44 @@
             justify-content: flex-end;
             margin-bottom: 15px;
             flex-shrink: 0;
+            position: relative;
         }
 
+        /* Torch M Effect */
+        .header-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            pointer-events: none;
+        }
+
+        .outline-m {
+            font-family: var(--title-font);
+            font-weight: 800;
+            font-size: 120px;
+            color: transparent;
+            -webkit-text-stroke: 1px transparent; 
+            position: relative;
+            line-height: 0.8;
+            z-index: 5;
+        }
+
+        .outline-m::after {
+            content: "M";
+            position: absolute;
+            inset: 0;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            mask-image: radial-gradient(circle 40px at var(--torch-x, 0) var(--torch-y, 0), black 0%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle 40px at var(--torch-x, 0) var(--torch-y, 0), black 0%, transparent 100%);
+        }
+
+        /* Layouts */
         .content-layout {
             display: grid;
             grid-template-columns: 60px 1fr 0.8fr;
@@ -287,6 +328,7 @@
 
         .contact-layout {
             grid-template-columns: 60px 1fr 1fr;
+            align-items: flex-start;
         }
 
         .map-container {
@@ -302,17 +344,62 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0.3;
         }
 
-        .map-container::after {
-            content: "MAP_DATA_UNLOCKED";
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
+        /* Sequential Form Styling */
+        .form-container {
+            height: 310px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
             font-family: var(--mono-font);
-            font-size: 8px;
+        }
+
+        .terminal-interface {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid #111;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .terminal-log {
+            font-size: 9px;
+            color: #444;
+            line-height: 1.5;
+            height: 140px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .terminal-log .entry { margin-bottom: 5px; }
+        .terminal-log .entry.user { color: var(--hazard-yellow); }
+
+        .active-prompt-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 15px;
+        }
+
+        .prompt-label {
+            font-size: 10px;
+            color: var(--hazard-yellow);
+            white-space: nowrap;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            padding: 0;
             color: #fff;
-            background: rgba(0, 0, 0, 0.5);            padding: 2px 5px;
+            font-size: 10px;
+            flex-grow: 1;
+            width: auto;
         }
 
         .side-info {
@@ -324,6 +411,25 @@
             padding-right: 10px;
             display: flex;
             flex-direction: column;
+        }
+
+        .social-link-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .social-link-wrap a {
+            color: #444;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link-wrap a:hover {
+            color: var(--hazard-yellow);
+            transform: translateX(5px);
         }
 
         .desc-container {
@@ -341,7 +447,6 @@
             margin: 0;
             line-height: 0.9;
             text-transform: uppercase;
-            transition: all 0.5s ease;
         }
 
         .scramble-h2 {
@@ -352,7 +457,7 @@
             margin-top: 5px;
         }
 
-        /* BENTO GRID */
+        /* Bento Grid */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -375,16 +480,14 @@
 
         .bento-box:hover {
             border-color: var(--hazard-yellow);
-            background: rgba(8, 8, 8, 0.8);
         }
 
         .bento-box .box-tag {
             font-size: 7px;
             color: #444;
-            margin-bottom: 4px;
+            letter-spacing: 1px;
             display: flex;
             justify-content: space-between;
-            letter-spacing: 1px;
         }
 
         .bento-box .box-tag .status-dot {
@@ -392,14 +495,12 @@
             height: 3px;
             background: var(--hazard-yellow);
             border-radius: 50%;
-            display: inline-block;
         }
 
         .bento-box .box-title {
             color: #fff;
             font-size: 9px;
             font-weight: 700;
-            letter-spacing: 1px;
             margin-bottom: 2px;
         }
 
@@ -413,19 +514,6 @@
             grid-column: span 2;
         }
 
-        /* FORM */
-        input, textarea {
-            background: #0a0a0a;
-            border: 1px solid #111;
-            color: #fff;
-            padding: 12px;
-            font-family: var(--mono-font);
-            font-size: 10px;
-            width: 100%;
-            margin-bottom: 8px;
-            border-radius: 0;
-        }
-
         button {
             background: #fff;
             color: #000;
@@ -435,42 +523,39 @@
             font-size: 10px;
             font-weight: 900;
             width: 100%;
-            cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px;
         }
 
         button:hover {
             background: var(--hazard-yellow);
         }
-        
+
         button:disabled {
             background: #222;
             color: #444;
-            cursor: not-allowed;
         }
 
-        /* SOLID NAV WHEEL */
+        /* Navigation Wheel */
         .nav-hub {
             position: fixed;
             left: 0;
             top: 50%;
-            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg);
+            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2));
             width: var(--wheel-size);
             height: var(--wheel-size);
             z-index: 8500;
-            transition: transform 0.1s linear; /* Fast for smooth updates */
-            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 50%;
         }
 
         .nav-hub.cartwheel-active {
-            transition: transform var(--wheel-travel-speed) cubic-bezier(0.4, 0, 0.2, 1) !important;
-            transform: translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation)) !important;
+            transition: transform var(--wheel-travel-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform: translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation));
         }
 
         .nav-hub.reverse-wipe {
-            transition: transform var(--wheel-return-speed) cubic-bezier(0.4, 0, 0.2, 1) !important;
-            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg) !important;
+            transition: transform var(--wheel-return-speed) cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg);
         }
 
         #wheel {
@@ -479,10 +564,7 @@
             border-radius: 50%;
             border: 2px solid #1a1a1a;
             background: #050505;
-            box-shadow: 
-                inset 0 0 80px rgba(0, 0, 0, 0.9), 
-                20px 0 100px rgba(0, 0, 0, 0.8),
-                0 0 0 10px rgba(255, 255, 255, 0.02);
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9);
             transition: transform 0.1s linear;
         }
 
@@ -500,10 +582,8 @@
             font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.15);
             display: block;
-            transition: color 0.4s ease, scale 0.4s ease, text-shadow 0.4s ease;
             letter-spacing: 4px;
             font-weight: 700;
-            transform-origin: center;
         }
 
         .inner-label.active {
@@ -516,17 +596,13 @@
             text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
         }
 
-        /* SCROLL NOTICE */
         #scroll-hint {
             margin-top: 15px;
             font-family: var(--mono-font);
             font-size: 8px;
             color: var(--hazard-yellow);
             letter-spacing: 2px;
-            text-transform: uppercase;
-            pointer-events: none;
             animation: blinker 2.5s infinite;
-            transition: opacity 0.5s ease;
             opacity: 0.5;
         }
 
@@ -534,106 +610,47 @@
             opacity: 0;
         }
 
-        /* PROJECT DETAIL */
+        /* Project Reveal Overlay */
         #project-detail {
             position: fixed;
             inset: 0;
             background: var(--bg-color);
             z-index: 15;
-            padding: 0;
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path var(--reveal-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            clip-path: inset(0 100% 0 0);
-            transition: clip-path var(--reveal-speed) cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
         }
 
         #project-detail.visible {
             clip-path: inset(0 0 0 0);
         }
 
-        #project-detail.wipe-return {
-            transition: clip-path var(--return-speed) cubic-bezier(0.4, 0, 0.2, 1);
-            clip-path: inset(0 100% 0 0);
-        }
-
         .detail-header-wrap {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: flex-end;
-            gap: 30px;
-            z-index: 50;
-        }
-
-        #project-detail .stable-h1 {
-            margin: 0;
-            line-height: 0.9;
-        }
-
-        #project-detail .desc-container {
-            margin-top: 140px;
-            margin-left: 20px;
-            color: #666;
-            width: calc(100vw - 320px - var(--brand-width) - var(--safety-gap));
-            max-width: 1200px;
-            padding-left: 0;
-            transition: all 0.5s ease;
+            padding: 20px;
         }
 
         .close-project {
-            position: absolute !important;
-            bottom: 40px;
-            left: 20px;
+            margin-top: auto;
+            margin-left: 20px;
+            margin-bottom: 40px;
+            padding: 15px;
+            border: 1px solid #222;
+            color: var(--hazard-yellow);
             font-family: var(--mono-font);
             font-size: 10px;
-            color: var(--hazard-yellow);
-            cursor: pointer;
-            letter-spacing: 2px;
-            border: 1px solid #222;
-            padding: 15px;
             width: fit-content;
-            z-index: 100;
-            background: var(--bg-color);
         }
 
-        /* MOBILE VERSION OVERRIDES */
         @media (max-width: 768px) {
-            body, html {
-                overflow-y: auto !important;
-                height: auto;
-            }
-
-            .brand-pillar {
-                position: fixed;
-                top: 0; left: 0; right: 0;
-                width: 100%; height: 60px;
-                flex-direction: row; padding: 0 20px;
-                border-left: none; border-bottom: 1px solid #1a1a1a;
-                justify-content: center; gap: 10px;
-            }
-
-            .brand-letter { font-size: 24px; transform: none; }
-            .nav-hub { display: none !important; }
-
-            #viewport { position: relative; padding: 80px 20px 40px 20px; height: auto; width: 100%; overflow: visible; }
+            .brand-pillar { position: fixed; top: 0; left: 0; right: 0; width: 100%; height: 60px; flex-direction: row; padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a; }
+            .brand-pillar::before { width: 100%; height: 4px; bottom: 0; top: auto; background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
+            .nav-hub { display: none; }
+            #viewport { padding: 80px 20px 40px 20px; overflow-y: auto; height: auto; position: relative; }
             .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
-            .stable-h1 { font-size: 2.2rem; }
-            .content-layout { display: flex; flex-direction: column; gap: 20px; max-width: 100%; }
-            .desc-container { padding: 0; font-size: 13px; width: 100% !important; }
-            #cursor-main { display: none !important; }
-
-            .detail-header-wrap { flex-direction: column; align-items: flex-start; gap: 10px; }
-            #project-detail .desc-container {
-                width: calc(100% - 40px);
-                margin-top: 180px;
-                display: flex !important;
-                flex-direction: column;
-            }
-
-            .bento-grid { grid-template-columns: 1fr; }
-            .close-project { position: relative !important; bottom: 0 !important; left: 0 !important; margin-top: 20px; margin-left: 20px; margin-bottom: 40px; }
+            .content-layout { display: flex; flex-direction: column; }
+            .header-top-right { display: none; }
+            .map-container, .form-container { height: auto; }
         }
     </style>
 </head>
@@ -643,10 +660,7 @@
     
     <div id="preloader">
         <div class="calibration-wrap">
-            <div class="loader-meta">
-                <span>SYSTEM_CALIBRATION</span>
-                <span id="loader-perc">000%</span>
-            </div>
+            <div class="loader-meta"><span>SYSTEM_CALIBRATION</span><span id="loader-perc">000%</span></div>
             <div class="scan-line" id="scan-line"></div>
             <div class="hex-stream" id="hex-stream"></div>
             <div id="any-key-prompt">RUN_INITIALIZATION</div>
@@ -676,7 +690,7 @@
                 <div class="content-layout">
                     <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting. Every line of code is a structural choice in the pursuit of digital permanence.</div>
+                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting.</div>
                         <div id="scroll-hint">SCROLL_TO_NAVIGATE</div>
                     </div>
                 </div>
@@ -688,10 +702,10 @@
                     <div class="side-info"><span><b>UNITS</b>03</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
                         <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void.</div>
-                        <div style="margin-top:10px;">
-                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('PILLAR_PROJECT')"><span>01 // PILLAR_PROJECT</span></div>
-                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')"><span>02 // VOID_CORE</span></div>
-                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('iGLOO')"><span>03 // iGLOO</span></div>
+                        <div style="margin-top:20px;">
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('PILLAR_PROJECT')">01 // PILLAR_PROJECT</div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')">02 // VOID_CORE</div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('iGLOO')">03 // iGLOO</div>
                         </div>
                     </div>
                 </div>
@@ -702,12 +716,11 @@
                 <div class="content-layout">
                     <div class="side-info"><span><b>TYPE</b>FULL</span><span><b>VER</b>8.4</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic for visual fidelity.</div>
+                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic.</div>
                         <div class="bento-grid">
                             <div class="bento-box"><div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div><div class="box-title">FRONT_END</div><div class="box-list">REACT / NEXT.JS / GSAP</div></div>
                             <div class="bento-box"><div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div><div class="box-title">GRAPHICS</div><div class="box-list">THREE.JS / GLSL</div></div>
                             <div class="bento-box full"><div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div><div class="box-title">SYSTEMS</div><div class="box-list">NODE.JS / AWS / DOCKER</div></div>
-                            <div class="bento-box full"><div class="box-tag"><span>EXP_LOG</span> <span class="status-dot"></span></div><div class="box-title">YEARS_OF_EXPERIENCE</div><div class="box-list">5+ YEARS ACTIVE DEVELOPMENT / MULTI-DISCIPLINARY ARCHITECTURE</div></div>
                         </div>
                     </div>
                 </div>
@@ -718,20 +731,37 @@
                 <div class="content-layout">
                     <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM, THIS PLATFORM SERVES AS A REPOSITORY FOR EXPERIMENTAL CODE AND ARCHITECTURAL DESIGN. THE SYSTEM UTILIZES ADVANCED INTERACTIVE LOGIC TO BRIDGE THE GAP BETWEEN USER INTERFACE AND CORE FUNCTIONALITY. EVERY COMPONENT IS OPTIMIZED FOR RAW PERFORMANCE, ENSURING A SEAMLESS DEEP-DIVE INTO THE DIGITAL VOID. WELCOME TO THE CORE.</div>
+                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM, THIS PLATFORM SERVES AS A REPOSITORY FOR EXPERIMENTAL CODE AND ARCHITECTURAL DESIGN.</div>
                     </div>
                 </div>
             </section>
 
             <section class="slide" id="link-up">
-                <div class="slide-header"><h1 class="stable-h1">LINK UP.</h1><div class="scramble-h2">SECURE_CHANNEL_INIT</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">LINK UP.</h1>
+                    <div class="scramble-h2">SECURE_CHANNEL_INIT</div>
+                    <div class="header-top-right"><div class="outline-m">M</div></div>
+                </div>
                 <div class="content-layout contact-layout">
-                    <div class="side-info"><span><b>SEC</b>LVL5</span><span><b>KEY</b>RSA</span></div>
-                    <div class="desc-container">
-                        <input type="text" id="user_name" placeholder="NAME">
-                        <input type="email" id="user_email" placeholder="EMAIL">
-                        <textarea id="user_message" placeholder="MESSAGE" rows="4"></textarea>
-                        <button id="send-btn" onclick="sendMail()">EXECUTE_SEND</button>
+                    <div class="side-info">
+                        <div class="social-link-wrap">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-x-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="form-container">
+                        <div class="terminal-interface">
+                            <div class="terminal-log" id="term-log">
+                                <div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div>
+                            </div>
+                            <div class="active-prompt-line">
+                                <span class="prompt-label" id="prompt-label">USER_NAME:</span>
+                                <input type="text" id="term-input" class="terminal-input" autocomplete="off" spellcheck="false">
+                            </div>
+                        </div>
+                        <button id="execute-btn" onclick="sendMail()" disabled>EXECUTE_SEND</button>
                     </div>
                     <div class="map-container"><img src="map.png" alt="Map"></div>
                 </div>
@@ -740,13 +770,8 @@
     </main>
 
     <section id="project-detail">
-        <div class="detail-header-wrap">
-            <h1 class="stable-h1" id="detail-title">PROJECT</h1>
-        </div>
-        <div class="desc-container" id="detail-desc-container">
-            <p id="detail-desc">DATA_EXTRACTED: SYSTEM ARCHITECTURE REVEALED. IMMERSIVE MODULES LOADED INTO PRIMARY BUFFER. SYSTEM STABLE.</p>
-        </div>
-        <div class="close-project" id="close-project-btn" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
+        <div class="detail-header-wrap"><h1 class="stable-h1" id="detail-title">PROJECT</h1></div>
+        <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
     </section>
 
     <script>
@@ -762,69 +787,128 @@
         
         let isBooted = false;
         let interacted = false;
-
-        /* SMOOTH SCROLLING ENGINE */
         let targetRotation = 0;
         let currentRotation = 0;
-        const lerpFactor = 0.08; // Control smoothness
+        const lerpFactor = 0.08; 
+
+        // Sequential Form Logic
+        let formData = { name: "", email: "", message: "" };
+        let formStep = 0; // 0: Name, 1: Email, 2: Message, 3: Ready
+        const termInput = document.getElementById('term-input');
+        const termLog = document.getElementById('term-log');
+        const promptLabel = document.getElementById('prompt-label');
+        const execBtn = document.getElementById('execute-btn');
+
+        termInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && termInput.value.trim() !== "") {
+                processStep(termInput.value.trim());
+            }
+        });
+
+        function processStep(val) {
+            const entry = document.createElement('div');
+            entry.className = 'entry user';
+            entry.innerText = `> ${promptLabel.innerText} ${val}`;
+            termLog.appendChild(entry);
+            termLog.scrollTop = termLog.scrollHeight;
+
+            if (formStep === 0) {
+                formData.name = val;
+                promptLabel.innerText = "USER_EMAIL:";
+                formStep = 1;
+            } else if (formStep === 1) {
+                formData.email = val;
+                promptLabel.innerText = "MESSAGE:";
+                formStep = 2;
+            } else if (formStep === 2) {
+                formData.message = val;
+                promptLabel.innerText = "SYS_STATUS:";
+                termInput.value = "READY_FOR_EXECUTION";
+                termInput.disabled = true;
+                execBtn.disabled = false;
+                formStep = 3;
+                return;
+            }
+            termInput.value = "";
+        }
+
+        function sendMail() {
+            execBtn.innerText = "SENDING...";
+            // Integration with EmailJS using formData object
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                from_name: formData.name,
+                from_email: formData.email,
+                message: formData.message
+            }).then(() => {
+                execBtn.innerText = "SUCCESS_SENT";
+                const successEntry = document.createElement('div');
+                successEntry.className = 'entry';
+                successEntry.style.color = 'var(--hazard-yellow)';
+                successEntry.innerText = "-- UPLINK_SUCCESSFUL: DATA_TERMINATED";
+                termLog.appendChild(successEntry);
+            });
+        }
 
         window.addEventListener('mousemove', (e) => {
             if (isMobile) return;
             cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
             const target = e.target;
-            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
+            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick]'));
+
+            const linkUpSlide = document.getElementById('link-up');
+            if (linkUpSlide.classList.contains('active')) {
+                const mElement = linkUpSlide.querySelector('.outline-m');
+                const rect = mElement.getBoundingClientRect();
+                mElement.style.setProperty('--torch-x', (e.clientX - rect.left) + 'px');
+                mElement.style.setProperty('--torch-y', (e.clientY - rect.top) + 'px');
+            }
         });
 
         function openProject(name) {
             document.getElementById('detail-title').innerText = name;
             if (!isMobile) {
-                navTrigger.classList.remove('reverse-wipe');
-                detail.classList.remove('wipe-return');
                 navTrigger.classList.add('cartwheel-active');
                 detail.classList.add('visible');
-                setTimeout(() => { viewport.style.opacity = '0'; }, 650);
+                setTimeout(() => { viewport.style.opacity = '0'; }, 550);
             } else {
                 detail.classList.add('visible');
-                document.body.style.overflow = 'hidden';
             }
         }
 
         function closeProject() {
             if (!isMobile) {
-                navTrigger.style.transition = "none";
-                navTrigger.style.transform = "translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation))";
-                requestAnimationFrame(() => {
-                    navTrigger.style.transition = "";
-                    navTrigger.classList.remove('cartwheel-active');
-                    navTrigger.classList.add('reverse-wipe');
-                    detail.classList.add('wipe-return');
-                    setTimeout(() => { viewport.style.opacity = '1'; }, 850);
-                    setTimeout(() => { detail.classList.remove('visible', 'wipe-return'); navTrigger.classList.remove('reverse-wipe'); navTrigger.style.transform = ""; }, 1700);
-                });
+                detail.style.transition = `clip-path var(--reveal-speed) cubic-bezier(0.23, 1, 0.32, 1)`;
+                detail.style.clipPath = 'inset(0 100% 0 0)';
+                navTrigger.classList.remove('cartwheel-active');
+                navTrigger.classList.add('reverse-wipe');
+                setTimeout(() => { viewport.style.opacity = '1'; }, 300);
+                setTimeout(() => { 
+                    detail.classList.remove('visible'); 
+                    navTrigger.classList.remove('reverse-wipe'); 
+                    detail.style.clipPath = '';
+                    detail.style.transition = '';
+                    interacted = true; 
+                    requestAnimationFrame(scrollLoop);
+                    let currentIdx = (Math.round(-currentRotation / 72) % 5 + 5) % 5;
+                    bg.classList.toggle('hidden-bg', currentIdx === 4);
+                }, 1500);
             } else {
                 detail.classList.remove('visible');
-                document.body.style.overflow = 'auto';
             }
         }
 
-        /* REDESIGNED CALIBRATION LOADER */
         function runBoot() {
             const scan = document.getElementById('scan-line');
             const perc = document.getElementById('loader-perc');
             const stream = document.getElementById('hex-stream');
             let progress = 0;
-
             const hexChars = '0123456789ABCDEF';
-            
             let interval = setInterval(() => {
                 if(progress < 100) {
-                    progress += Math.random() * 2;
+                    progress += Math.random() * 3;
                     if(progress > 100) progress = 100;
-                    
                     scan.style.width = progress + "%";
                     perc.innerText = Math.floor(progress).toString().padStart(3, '0') + "%";
-                    
-                    // Hex stream effect
                     let hex = '';
                     for(let i=0; i<80; i++) hex += hexChars[Math.floor(Math.random()*16)];
                     stream.innerText = hex;
@@ -842,29 +926,19 @@
             setTimeout(() => { 
                 if (!isMobile) bg.classList.add('booted'); 
                 document.getElementById('preloader').style.display = 'none'; 
-                requestAnimationFrame(scrollLoop); // Start smooth scroll loop
+                requestAnimationFrame(scrollLoop); 
             }, 800);
         }
 
         function scrollLoop() {
-            if (isMobile || detail.classList.contains('visible')) return;
-
-            // Interpolate rotation
+            if (isMobile || (detail.classList.contains('visible') && !navTrigger.classList.contains('reverse-wipe'))) return;
             currentRotation += (targetRotation - currentRotation) * lerpFactor;
-            
             wheel.style.transform = `rotate(${currentRotation}deg)`;
             updateUprightNumbers(currentRotation);
-
-            // Calculate active index
             let newIdx = (Math.round(-currentRotation / 72) % 5 + 5) % 5;
             slides.forEach((s, i) => s.classList.toggle('active', i === newIdx));
             document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
-            
-            // Dynamic Blur Effect based on rotation speed
-            const speed = Math.abs(targetRotation - currentRotation);
-            bg.style.filter = `grayscale(0.5) brightness(1.2) blur(${speed * 0.1}px)`;
             bg.classList.toggle('hidden-bg', newIdx === 4);
-
             requestAnimationFrame(scrollLoop);
         }
 
@@ -878,8 +952,6 @@
         window.onwheel = e => {
             if (!isBooted || isMobile || detail.classList.contains('visible')) return;
             if (!interacted) { interacted = true; scrollHint.classList.add('hidden'); }
-            
-            // Increment target based on scroll
             targetRotation -= e.deltaY * 0.3;
         };
 
