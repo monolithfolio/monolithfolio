@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MONOLITH // STRENGTH.EXE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&family=Space+Grotesk:wght@300;700&family=Space+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Architectural Theme Colors */
+            --unit-bg: #000000;
+            --content-bg: #000000;
+            --accent-red: #ff003c; 
+            
+            /* Structural Variables */
+            --frame-size: 25px;
+            --inner-bar-h: 25px;
+            --inner-bar-w: 200px;
+            --bevel: 45px;
+            --border-width: 2px;
+            
+            /* Typography */
+            --text-primary: #ffffff;
+            --mono-font: 'Space Mono', monospace;
+            --main-font: 'Space Grotesk', sans-serif;
+        }
+
+        /* Essential Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: var(--unit-bg);
+            color: var(--text-primary);
+            font-family: var(--main-font);
+        }
+
+        /* Outer Frame Layout */
+        .monolithic-unit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            padding: var(--frame-size);
+            z-index: 10000;
+            pointer-events: none; 
+        }
+
+        /* The Red Kinetic Border */
+        .main-content-frame {
+            position: relative;
+            flex: 1;
+            background-color: var(--accent-red);
+            overflow: hidden;
+            pointer-events: auto;
+            clip-path: polygon(
+                0% calc(var(--inner-bar-h) + var(--bevel)),
+                var(--bevel) var(--inner-bar-h),
+                var(--inner-bar-w) var(--inner-bar-h),
+                calc(var(--inner-bar-w) + var(--bevel)) 0%,
+                calc(100% - var(--bevel)) 0%,
+                100% var(--bevel),
+                100% calc(100% - var(--bevel)),
+                calc(100% - var(--bevel)) 100%,
+                var(--bevel) 100%,
+                0% calc(100% - var(--bevel))
+            );
+        }
+
+        /* The Interior Viewport */
+        .viewport-wrapper {
+            position: absolute;
+            top: var(--border-width);
+            left: var(--border-width);
+            right: var(--border-width);
+            bottom: var(--border-width);
+            background-color: var(--content-bg);
+            clip-path: inherit;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            z-index: 5;
+        }
+
+        .viewport-wrapper::-webkit-scrollbar { width: 0; }
+
+        /* REFINED SLIDING PANEL - CALCULATED TO PROTECT RED BORDER */
+        .massive-sliding-panel {
+            position: absolute;
+            /* Offset by border-width to ensure it stays INSIDE the red frame */
+            top: var(--border-width);
+            right: var(--border-width);
+            width: 200px;
+            height: 200px;
+            
+            /* Glassmorphism Logic */
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            
+            z-index: 10010;
+            pointer-events: auto;
+            
+            /* Hidden State: Adjusted for the 47px tip */
+            transform: translate(153px, -153px); 
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            /* This ensures the panel content doesn't bleed over the top-right bevel */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        /* RED PROTRUDING TIP (Triangle) */
+        .massive-sliding-panel::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 47px; 
+            height: 47px; 
+            background-color: var(--accent-red);
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
+            filter: drop-shadow(0 0 10px var(--accent-red));
+            z-index: 10011;
+        }
+
+        /* PANEL NAVIGATION STYLE */
+        .panel-nav {
+            list-style: none;
+            padding-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.15s;
+        }
+
+        .massive-sliding-panel:hover {
+            transform: translate(0, 0);
+        }
+
+        .massive-sliding-panel:hover .panel-nav {
+            opacity: 1;
+        }
+
+        .panel-nav li {
+            margin: 10px 0;
+        }
+
+        .panel-nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-family: var(--mono-font);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .panel-nav a:hover {
+            color: var(--accent-red);
+        }
+
+        .panel-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background-color: var(--accent-red);
+            transition: width 0.3s ease;
+        }
+
+        .panel-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Branding */
+        .brand-container {
+            position: fixed;
+            top: -30px; 
+            left: 100px; 
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .brand-logo {
+            height: 100px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 60, 0.4));
+        }
+
+        /* Section Modules */
+        section {
+            min-height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10vh 2rem;
+            position: relative;
+            scroll-snap-align: start;
+        }
+
+        /* Horizontal Interface */
+        .horizontal-container {
+            min-height: 100%;
+            width: 100%;
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-snap-align: start;
+        }
+        .horizontal-container::-webkit-scrollbar { height: 0; }
+
+        .horizontal-pane {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Typography & UI Elements */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            max-width: 600px;
+            opacity: 0.7;
+            font-family: var(--mono-font);
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .section-label {
+            font-family: var(--mono-font);
+            font-size: 0.7rem;
+            color: var(--accent-red);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .grid-item {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.02);
+            transition: border-color 0.3s ease;
+        }
+
+        .grid-item:hover { border-color: var(--accent-red); }
+
+        .cta-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--accent-red);
+            color: var(--text-primary);
+            font-family: var(--mono-font);
+            font-weight: 900;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+        }
+
+        .cta-btn:hover {
+            background: var(--accent-red);
+            color: #000;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+
+        .no-up-scroll {
+            overflow-y: hidden !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="brand-container">
+        <img src="boxom.png" alt="Logo" class="brand-logo">
+    </div>
+
+    <div class="monolithic-unit">
+        <main class="main-content-frame">
+            <nav class="massive-sliding-panel">
+                <ul class="panel-nav">
+                    <li><a href="#hero">01 // Home</a></li>
+                    <li><a href="#about">02 // Mission</a></li>
+                    <li><a href="#membership">03 // Arrays</a></li>
+                    <li><a href="#contact">04 // Comms</a></li>
+                </ul>
+            </nav>
+
+            <div class="viewport-wrapper" id="main-content">
+                <section id="hero">
+                    <p class="section-label">[BIOMECHANICAL_UPTIME]</p>
+                    <h1>CONSTRUCT<br>STRENGTH</h1>
+                    <p class="tagline">Engineered for the elite. MONOLITH is an experimental architecture built for maximum output under extreme load.</p>
+                    <a href="#about" class="cta-btn">ACCESS_PROTOCOLS</a>
+                </section>
+
+                <div class="divider"></div>
+
+                <section id="about">
+                    <p class="section-label">[MISSION_LOG_01]</p>
+                    <p style="max-width: 700px; text-align: left; line-height: 1.6; opacity: 0.8;">Our mission is to engineer a high-fidelity environment where human physiology is recalibrated through absolute mechanical precision.</p>
+                </section>
+
+                <div class="divider"></div>
+
+                <div class="horizontal-container" id="horizontal-track">
+                    <div class="horizontal-pane" id="membership">
+                        <p class="section-label">[MEMBERSHIP_ARCHITECTURE]</p>
+                        <div class="grid-container">
+                            <div class="grid-item">
+                                <h3>INITIATE</h3>
+                                <p>$85 - Standard access to hardware arrays.</p>
+                                <a href="#" class="cta-btn">SELECT</a>
+                            </div>
+                            <div class="grid-item" style="border-color: var(--accent-red); background: rgba(255,0,61,0.05);">
+                                <h3>OPERATIVE</h3>
+                                <p>$140 - Full 24/7 integration & analytics.</p>
+                                <a href="#" class="cta-btn" style="background:var(--accent-red); color:#000;">SELECT</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-pane" id="contact">
+                        <div class="contact-terminal">
+                            <p class="section-label">[COMMS_TERMINAL]</p>
+                            <a href="mailto:ops@monolith.sys" class="cta-btn">TRANSMIT_SIGNAL</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('main-content');
+        const track = document.getElementById('horizontal-track');
+
+        track.addEventListener('scroll', () => {
+            const scrollWidth = track.scrollWidth - track.clientWidth;
+            if (track.scrollLeft >= scrollWidth * 0.9) {
+                wrapper.classList.add('no-up-scroll');
+            } else {
+                wrapper.classList.remove('no-up-scroll');
+            }
+        });
+    </script>
+</body>
+</html>
