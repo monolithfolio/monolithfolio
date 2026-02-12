@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONOLITH // ARCHIVE.EXE</title>
+    <title>MONOLITH // ARCHIVE</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -27,10 +27,11 @@
             --brand-width: 100px;
             --safety-gap: 60px;
             --header-height: 180px;
-            --reveal-speed: 1.3s;
-            --wheel-travel-speed: 1.7s;
-            --wheel-return-speed: 1.5s;
-            --full-rotation: 1080deg;
+            --reveal-speed: 1.5s;
+            --wheel-travel-speed: 1.9s;
+            /* Increased return speed for a more natural, smoother glide */
+            --wheel-return-speed: 1.9s; 
+            --full-rotation: 1050deg;
         }
 
         /* Global cursor styling */
@@ -331,20 +332,28 @@
             align-items: flex-start;
         }
 
+        /* Modern Maps Container Integration */
         .map-container {
             width: 100%;
             height: 310px;
-            background: #0a0a0a;
-            border: 1px solid #111;
+            background: #000;
+            border: 1px solid #1a1a1a;
             overflow: hidden;
             position: relative;
         }
 
-        .map-container img {
+        .map-container iframe {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            opacity: 0.3;
+            border: none;
+            /* Inverting and desaturating to match the modern dark theme */
+            filter: grayscale(1) invert(0.92) contrast(1.2) brightness(0.8);
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .map-container:hover iframe {
+            opacity: 0.9;
         }
 
         /* Sequential Form Styling */
@@ -554,7 +563,8 @@
         }
 
         .nav-hub.reverse-wipe {
-            transition: transform var(--wheel-return-speed) cubic-bezier(0.23, 1, 0.32, 1);
+            /* Modified cubic-bezier for a smoother, decelerating return */
+            transition: transform var(--wheel-return-speed) cubic-bezier(0.16, 1, 0.3, 1);
             transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg);
         }
 
@@ -610,7 +620,7 @@
             opacity: 0;
         }
 
-        /* Project Reveal Overlay */
+        /* Project Reveal Overlay Styles */
         #project-detail {
             position: fixed;
             inset: 0;
@@ -620,6 +630,7 @@
             transition: clip-path var(--reveal-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
             display: flex;
             flex-direction: column;
+            padding: 40px 100px 40px 60px;
         }
 
         #project-detail.visible {
@@ -627,19 +638,125 @@
         }
 
         .detail-header-wrap {
-            padding: 20px;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .detail-body {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            flex-grow: 1;
+            min-height: 0; 
+        }
+
+        .detail-visual {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .detail-visual::before {
+            content: "PREVIEW_NOT_AVAILABLE";
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: #222;
+        }
+
+        .detail-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .detail-description {
+            font-family: var(--mono-font);
+            font-size: 12px;
+            color: #888;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .detail-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            border-top: 1px solid #111;
+            padding-top: 20px;
+        }
+
+        .spec-item {
+            font-family: var(--mono-font);
+        }
+
+        .spec-label {
+            font-size: 9px;
+            color: var(--hazard-yellow);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .spec-value {
+            font-size: 11px;
+            color: #fff;
+        }
+
+        /* Unified Action Footer */
+        .detail-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .launch-action-wrap {
+            border: 1px solid var(--hazard-yellow);
+            padding: 2px;
+            display: inline-block;
+        }
+
+        .launch-btn {
+            background: var(--hazard-yellow);
+            color: #000;
+            font-family: var(--mono-font);
+            font-size: 11px;
+            font-weight: 900;
+            padding: 15px 40px;
+            text-decoration: none;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .launch-btn:hover {
+            background: #fff;
+            color: #000;
         }
 
         .close-project {
-            margin-top: auto;
-            margin-left: 20px;
-            margin-bottom: 40px;
-            padding: 15px;
+            padding: 15px 30px;
             border: 1px solid #222;
-            color: var(--hazard-yellow);
+            color: #555;
             font-family: var(--mono-font);
             font-size: 10px;
-            width: fit-content;
+            transition: 0.3s;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .close-project:hover {
+            background: #111;
+            color: #fff;
+            border-color: #333;
         }
 
         @media (max-width: 768px) {
@@ -651,6 +768,10 @@
             .content-layout { display: flex; flex-direction: column; }
             .header-top-right { display: none; }
             .map-container, .form-container { height: auto; }
+            #project-detail { padding: 80px 20px 20px 20px; overflow-y: auto; }
+            .detail-body { display: flex; flex-direction: column; gap: 30px; }
+            .detail-visual { height: 250px; }
+            .detail-footer { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -703,7 +824,7 @@
                     <div class="desc-container">
                         <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void.</div>
                         <div style="margin-top:20px;">
-                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('PILLAR_PROJECT')">01 // STRENGTH.EXE</div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('STRENGTH.EXE')">01 // STRENGTH.EXE</div>
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')">02 // VOID_CORE</div>
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('iGLOO')">03 // iGLOO</div>
                         </div>
@@ -763,15 +884,56 @@
                         </div>
                         <button id="execute-btn" onclick="sendMail()" disabled>EXECUTE_SEND</button>
                     </div>
-                    <div class="map-container"><img src="map.png" alt="Map"></div>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d4840.770913735254!2d76.27565153861202!3d10.341188424252875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDIwJzI5LjYiTiA3NsKwMTYnMzMuOSJF!5e1!3m2!1sen!2sin!4v1770890601174!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
 
     <section id="project-detail">
-        <div class="detail-header-wrap"><h1 class="stable-h1" id="detail-title">PROJECT</h1></div>
-        <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
+        <div class="detail-header-wrap">
+            <div class="scramble-h2" style="margin-bottom: 5px;">PROJECT_STREAMS // FILE_01</div>
+            <h1 class="stable-h1" id="detail-title">STRENGTH.EXE</h1>
+        </div>
+        
+        <div class="detail-body">
+            <div class="detail-visual">
+                </div>
+            
+            <div class="detail-content">
+                <div class="detail-description" id="detail-desc">
+                    EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD. INTEGRATING REACT-BASED STATE MACHINES WITH GSAP ANIMATION SEQUENCES. THIS MODULE SERVES AS THE STRUCTURAL FOUNDATION FOR THE MONOLITH ECOSYSTEM, ENSURING SEAMLESS TRANSITIONS ACROSS NON-LINEAR VIEWPORTS.
+                </div>
+                
+                <div class="detail-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">STABILITY_RATING</span>
+                        <span class="spec-value">99.98% / OPTIMIZED</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">TECH_STACK</span>
+                        <span class="spec-value">REACT / GSAP / WEBGRID</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">COMPILATION_DATE</span>
+                        <span class="spec-value">JAN_2026</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">SYSTEM_RANK</span>
+                        <span class="spec-value">CORE_MODULE_01</span>
+                    </div>
+                </div>
+
+                <div class="detail-footer">
+                    <div class="launch-action-wrap">
+                        <a href="boxom.html" class="launch-btn" id="launch-link">LAUNCH_SITE</a>
+                    </div>
+                    <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <script>
@@ -793,7 +955,7 @@
 
         // Sequential Form Logic
         let formData = { name: "", email: "", message: "" };
-        let formStep = 0; // 0: Name, 1: Email, 2: Message, 3: Ready
+        let formStep = 0; 
         const termInput = document.getElementById('term-input');
         const termLog = document.getElementById('term-log');
         const promptLabel = document.getElementById('prompt-label');
@@ -834,7 +996,6 @@
 
         function sendMail() {
             execBtn.innerText = "SENDING...";
-            // Integration with EmailJS using formData object
             emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
                 from_name: formData.name,
                 from_email: formData.email,
@@ -853,7 +1014,7 @@
             if (isMobile) return;
             cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
             const target = e.target;
-            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick]'));
+            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
 
             const linkUpSlide = document.getElementById('link-up');
             if (linkUpSlide.classList.contains('active')) {
@@ -866,6 +1027,19 @@
 
         function openProject(name) {
             document.getElementById('detail-title').innerText = name;
+            const launchBtn = document.getElementById('launch-link');
+            
+            if (name === 'VOID_CORE') {
+                document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS. OPTIMIZED FOR LARGE-SCALE DATA VISUALIZATION AND REAL-TIME RENDER LOOPS.";
+                launchBtn.href = "#"; 
+            } else if (name === 'iGLOO') {
+                document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING. FEATURES ADAPTIVE ENCRYPTION AND BRUTALIST UI ELEMENTS.";
+                launchBtn.href = "#"; 
+            } else {
+                document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD. INTEGRATING REACT-BASED STATE MACHINES WITH GSAP ANIMATION SEQUENCES.";
+                launchBtn.href = "boxom.html";
+            }
+
             if (!isMobile) {
                 navTrigger.classList.add('cartwheel-active');
                 detail.classList.add('visible');
@@ -962,5 +1136,3 @@
 </body>
 
 </html>
-
-
