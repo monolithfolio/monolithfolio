@@ -1,399 +1,1030 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONOLITH // STRENGTH.EXE</title>
-    <link rel="icon" type="image/png" href="boxom.png">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@900&family=Space+Grotesk:wght@300;700&family=Space+Mono:wght@700;900&display=swap" rel="stylesheet">
+    <title>MONOLITH // ARCHIVE</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
+
     <style>
         :root {
-            /* Architectural Theme Colors */
-            --unit-bg: #000000;
-            --content-bg: #000000;
-            --accent-red: #ff003c; 
-            
-            /* Structural Variables */
-            --frame-size: 25px;
-            --inner-bar-h: 25px;
-            --inner-bar-w: 200px;
-            --bevel: 45px;
-            --border-width: 2px;
-            
-            /* Typography */
-            --text-primary: #ffffff;
+            --bg-color: #050505;
+            --text-main: #eeeeee;
+            --wheel-size: 580px;
+            --title-font: 'Syne', sans-serif;
             --mono-font: 'Space Mono', monospace;
-            --main-font: 'Space Grotesk', sans-serif;
+            --hazard-yellow: #ffcc00;
+            --brand-width: 100px;
+            --safety-gap: 60px;
+            --header-height: 180px;
+            --reveal-speed: 1.5s;
+            --wheel-travel-speed: 1.9s;
+            --wheel-return-speed: 1.9s; 
+            --full-rotation: 1050deg;
+            --step-angle: 60deg; 
         }
 
-        /* Essential Reset */
+        /* Global cursor styling */
+        *, body, html, a, button, input, textarea, [onclick], .close-project {
+            cursor: none !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         * {
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            cursor: crosshair;
-        }
-
-        html, body {
-            height: 100vh;
-            width: 100vw;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
-            background-color: var(--unit-bg);
-            color: var(--text-primary);
-            font-family: var(--main-font);
+            transition: background 0.5s ease;
         }
 
-        /* Outer Frame Layout */
-        .monolithic-unit {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            padding: var(--frame-size);
-            z-index: 10000;
-            pointer-events: none; 
+        #cursor-main {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border: 1px solid #fff;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, background 0.3s;
+            border-radius: 50%;
         }
 
-        /* The Red Kinetic Border */
-        .main-content-frame {
-            position: relative;
-            flex: 1;
-            background-color: var(--accent-red);
-            overflow: hidden;
-            pointer-events: auto;
-            clip-path: polygon(
-                0% calc(var(--inner-bar-h) + var(--bevel)),
-                var(--bevel) var(--inner-bar-h),
-                var(--inner-bar-w) var(--inner-bar-h),
-                calc(var(--inner-bar-w) + var(--bevel)) 0%,
-                calc(100% - var(--bevel)) 0%,
-                100% var(--bevel),
-                100% calc(100% - var(--bevel)),
-                calc(100% - var(--bevel)) 100%,
-                var(--bevel) 100%,
-                0% calc(100% - var(--bevel))
-            );
+        #cursor-main.active {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--hazard-yellow);
         }
 
-        /* The Interior Viewport */
-        .viewport-wrapper {
-            position: absolute;
-            top: var(--border-width);
-            left: var(--border-width);
-            right: var(--border-width);
-            bottom: var(--border-width);
-            background-color: var(--content-bg);
-            clip-path: inherit;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
-            z-index: 5;
-        }
-
-        .viewport-wrapper::-webkit-scrollbar { width: 0; }
-
-        /* REFINED SLIDING PANEL - CALCULATED TO PROTECT RED BORDER */
-        .massive-sliding-panel {
-            position: absolute;
-            /* Offset by border-width to ensure it stays INSIDE the red frame */
-            top: var(--border-width);
-            right: var(--border-width);
-            width: 200px;
-            height: 200px;
-            
-            /* Glassmorphism Logic */
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            
-            z-index: 10010;
-            pointer-events: auto;
-            
-            /* Hidden State: Adjusted for the 47px tip */
-            transform: translate(153px, -153px); 
-            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-
+        /* System Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 30000;
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            
-            /* This ensures the panel content doesn't bleed over the top-right bevel */
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transition: opacity 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        /* RED PROTRUDING TIP (Triangle) */
-        .massive-sliding-panel::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 47px; 
-            height: 47px; 
-            background-color: var(--accent-red);
-            clip-path: polygon(0 0, 0 100%, 100% 100%);
-            filter: drop-shadow(0 0 10px var(--accent-red));
-            z-index: 10011;
+        .calibration-wrap {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        /* PANEL NAVIGATION STYLE */
-        .panel-nav {
-            list-style: none;
-            padding-left: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease 0.15s;
-        }
-
-        .massive-sliding-panel:hover {
-            transform: translate(0, 0);
-        }
-
-        .massive-sliding-panel:hover .panel-nav {
-            opacity: 1;
-        }
-
-        .panel-nav li {
-            margin: 10px 0;
-        }
-
-        .panel-nav a {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-family: var(--mono-font);
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .panel-nav a:hover {
-            color: var(--accent-red);
-        }
-
-        .panel-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
+        .scan-line {
+            height: 2px;
+            background: var(--hazard-yellow);
             width: 0%;
-            height: 1px;
-            background-color: var(--accent-red);
-            transition: width 0.3s ease;
+            box-shadow: 0 0 15px var(--hazard-yellow);
+            transition: width 0.1s linear;
         }
 
-        .panel-nav a:hover::after {
-            width: 100%;
+        .hex-stream {
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: #222;
+            height: 40px;
+            overflow: hidden;
+            word-break: break-all;
+            line-height: 1;
         }
 
-        /* Branding */
-        .brand-container {
-            position: fixed;
-            top: -30px; 
-            left: 100px; 
-            z-index: 9999;
+        .loader-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        #preloader.exit {
+            opacity: 0;
             pointer-events: none;
         }
 
-        .brand-logo {
-            height: 100px;
-            width: auto;
-            display: block;
-            filter: drop-shadow(0 0 15px rgba(255, 0, 60, 0.4));
+        #any-key-prompt {
+            font-family: var(--mono-font);
+            font-size: 10px;
+            color: var(--hazard-yellow);
+            letter-spacing: 3px;
+            opacity: 0;
+            text-align: center;
+            margin-top: 10px;
         }
 
-        /* Section Modules */
-        section {
-            min-height: 100%;
+        #any-key-prompt.visible {
+            opacity: 1;
+            animation: blinker 1s infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        /* Profile Backdrop - Updated dimensions & position to prevent content overlap */
+        .profile-watermark {
+            position: fixed;
+            top: 50%;
+            left: 79%; /* Shifted further right to create a safe zone */
+            transform: translate(-50%, -50%);
+            width: 550px; /* Reduced size (was 700px) */
+            height: 550px; /* Reduced size (was 700px) */
+            z-index: 0;
+            opacity: 0;
+            pointer-events: none;
+            -webkit-mask-image: radial-gradient(circle, black 20%, transparent 85%);
+            mask-image: radial-gradient(circle, black 20%, transparent 85%);
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), filter 1s ease;
+        }
+
+        .profile-watermark.booted {
+            animation: atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .profile-watermark.hidden-bg {
+            opacity: 0 !important;
+            animation: none;
+        }
+
+        @keyframes atmosphericEntry {
+            0% { opacity: 0; filter: grayscale(1) brightness(0.5) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0.45; filter: grayscale(0.5) brightness(1.2) blur(0px); transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .profile-watermark img {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10vh 2rem;
-            position: relative;
-            scroll-snap-align: start;
-        }
-
-        /* Horizontal Interface */
-        .horizontal-container {
-            min-height: 100%;
-            width: 100%;
-            display: flex;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scroll-snap-type: x mandatory;
-            scroll-snap-align: start;
-        }
-        .horizontal-container::-webkit-scrollbar { height: 0; }
-
-        .horizontal-pane {
-            min-width: 100%;
             height: 100%;
-            flex-shrink: 0;
-            scroll-snap-align: start;
+            object-fit: cover;
+        }
+
+        /* Brand Pillar */
+        .brand-pillar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: var(--brand-width);
+            background: var(--bg-color);
+            border-left: 1px solid #1a1a1a;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+            z-index: 9000;
+        }
+
+        .brand-pillar::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: repeating-linear-gradient(
+                -45deg,
+                var(--hazard-yellow),
+                var(--hazard-yellow) 10px,
+                #000 10px,
+                #000 20px
+            );
+            background-size: 200% 200%;
+            animation: hazardSlide 2s linear infinite;
+        }
+
+        @keyframes hazardSlide {
+            from { background-position: 0 0; }
+            to { background-position: 0 40px; }
+        }
+
+        .brand-letter {
+            font-family: var(--title-font);
+            font-weight: 800;
+            font-size: 48px;
+            color: #7e7c7c;
+            line-height: 0.8;
+            transform: scaleY(1.4);
+        }
+
+        /* Main Viewport */
+        #viewport {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            z-index: 10;
+            padding-left: 320px;
+            padding-right: calc(var(--brand-width) + var(--safety-gap));
+            transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .text-frame {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+
+        .slide {
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            width: 100%;
+            transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1), transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(40px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .slide-header {
+            height: var(--header-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Torch Effect */
+        .header-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            width: 200px;
+            pointer-events: none;
         }
 
-        /* Typography & UI Elements */
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
-            font-weight: 700;
-            line-height: 0.9;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            margin-bottom: 1.5rem;
-            text-align: center;
+        .outline-m {
+            font-family: var(--title-font);
+            font-weight: 800;
+            font-size: 120px;
+            color: transparent;
+            -webkit-text-stroke: 1px transparent; 
+            position: relative;
+            line-height: 0.8;
+            z-index: 5;
         }
 
-        .tagline {
-            font-size: 1rem;
-            max-width: 600px;
-            opacity: 0.7;
-            font-family: var(--mono-font);
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.4;
+        .outline-m::after {
+            content: "M";
+            position: absolute;
+            inset: 0;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            mask-image: radial-gradient(circle 40px at var(--torch-x, 0) var(--torch-y, 0), black 0%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle 40px at var(--torch-x, 0) var(--torch-y, 0), black 0%, transparent 100%);
         }
 
-        .section-label {
-            font-family: var(--mono-font);
-            font-size: 0.7rem;
-            color: var(--accent-red);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        .grid-container {
+        /* Layouts */
+        .content-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 60px 1fr 0.8fr;
+            gap: 10px;
             width: 100%;
             max-width: 1100px;
+            flex-grow: 1;
+            min-height: 0;
         }
 
-        .grid-item {
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 1.5rem;
-            background: rgba(255,255,255,0.02);
-            transition: border-color 0.3s ease;
+        .contact-layout {
+            grid-template-columns: 60px 1fr 1fr;
+            align-items: flex-start;
         }
 
-        .grid-item:hover { border-color: var(--accent-red); }
-
-        .cta-btn {
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: 2px solid var(--accent-red);
-            color: var(--text-primary);
-            font-family: var(--mono-font);
-            font-weight: 900;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-        }
-
-        .cta-btn:hover {
-            background: var(--accent-red);
-            color: #000;
-        }
-
-        .divider {
+        /* Map styling */
+        .map-container {
             width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            height: 310px;
+            background: #000;
+            border: 1px solid #1a1a1a;
+            overflow: hidden;
+            position: relative;
         }
 
-        .no-up-scroll {
-            overflow-y: hidden !important;
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(1) invert(0.92) contrast(1.2) brightness(0.8);
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Terminal Form */
+        .form-container {
+            height: 310px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            font-family: var(--mono-font);
+        }
+
+        .terminal-interface {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid #111;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .terminal-log {
+            font-size: 9px;
+            color: #444;
+            line-height: 1.5;
+            height: 140px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .active-prompt-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 15px;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: #fff;
+            font-size: 10px;
+            flex-grow: 1;
+        }
+
+        .side-info {
+            font-family: var(--mono-font);
+            font-size: 8px;
+            color: #444;
+            text-transform: uppercase;
+            line-height: 1.8;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logs Table Styling */
+        .logs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--mono-font);
+            font-size: 9px;
+            margin-top: 10px;
+        }
+
+        .logs-table th {
+            text-align: left;
+            color: var(--hazard-yellow);
+            border-bottom: 1px solid #1a1a1a;
+            padding: 8px 0;
+            letter-spacing: 1px;
+        }
+
+        .logs-table td {
+            padding: 8px 0;
+            color: #666;
+            border-bottom: 1px solid #0a0a0a;
+        }
+
+        .logs-table tr:hover td {
+            color: #fff;
+        }
+
+        .social-link-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .social-link-wrap a {
+            color: #444;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link-wrap a:hover {
+            color: var(--hazard-yellow);
+            transform: translateX(5px);
+        }
+
+        .desc-container {
+            font-family: var(--mono-font);
+            font-size: 11px;
+            color: #888;
+            line-height: 1.6;
+            text-transform: uppercase;
+        }
+
+        .stable-h1 {
+            font-family: var(--title-font);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin: 0;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .scramble-h2 {
+            font-family: var(--mono-font);
+            font-size: 0.65rem;
+            color: #555;
+            letter-spacing: 5px;
+            margin-top: 5px;
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .bento-box {
+            background: rgba(8, 8, 8, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .bento-box:hover { border-color: var(--hazard-yellow); }
+
+        .bento-box .box-tag {
+            font-size: 7px;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bento-box .box-title { color: #fff; font-size: 9px; font-weight: 700; }
+
+        .bento-box .box-list { color: #666; font-size: 8px; }
+
+        .bento-box.full { grid-column: span 2; }
+
+        button {
+            background: #fff; color: #000; border: none; padding: 15px;
+            font-family: var(--mono-font); font-size: 10px; font-weight: 900;
+            width: 100%; transition: 0.3s; margin-top: 10px;
+        }
+
+        button:hover { background: var(--hazard-yellow); }
+        button:disabled { background: #222; color: #444; }
+
+        /* Navigation Wheel */
+        .nav-hub {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2));
+            width: var(--wheel-size);
+            height: var(--wheel-size);
+            z-index: 8500;
+            border-radius: 50%;
+        }
+
+        .nav-hub.cartwheel-active {
+            transition: transform var(--wheel-travel-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform: translateY(-50%) translateX(calc(100vw + (var(--wheel-size) / 2))) rotate(var(--full-rotation));
+        }
+
+        .nav-hub.reverse-wipe {
+            transition: transform var(--wheel-return-speed) cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg);
+        }
+
+        #wheel {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid #1a1a1a;
+            background: #050505;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9);
+            transition: transform 0.1s linear;
+        }
+
+        .inner-label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-origin: 0% 0%;
+            transform: rotate(calc(var(--step-angle) * var(--i))) translateX(220px);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .inner-label span {
+            font-family: var(--mono-font);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.15);
+            display: block;
+            letter-spacing: 4px;
+            font-weight: 700;
+        }
+
+        .inner-label.active {
+            transform: rotate(calc(var(--step-angle) * var(--i))) translateX(250px);
+        }
+
+        .inner-label.active span {
+            color: var(--hazard-yellow);
+            scale: 1.5;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+        }
+
+        #scroll-hint {
+            margin-top: 15px; font-family: var(--mono-font); font-size: 8px;
+            color: var(--hazard-yellow); letter-spacing: 2px;
+            animation: blinker 2.5s infinite; opacity: 0.5;
+        }
+
+        #scroll-hint.hidden { opacity: 0; }
+
+        /* Project Reveal Overlay Styles */
+        #project-detail {
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 15;
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path var(--reveal-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+            display: flex; flex-direction: column; padding: 40px 100px 40px 60px;
+        }
+
+        #project-detail.visible { clip-path: inset(0 0 0 0); }
+
+        .detail-header-wrap { margin-bottom: 30px; flex-shrink: 0; }
+
+        .detail-body { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; flex-grow: 1; min-height: 0; }
+
+        .detail-visual {
+            background: #0a0a0a; border: 1px solid #1a1a1a;
+            position: relative; overflow: hidden; display: flex;
+            align-items: center; justify-content: center; height: 100%;
+        }
+
+        .detail-visual::before {
+            content: "PREVIEW_NOT_AVAILABLE"; font-family: var(--mono-font); font-size: 10px; color: #222;
+        }
+
+        .detail-content { display: flex; flex-direction: column; gap: 20px; height: 100%; }
+
+        .detail-description {
+            font-family: var(--mono-font); font-size: 12px; color: #888;
+            line-height: 1.8; max-width: 600px;
+        }
+
+        .detail-specs {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+            border-top: 1px solid #111; padding-top: 20px;
+        }
+
+        .spec-label { font-size: 9px; color: var(--hazard-yellow); margin-bottom: 5px; display: block; }
+        .spec-value { font-size: 11px; color: #fff; }
+
+        .detail-footer { margin-top: auto; padding-top: 20px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+
+        .launch-action-wrap { border: 1px solid var(--hazard-yellow); padding: 2px; display: inline-block; }
+
+        .launch-btn {
+            background: var(--hazard-yellow); color: #000; font-family: var(--mono-font);
+            font-size: 11px; font-weight: 900; padding: 15px 40px; text-decoration: none;
+            display: block; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
+        }
+
+        .launch-btn:hover { background: #fff; }
+
+        .close-project {
+            padding: 15px 30px; border: 1px solid #222; color: #555;
+            font-family: var(--mono-font); font-size: 10px; transition: 0.3s;
+            text-transform: uppercase; white-space: nowrap;
+        }
+
+        .close-project:hover { background: #111; color: #fff; border-color: #333; }
+
+        @media (max-width: 768px) {
+            .brand-pillar { position: fixed; top: 0; left: 0; right: 0; width: 100%; height: 60px; flex-direction: row; padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a; }
+            .brand-pillar::before { width: 100%; height: 4px; bottom: 0; top: auto; background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
+            .nav-hub { display: none; }
+            #viewport { padding: 80px 20px 40px 20px; overflow-y: auto; height: auto; position: relative; }
+            .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
+            .content-layout { display: flex; flex-direction: column; }
+            .header-top-right { display: none; }
+            .profile-watermark { display: none; } /* Better to hide on mobile for clarity */
+            #project-detail { padding: 80px 20px 20px 20px; overflow-y: auto; }
+            .detail-body { display: flex; flex-direction: column; gap: 30px; }
+            .detail-visual { height: 250px; }
+            .detail-footer { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
+
 <body>
-    <div class="brand-container">
-        <img src="boxom.png" alt="Logo" class="brand-logo">
+    <div id="cursor-main"></div>
+    
+    <div id="preloader">
+        <div class="calibration-wrap">
+            <div class="loader-meta"><span>SYSTEM_CALIBRATION</span><span id="loader-perc">000%</span></div>
+            <div class="scan-line" id="scan-line"></div>
+            <div class="hex-stream" id="hex-stream"></div>
+            <div id="any-key-prompt">RUN_INITIALIZATION</div>
+        </div>
     </div>
 
-    <div class="monolithic-unit">
-        <main class="main-content-frame">
-            <nav class="massive-sliding-panel">
-                <ul class="panel-nav">
-                    <li><a href="#hero">01 // Home</a></li>
-                    <li><a href="#about">02 // Mission</a></li>
-                    <li><a href="#membership">03 // Arrays</a></li>
-                    <li><a href="#contact">04 // Comms</a></li>
-                </ul>
-            </nav>
+    <header class="brand-pillar">
+        <div class="brand-letter">M</div><div class="brand-letter">O</div><div class="brand-letter">N</div><div class="brand-letter">O</div><div class="brand-letter">L</div><div class="brand-letter">I</div><div class="brand-letter">T</div><div class="brand-letter">H</div>
+    </header>
 
-            <div class="viewport-wrapper" id="main-content">
-                <section id="hero">
-                    <p class="section-label">[BIOMECHANICAL_UPTIME]</p>
-                    <h1>CONSTRUCT<br>STRENGTH</h1>
-                    <p class="tagline">Engineered for the elite. MONOLITH is an experimental architecture built for maximum output under extreme load.</p>
-                    <a href="#about" class="cta-btn">ACCESS_PROTOCOLS</a>
-                </section>
+    <div class="nav-hub" id="nav-trigger">
+        <div id="wheel">
+            <div class="inner-label active" style="--i:0;"><span>01</span></div>
+            <div class="inner-label" style="--i:1;"><span>02</span></div>
+            <div class="inner-label" style="--i:2;"><span>03</span></div>
+            <div class="inner-label" style="--i:3;"><span>04</span></div>
+            <div class="inner-label" style="--i:4;"><span>05</span></div>
+            <div class="inner-label" style="--i:5;"><span>06</span></div>
+        </div>
+    </div>
 
-                <div class="divider"></div>
+    <div class="profile-watermark" id="global-bg"><img src="profile.jpeg" alt="Backdrop"></div>
 
-                <section id="about">
-                    <p class="section-label">[MISSION_LOG_01]</p>
-                    <p style="max-width: 700px; text-align: left; line-height: 1.6; opacity: 0.8;">Our mission is to engineer a high-fidelity environment where human physiology is recalibrated through absolute mechanical precision.</p>
-                </section>
-
-                <div class="divider"></div>
-
-                <div class="horizontal-container" id="horizontal-track">
-                    <div class="horizontal-pane" id="membership">
-                        <p class="section-label">[MEMBERSHIP_ARCHITECTURE]</p>
-                        <div class="grid-container">
-                            <div class="grid-item">
-                                <h3>INITIATE</h3>
-                                <p>$85 - Standard access to hardware arrays.</p>
-                                <a href="#" class="cta-btn">SELECT</a>
-                            </div>
-                            <div class="grid-item" style="border-color: var(--accent-red); background: rgba(255,0,61,0.05);">
-                                <h3>OPERATIVE</h3>
-                                <p>$140 - Full 24/7 integration & analytics.</p>
-                                <a href="#" class="cta-btn" style="background:var(--accent-red); color:#000;">SELECT</a>
-                            </div>
-                        </div>
+    <main id="viewport">
+        <div class="text-frame">
+            <section class="slide active" id="identity">
+                <div class="slide-header"><h1 class="stable-h1">IDENTITY.</h1><div class="scramble-h2">SYSTEM_INIT_IDENTITY</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact.</div>
+                        <div id="scroll-hint">SCROLL_TO_NAVIGATE</div>
                     </div>
+                </div>
+            </section>
 
-                    <div class="horizontal-pane" id="contact">
-                        <div class="contact-terminal">
-                            <p class="section-label">[COMMS_TERMINAL]</p>
-                            <a href="mailto:ops@monolith.sys" class="cta-btn">TRANSMIT_SIGNAL</a>
+            <section class="slide" id="works">
+                <div class="slide-header"><h1 class="stable-h1">WORKS.</h1><div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>UNITS</b>03</span><span><b>ARC</b>2026</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency.</div>
+                        <div style="margin-top:20px;">
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('STRENGTH.EXE')">01 // STRENGTH.EXE</div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')">02 // VOID_CORE</div>
+                            <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('iGLOO')">03 // iGLOO</div>
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section class="slide" id="stack">
+                <div class="slide-header"><h1 class="stable-h1">STACK.</h1><div class="scramble-h2">TECH_SPEC_REVEAL</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>TYPE</b>FULL</span><span><b>VER</b>8.4</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic.</div>
+                        <div class="bento-grid">
+                            <div class="bento-box"><div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div><div class="box-title">FRONT_END</div><div class="box-list">REACT / NEXT.JS / GSAP</div></div>
+                            <div class="bento-box"><div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div><div class="box-title">GRAPHICS</div><div class="box-list">THREE.JS / GLSL</div></div>
+                            <div class="bento-box full"><div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div><div class="box-title">SYSTEMS</div><div class="box-list">NODE.JS / AWS / DOCKER</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="logs">
+                <div class="slide-header"><h1 class="stable-h1">LOGS.</h1><div class="scramble-h2">SYSTEM_EVENT_HISTORY</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>LOG</b>64_BIT</span><span><b>SEQ</b>409</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">Historical data of recent builds and system deployments. Archive state: Healthy.</div>
+                        <table class="logs-table">
+                            <thead>
+                                <tr><th>TIMESTAMP</th><th>EVENT_ID</th><th>STATUS</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>12.02.26</td><td>DEPLOY_CORE_V2</td><td>STABLE</td></tr>
+                                <tr><td>08.02.26</td><td>SHADER_REFRACT_01</td><td>OPTIMIZED</td></tr>
+                                <tr><td>01.02.26</td><td>INIT_MONOLITH</td><td>VERIFIED</td></tr>
+                                <tr><td>25.01.26</td><td>NODE_UPLINK_SEC</td><td>SECURE</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="void">
+                <div class="slide-header"><h1 class="stable-h1">VOID.</h1><div class="scramble-h2">NULL_SPACE_MONITOR</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="link-up">
+                <div class="slide-header">
+                    <h1 class="stable-h1">LINK UP.</h1>
+                    <div class="scramble-h2">SECURE_CHANNEL_INIT</div>
+                    <div class="header-top-right"><div class="outline-m">M</div></div>
+                </div>
+                <div class="content-layout contact-layout">
+                    <div class="side-info">
+                        <div class="social-link-wrap">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="form-container">
+                        <div class="terminal-interface">
+                            <div class="terminal-log" id="term-log">
+                                <div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div>
+                            </div>
+                            <div class="active-prompt-line">
+                                <span class="prompt-label" id="prompt-label">USER_NAME:</span>
+                                <input type="text" id="term-input" class="terminal-input" autocomplete="off" spellcheck="false">
+                            </div>
+                        </div>
+                        <button id="execute-btn" onclick="sendMail()" disabled>EXECUTE_SEND</button>
+                    </div>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d4840.770913735254!2d76.27565153861202!3d10.341188424252875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDIwJzI5LjYiTiA3NsKwMTYnMzMuOSJF!5e1!3m2!1sen!2sin!4v1770890601174!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <section id="project-detail">
+        <div class="detail-header-wrap">
+            <div class="scramble-h2" style="margin-bottom: 5px;">PROJECT_STREAMS // FILE_01</div>
+            <h1 class="stable-h1" id="detail-title">STRENGTH.EXE</h1>
+        </div>
+        <div class="detail-body">
+            <div class="detail-visual"></div>
+            <div class="detail-content">
+                <div class="detail-description" id="detail-desc">EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD.</div>
+                <div class="detail-specs">
+                    <div class="spec-item"><span class="spec-label">STABILITY_RATING</span><span class="spec-value">99.98% / OPTIMIZED</span></div>
+                    <div class="spec-item"><span class="spec-label">TECH_STACK</span><span class="spec-value">REACT / GSAP / WEBGRID</span></div>
+                </div>
+                <div class="detail-footer">
+                    <div class="launch-action-wrap"><a href="boxom.html" class="launch-btn" id="launch-link">LAUNCH_SITE</a></div>
+                    <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
+                </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </section>
 
     <script>
-        const wrapper = document.getElementById('main-content');
-        const track = document.getElementById('horizontal-track');
+        const isMobile = window.innerWidth <= 768;
+        const slides = document.querySelectorAll('.slide');
+        const wheel = document.getElementById('wheel');
+        const navTrigger = document.getElementById('nav-trigger');
+        const bg = document.getElementById('global-bg');
+        const detail = document.getElementById('project-detail');
+        const viewport = document.getElementById('viewport');
+        const cursor = document.getElementById('cursor-main');
+        const scrollHint = document.getElementById('scroll-hint');
+        
+        const totalSlides = slides.length; 
+        const stepAngle = 360 / totalSlides; 
 
-        track.addEventListener('scroll', () => {
-            const scrollWidth = track.scrollWidth - track.clientWidth;
-            if (track.scrollLeft >= scrollWidth * 0.9) {
-                wrapper.classList.add('no-up-scroll');
-            } else {
-                wrapper.classList.remove('no-up-scroll');
+        let isBooted = false;
+        let interacted = false;
+        let targetRotation = 0;
+        let currentRotation = 0;
+        const lerpFactor = 0.08; 
+
+        // Sequential Form Logic
+        let formData = { name: "", email: "", message: "" };
+        let formStep = 0; 
+        const termInput = document.getElementById('term-input');
+        const termLog = document.getElementById('term-log');
+        const promptLabel = document.getElementById('prompt-label');
+        const execBtn = document.getElementById('execute-btn');
+
+        termInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && termInput.value.trim() !== "") {
+                processStep(termInput.value.trim());
             }
         });
+
+        function processStep(val) {
+            const entry = document.createElement('div');
+            entry.className = 'entry user';
+            entry.innerText = `> ${promptLabel.innerText} ${val}`;
+            termLog.appendChild(entry);
+            termLog.scrollTop = termLog.scrollHeight;
+
+            if (formStep === 0) {
+                formData.name = val;
+                promptLabel.innerText = "USER_EMAIL:";
+                formStep = 1;
+            } else if (formStep === 1) {
+                formData.email = val;
+                promptLabel.innerText = "MESSAGE:";
+                formStep = 2;
+            } else if (formStep === 2) {
+                formData.message = val;
+                promptLabel.innerText = "SYS_STATUS:";
+                termInput.value = "READY_FOR_EXECUTION";
+                termInput.disabled = true;
+                execBtn.disabled = false;
+                formStep = 3;
+                return;
+            }
+            termInput.value = "";
+        }
+
+        function sendMail() {
+            execBtn.innerText = "SENDING...";
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                from_name: formData.name,
+                from_email: formData.email,
+                message: formData.message
+            }).then(() => {
+                execBtn.innerText = "SUCCESS_SENT";
+                const successEntry = document.createElement('div');
+                successEntry.className = 'entry';
+                successEntry.style.color = 'var(--hazard-yellow)';
+                successEntry.innerText = "-- UPLINK_SUCCESSFUL: DATA_TERMINATED";
+                termLog.appendChild(successEntry);
+            });
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (isMobile) return;
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            const target = e.target;
+            cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
+
+            const linkUpSlide = document.getElementById('link-up');
+            if (linkUpSlide.classList.contains('active')) {
+                const mElement = linkUpSlide.querySelector('.outline-m');
+                const rect = mElement.getBoundingClientRect();
+                mElement.style.setProperty('--torch-x', (e.clientX - rect.left) + 'px');
+                mElement.style.setProperty('--torch-y', (e.clientY - rect.top) + 'px');
+            }
+        });
+
+        function openProject(name) {
+            document.getElementById('detail-title').innerText = name;
+            const launchBtn = document.getElementById('launch-link');
+            
+            if (name === 'VOID_CORE') {
+                document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS.";
+                launchBtn.href = "#"; 
+            } else if (name === 'iGLOO') {
+                document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING.";
+                launchBtn.href = "#"; 
+            } else {
+                document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD.";
+                launchBtn.href = "boxom.html";
+            }
+
+            if (!isMobile) {
+                navTrigger.classList.add('cartwheel-active');
+                detail.classList.add('visible');
+                setTimeout(() => { viewport.style.opacity = '0'; }, 550);
+            } else {
+                detail.classList.add('visible');
+            }
+        }
+
+        function closeProject() {
+            if (!isMobile) {
+                detail.style.transition = `clip-path var(--reveal-speed) cubic-bezier(0.23, 1, 0.32, 1)`;
+                detail.style.clipPath = 'inset(0 100% 0 0)';
+                navTrigger.classList.remove('cartwheel-active');
+                navTrigger.classList.add('reverse-wipe');
+                setTimeout(() => { viewport.style.opacity = '1'; }, 300);
+                setTimeout(() => { 
+                    detail.classList.remove('visible'); 
+                    navTrigger.classList.remove('reverse-wipe'); 
+                    detail.style.clipPath = '';
+                    detail.style.transition = '';
+                    interacted = true; 
+                    requestAnimationFrame(scrollLoop);
+                }, 1500);
+            } else {
+                detail.classList.remove('visible');
+            }
+        }
+
+        function runBoot() {
+            const scan = document.getElementById('scan-line');
+            const perc = document.getElementById('loader-perc');
+            const stream = document.getElementById('hex-stream');
+            let progress = 0;
+            const hexChars = '0123456789ABCDEF';
+            let interval = setInterval(() => {
+                if(progress < 100) {
+                    progress += Math.random() * 3;
+                    if(progress > 100) progress = 100;
+                    scan.style.width = progress + "%";
+                    perc.innerText = Math.floor(progress).toString().padStart(3, '0') + "%";
+                    let hex = '';
+                    for(let i=0; i<80; i++) hex += hexChars[Math.floor(Math.random()*16)];
+                    stream.innerText = hex;
+                } else {
+                    clearInterval(interval);
+                    isBooted = true;
+                    document.getElementById('any-key-prompt').classList.add('visible');
+                }
+            }, 50);
+        }
+
+        function exitPreloader() {
+            if (!isBooted) return;
+            document.getElementById('preloader').classList.add('exit');
+            setTimeout(() => { 
+                if (!isMobile) bg.classList.add('booted'); 
+                document.getElementById('preloader').style.display = 'none'; 
+                requestAnimationFrame(scrollLoop); 
+            }, 800);
+        }
+
+        function scrollLoop() {
+            if (isMobile || (detail.classList.contains('visible') && !navTrigger.classList.contains('reverse-wipe'))) return;
+            currentRotation += (targetRotation - currentRotation) * lerpFactor;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            updateUprightNumbers(currentRotation);
+            
+            let newIdx = (Math.round(-currentRotation / stepAngle) % totalSlides + totalSlides) % totalSlides;
+            slides.forEach((s, i) => s.classList.toggle('active', i === newIdx));
+            document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
+            
+            // Background logic for 6 sections
+            bg.classList.toggle('hidden-bg', newIdx === (totalSlides - 1));
+            
+            requestAnimationFrame(scrollLoop);
+        }
+
+        function updateUprightNumbers(rotation) {
+            document.querySelectorAll('.inner-label').forEach((label, i) => {
+                const span = label.querySelector('span');
+                span.style.transform = `rotate(${- ( (stepAngle * i) + rotation)}deg)`;
+            });
+        }
+
+        window.onwheel = e => {
+            if (!isBooted || isMobile || detail.classList.contains('visible')) return;
+            if (!interacted) { interacted = true; scrollHint.classList.add('hidden'); }
+            targetRotation -= e.deltaY * 0.3;
+        };
+
+        window.addEventListener('mousedown', exitPreloader);
+        window.addEventListener('touchstart', exitPreloader);
+        window.addEventListener('load', runBoot);
     </script>
 </body>
 
