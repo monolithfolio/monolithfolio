@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONOLITH // ARCHIVE.EXE</title>
+    <title>MONOLITH // ARCHIVE</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -29,9 +29,9 @@
             --header-height: 180px;
             --reveal-speed: 1.5s;
             --wheel-travel-speed: 1.9s;
-            /* Increased return speed for a more natural, smoother glide */
             --wheel-return-speed: 1.9s; 
             --full-rotation: 1050deg;
+            --step-angle: 60deg; 
         }
 
         /* Global cursor styling */
@@ -151,19 +151,19 @@
             50% { opacity: 0; }
         }
 
-        /* Profile Backdrop */
+        /* Profile Backdrop - Updated dimensions & position to prevent content overlap */
         .profile-watermark {
             position: fixed;
             top: 50%;
-            left: 72%;
+            left: 79%; /* Shifted further right to create a safe zone */
             transform: translate(-50%, -50%);
-            width: 700px;
-            height: 700px;
+            width: 550px; /* Reduced size (was 700px) */
+            height: 550px; /* Reduced size (was 700px) */
             z-index: 0;
             opacity: 0;
             pointer-events: none;
-            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
-            mask-image: radial-gradient(circle, black 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle, black 20%, transparent 85%);
+            mask-image: radial-gradient(circle, black 20%, transparent 85%);
             transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), filter 1s ease;
         }
 
@@ -178,7 +178,7 @@
 
         @keyframes atmosphericEntry {
             0% { opacity: 0; filter: grayscale(1) brightness(0.5) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0.55; filter: grayscale(0.5) brightness(1.2) blur(0px); transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.45; filter: grayscale(0.5) brightness(1.2) blur(0px); transform: translate(-50%, -50%) scale(1); }
         }
 
         .profile-watermark img {
@@ -187,7 +187,7 @@
             object-fit: cover;
         }
 
-        /* Brand Pillar with Animated Hazard Line */
+        /* Brand Pillar */
         .brand-pillar {
             position: fixed;
             right: 0;
@@ -282,7 +282,7 @@
             position: relative;
         }
 
-        /* Torch M Effect */
+        /* Torch Effect */
         .header-top-right {
             position: absolute;
             top: 0;
@@ -332,7 +332,7 @@
             align-items: flex-start;
         }
 
-        /* Modern Maps Container Integration */
+        /* Map styling */
         .map-container {
             width: 100%;
             height: 310px;
@@ -346,17 +346,12 @@
             width: 100%;
             height: 100%;
             border: none;
-            /* Inverting and desaturating to match the modern dark theme */
             filter: grayscale(1) invert(0.92) contrast(1.2) brightness(0.8);
             opacity: 0.6;
             transition: opacity 0.5s ease;
         }
 
-        .map-container:hover iframe {
-            opacity: 0.9;
-        }
-
-        /* Sequential Form Styling */
+        /* Terminal Form */
         .form-container {
             height: 310px;
             display: flex;
@@ -384,21 +379,12 @@
             margin-bottom: 10px;
         }
 
-        .terminal-log .entry { margin-bottom: 5px; }
-        .terminal-log .entry.user { color: var(--hazard-yellow); }
-
         .active-prompt-line {
             display: flex;
             align-items: center;
             gap: 10px;
             border-top: 1px solid #1a1a1a;
             padding-top: 15px;
-        }
-
-        .prompt-label {
-            font-size: 10px;
-            color: var(--hazard-yellow);
-            white-space: nowrap;
         }
 
         .terminal-input {
@@ -408,7 +394,6 @@
             color: #fff;
             font-size: 10px;
             flex-grow: 1;
-            width: auto;
         }
 
         .side-info {
@@ -420,6 +405,33 @@
             padding-right: 10px;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Logs Table Styling */
+        .logs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--mono-font);
+            font-size: 9px;
+            margin-top: 10px;
+        }
+
+        .logs-table th {
+            text-align: left;
+            color: var(--hazard-yellow);
+            border-bottom: 1px solid #1a1a1a;
+            padding: 8px 0;
+            letter-spacing: 1px;
+        }
+
+        .logs-table td {
+            padding: 8px 0;
+            color: #666;
+            border-bottom: 1px solid #0a0a0a;
+        }
+
+        .logs-table tr:hover td {
+            color: #fff;
         }
 
         .social-link-wrap {
@@ -442,7 +454,6 @@
         }
 
         .desc-container {
-            padding-left: 0;
             font-family: var(--mono-font);
             font-size: 11px;
             color: #888;
@@ -487,63 +498,29 @@
             backdrop-filter: blur(5px);
         }
 
-        .bento-box:hover {
-            border-color: var(--hazard-yellow);
-        }
+        .bento-box:hover { border-color: var(--hazard-yellow); }
 
         .bento-box .box-tag {
             font-size: 7px;
             color: #444;
-            letter-spacing: 1px;
             display: flex;
             justify-content: space-between;
         }
 
-        .bento-box .box-tag .status-dot {
-            width: 3px;
-            height: 3px;
-            background: var(--hazard-yellow);
-            border-radius: 50%;
-        }
+        .bento-box .box-title { color: #fff; font-size: 9px; font-weight: 700; }
 
-        .bento-box .box-title {
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
+        .bento-box .box-list { color: #666; font-size: 8px; }
 
-        .bento-box .box-list {
-            color: #666;
-            font-size: 8px;
-            line-height: 1.3;
-        }
-
-        .bento-box.full {
-            grid-column: span 2;
-        }
+        .bento-box.full { grid-column: span 2; }
 
         button {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 15px;
-            font-family: var(--mono-font);
-            font-size: 10px;
-            font-weight: 900;
-            width: 100%;
-            transition: 0.3s;
-            margin-top: 10px;
+            background: #fff; color: #000; border: none; padding: 15px;
+            font-family: var(--mono-font); font-size: 10px; font-weight: 900;
+            width: 100%; transition: 0.3s; margin-top: 10px;
         }
 
-        button:hover {
-            background: var(--hazard-yellow);
-        }
-
-        button:disabled {
-            background: #222;
-            color: #444;
-        }
+        button:hover { background: var(--hazard-yellow); }
+        button:disabled { background: #222; color: #444; }
 
         /* Navigation Wheel */
         .nav-hub {
@@ -563,7 +540,6 @@
         }
 
         .nav-hub.reverse-wipe {
-            /* Modified cubic-bezier for a smoother, decelerating return */
             transition: transform var(--wheel-return-speed) cubic-bezier(0.16, 1, 0.3, 1);
             transform: translateY(-50%) translateX(calc(var(--wheel-size) / -2)) rotate(0deg);
         }
@@ -583,7 +559,7 @@
             left: 50%;
             top: 50%;
             transform-origin: 0% 0%;
-            transform: rotate(calc(72deg * var(--i))) translateX(220px);
+            transform: rotate(calc(var(--step-angle) * var(--i))) translateX(220px);
             transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -597,7 +573,7 @@
         }
 
         .inner-label.active {
-            transform: rotate(calc(72deg * var(--i))) translateX(250px);
+            transform: rotate(calc(var(--step-angle) * var(--i))) translateX(250px);
         }
 
         .inner-label.active span {
@@ -607,157 +583,71 @@
         }
 
         #scroll-hint {
-            margin-top: 15px;
-            font-family: var(--mono-font);
-            font-size: 8px;
-            color: var(--hazard-yellow);
-            letter-spacing: 2px;
-            animation: blinker 2.5s infinite;
-            opacity: 0.5;
+            margin-top: 15px; font-family: var(--mono-font); font-size: 8px;
+            color: var(--hazard-yellow); letter-spacing: 2px;
+            animation: blinker 2.5s infinite; opacity: 0.5;
         }
 
-        #scroll-hint.hidden {
-            opacity: 0;
-        }
+        #scroll-hint.hidden { opacity: 0; }
 
         /* Project Reveal Overlay Styles */
         #project-detail {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            z-index: 15;
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 15;
             clip-path: inset(0 100% 0 0);
             transition: clip-path var(--reveal-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
-            display: flex;
-            flex-direction: column;
-            padding: 40px 100px 40px 60px;
+            display: flex; flex-direction: column; padding: 40px 100px 40px 60px;
         }
 
-        #project-detail.visible {
-            clip-path: inset(0 0 0 0);
-        }
+        #project-detail.visible { clip-path: inset(0 0 0 0); }
 
-        .detail-header-wrap {
-            margin-bottom: 30px;
-            flex-shrink: 0;
-        }
+        .detail-header-wrap { margin-bottom: 30px; flex-shrink: 0; }
 
-        .detail-body {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 60px;
-            flex-grow: 1;
-            min-height: 0; 
-        }
+        .detail-body { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; flex-grow: 1; min-height: 0; }
 
         .detail-visual {
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
+            background: #0a0a0a; border: 1px solid #1a1a1a;
+            position: relative; overflow: hidden; display: flex;
+            align-items: center; justify-content: center; height: 100%;
         }
 
         .detail-visual::before {
-            content: "PREVIEW_NOT_AVAILABLE";
-            font-family: var(--mono-font);
-            font-size: 10px;
-            color: #222;
+            content: "PREVIEW_NOT_AVAILABLE"; font-family: var(--mono-font); font-size: 10px; color: #222;
         }
 
-        .detail-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            height: 100%;
-        }
+        .detail-content { display: flex; flex-direction: column; gap: 20px; height: 100%; }
 
         .detail-description {
-            font-family: var(--mono-font);
-            font-size: 12px;
-            color: #888;
-            line-height: 1.8;
-            max-width: 600px;
+            font-family: var(--mono-font); font-size: 12px; color: #888;
+            line-height: 1.8; max-width: 600px;
         }
 
         .detail-specs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            border-top: 1px solid #111;
-            padding-top: 20px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+            border-top: 1px solid #111; padding-top: 20px;
         }
 
-        .spec-item {
-            font-family: var(--mono-font);
-        }
+        .spec-label { font-size: 9px; color: var(--hazard-yellow); margin-bottom: 5px; display: block; }
+        .spec-value { font-size: 11px; color: #fff; }
 
-        .spec-label {
-            font-size: 9px;
-            color: var(--hazard-yellow);
-            margin-bottom: 5px;
-            display: block;
-        }
+        .detail-footer { margin-top: auto; padding-top: 20px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
 
-        .spec-value {
-            font-size: 11px;
-            color: #fff;
-        }
-
-        /* Unified Action Footer */
-        .detail-footer {
-            margin-top: auto;
-            padding-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-shrink: 0;
-        }
-
-        .launch-action-wrap {
-            border: 1px solid var(--hazard-yellow);
-            padding: 2px;
-            display: inline-block;
-        }
+        .launch-action-wrap { border: 1px solid var(--hazard-yellow); padding: 2px; display: inline-block; }
 
         .launch-btn {
-            background: var(--hazard-yellow);
-            color: #000;
-            font-family: var(--mono-font);
-            font-size: 11px;
-            font-weight: 900;
-            padding: 15px 40px;
-            text-decoration: none;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: background 0.3s, color 0.3s;
+            background: var(--hazard-yellow); color: #000; font-family: var(--mono-font);
+            font-size: 11px; font-weight: 900; padding: 15px 40px; text-decoration: none;
+            display: block; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
         }
 
-        .launch-btn:hover {
-            background: #fff;
-            color: #000;
-        }
+        .launch-btn:hover { background: #fff; }
 
         .close-project {
-            padding: 15px 30px;
-            border: 1px solid #222;
-            color: #555;
-            font-family: var(--mono-font);
-            font-size: 10px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            white-space: nowrap;
+            padding: 15px 30px; border: 1px solid #222; color: #555;
+            font-family: var(--mono-font); font-size: 10px; transition: 0.3s;
+            text-transform: uppercase; white-space: nowrap;
         }
 
-        .close-project:hover {
-            background: #111;
-            color: #fff;
-            border-color: #333;
-        }
+        .close-project:hover { background: #111; color: #fff; border-color: #333; }
 
         @media (max-width: 768px) {
             .brand-pillar { position: fixed; top: 0; left: 0; right: 0; width: 100%; height: 60px; flex-direction: row; padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a; }
@@ -767,7 +657,7 @@
             .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
             .content-layout { display: flex; flex-direction: column; }
             .header-top-right { display: none; }
-            .map-container, .form-container { height: auto; }
+            .profile-watermark { display: none; } /* Better to hide on mobile for clarity */
             #project-detail { padding: 80px 20px 20px 20px; overflow-y: auto; }
             .detail-body { display: flex; flex-direction: column; gap: 30px; }
             .detail-visual { height: 250px; }
@@ -799,6 +689,7 @@
             <div class="inner-label" style="--i:2;"><span>03</span></div>
             <div class="inner-label" style="--i:3;"><span>04</span></div>
             <div class="inner-label" style="--i:4;"><span>05</span></div>
+            <div class="inner-label" style="--i:5;"><span>06</span></div>
         </div>
     </div>
 
@@ -811,7 +702,7 @@
                 <div class="content-layout">
                     <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact. My process involves dissecting complex challenges and reassembling them into streamlined, aesthetic environments. Driven by the void between design and engineering, I specialize in crafting experiences that are as technically sound as they are visually arresting.</div>
+                        <div class="scramble-body">Creative developer specialized in high-performance digital architecture and brutalist aesthetics. Focused on bridging raw logic with immersive visuals. I build digital structures that prioritize technical precision and functional impact.</div>
                         <div id="scroll-hint">SCROLL_TO_NAVIGATE</div>
                     </div>
                 </div>
@@ -822,7 +713,7 @@
                 <div class="content-layout">
                     <div class="side-info"><span><b>UNITS</b>03</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency. Projects built to endure the digital void.</div>
+                        <div class="scramble-body">Selected code archives. Optimized for visual impact and technical efficiency.</div>
                         <div style="margin-top:20px;">
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('STRENGTH.EXE')">01 // STRENGTH.EXE</div>
                             <div style="cursor:pointer; margin-bottom:10px; font-family:var(--mono-font); font-size:10px; color:#555;" onclick="openProject('VOID_CORE')">02 // VOID_CORE</div>
@@ -847,12 +738,33 @@
                 </div>
             </section>
 
+            <section class="slide" id="logs">
+                <div class="slide-header"><h1 class="stable-h1">LOGS.</h1><div class="scramble-h2">SYSTEM_EVENT_HISTORY</div></div>
+                <div class="content-layout">
+                    <div class="side-info"><span><b>LOG</b>64_BIT</span><span><b>SEQ</b>409</span></div>
+                    <div class="desc-container">
+                        <div class="scramble-body">Historical data of recent builds and system deployments. Archive state: Healthy.</div>
+                        <table class="logs-table">
+                            <thead>
+                                <tr><th>TIMESTAMP</th><th>EVENT_ID</th><th>STATUS</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>12.02.26</td><td>DEPLOY_CORE_V2</td><td>STABLE</td></tr>
+                                <tr><td>08.02.26</td><td>SHADER_REFRACT_01</td><td>OPTIMIZED</td></tr>
+                                <tr><td>01.02.26</td><td>INIT_MONOLITH</td><td>VERIFIED</td></tr>
+                                <tr><td>25.01.26</td><td>NODE_UPLINK_SEC</td><td>SECURE</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <section class="slide" id="void">
                 <div class="slide-header"><h1 class="stable-h1">VOID.</h1><div class="scramble-h2">NULL_SPACE_MONITOR</div></div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
                     <div class="desc-container">
-                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM, THIS PLATFORM SERVES AS A REPOSITORY FOR EXPERIMENTAL CODE AND ARCHITECTURAL DESIGN.</div>
+                        <div class="scramble-body">MONOLITH ARCHIVE IS A TERMINAL-GRADE DIGITAL HUB DESIGNED FOR HIGH-FIDELITY PROJECT EXPOSURE. BUILT ON THE PRINCIPLES OF MINIMALIST BRUTALISM.</div>
                     </div>
                 </div>
             </section>
@@ -869,7 +781,6 @@
                             <a href="#"><i class="fab fa-github"></i></a>
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
                             <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-x-twitter"></i></a>
                         </div>
                     </div>
                     <div class="form-container">
@@ -885,7 +796,7 @@
                         <button id="execute-btn" onclick="sendMail()" disabled>EXECUTE_SEND</button>
                     </div>
                     <div class="map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d4840.770913735254!2d76.27565153861202!3d10.341188424252875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDIwJzI5LjYiTiA3NsKwMTYnMzMuOSJF!5e1!3m2!1sen!2sin!4v1770890601174!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d4840.770913735254!2d76.27565153861202!3d10.341188424252875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDIwJzI5LjYiTiA3NsKwMTYnMzMuOSJF!5e1!3m2!1sen!2sin!4v1770890601174!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </section>
@@ -897,39 +808,16 @@
             <div class="scramble-h2" style="margin-bottom: 5px;">PROJECT_STREAMS // FILE_01</div>
             <h1 class="stable-h1" id="detail-title">STRENGTH.EXE</h1>
         </div>
-        
         <div class="detail-body">
-            <div class="detail-visual">
-                </div>
-            
+            <div class="detail-visual"></div>
             <div class="detail-content">
-                <div class="detail-description" id="detail-desc">
-                    EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD. INTEGRATING REACT-BASED STATE MACHINES WITH GSAP ANIMATION SEQUENCES. THIS MODULE SERVES AS THE STRUCTURAL FOUNDATION FOR THE MONOLITH ECOSYSTEM, ENSURING SEAMLESS TRANSITIONS ACROSS NON-LINEAR VIEWPORTS.
-                </div>
-                
+                <div class="detail-description" id="detail-desc">EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD.</div>
                 <div class="detail-specs">
-                    <div class="spec-item">
-                        <span class="spec-label">STABILITY_RATING</span>
-                        <span class="spec-value">99.98% / OPTIMIZED</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">TECH_STACK</span>
-                        <span class="spec-value">REACT / GSAP / WEBGRID</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">COMPILATION_DATE</span>
-                        <span class="spec-value">JAN_2026</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">SYSTEM_RANK</span>
-                        <span class="spec-value">CORE_MODULE_01</span>
-                    </div>
+                    <div class="spec-item"><span class="spec-label">STABILITY_RATING</span><span class="spec-value">99.98% / OPTIMIZED</span></div>
+                    <div class="spec-item"><span class="spec-label">TECH_STACK</span><span class="spec-value">REACT / GSAP / WEBGRID</span></div>
                 </div>
-
                 <div class="detail-footer">
-                    <div class="launch-action-wrap">
-                        <a href="boxom.html" class="launch-btn" id="launch-link">LAUNCH_SITE</a>
-                    </div>
+                    <div class="launch-action-wrap"><a href="boxom.html" class="launch-btn" id="launch-link">LAUNCH_SITE</a></div>
                     <div class="close-project" onclick="closeProject()">[ RE-INITIALIZE_ARCHIVE ]</div>
                 </div>
             </div>
@@ -947,6 +835,9 @@
         const cursor = document.getElementById('cursor-main');
         const scrollHint = document.getElementById('scroll-hint');
         
+        const totalSlides = slides.length; 
+        const stepAngle = 360 / totalSlides; 
+
         let isBooted = false;
         let interacted = false;
         let targetRotation = 0;
@@ -1030,13 +921,13 @@
             const launchBtn = document.getElementById('launch-link');
             
             if (name === 'VOID_CORE') {
-                document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS. OPTIMIZED FOR LARGE-SCALE DATA VISUALIZATION AND REAL-TIME RENDER LOOPS.";
+                document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS.";
                 launchBtn.href = "#"; 
             } else if (name === 'iGLOO') {
-                document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING. FEATURES ADAPTIVE ENCRYPTION AND BRUTALIST UI ELEMENTS.";
+                document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING.";
                 launchBtn.href = "#"; 
             } else {
-                document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD. INTEGRATING REACT-BASED STATE MACHINES WITH GSAP ANIMATION SEQUENCES.";
+                document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD.";
                 launchBtn.href = "boxom.html";
             }
 
@@ -1063,8 +954,6 @@
                     detail.style.transition = '';
                     interacted = true; 
                     requestAnimationFrame(scrollLoop);
-                    let currentIdx = (Math.round(-currentRotation / 72) % 5 + 5) % 5;
-                    bg.classList.toggle('hidden-bg', currentIdx === 4);
                 }, 1500);
             } else {
                 detail.classList.remove('visible');
@@ -1109,17 +998,21 @@
             currentRotation += (targetRotation - currentRotation) * lerpFactor;
             wheel.style.transform = `rotate(${currentRotation}deg)`;
             updateUprightNumbers(currentRotation);
-            let newIdx = (Math.round(-currentRotation / 72) % 5 + 5) % 5;
+            
+            let newIdx = (Math.round(-currentRotation / stepAngle) % totalSlides + totalSlides) % totalSlides;
             slides.forEach((s, i) => s.classList.toggle('active', i === newIdx));
             document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
-            bg.classList.toggle('hidden-bg', newIdx === 4);
+            
+            // Background logic for 6 sections
+            bg.classList.toggle('hidden-bg', newIdx === (totalSlides - 1));
+            
             requestAnimationFrame(scrollLoop);
         }
 
         function updateUprightNumbers(rotation) {
             document.querySelectorAll('.inner-label').forEach((label, i) => {
                 const span = label.querySelector('span');
-                span.style.transform = `rotate(${- ( (72 * i) + rotation)}deg)`;
+                span.style.transform = `rotate(${- ( (stepAngle * i) + rotation)}deg)`;
             });
         }
 
@@ -1136,4 +1029,3 @@
 </body>
 
 </html>
-
