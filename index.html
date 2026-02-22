@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONOLITH // ARCHIVE.EXE</title>
+    <title>MONOLITH // ARCHIVE</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -81,7 +81,7 @@
             border: 1px solid var(--hazard-yellow);
         }
 
-        /* System Preloader */
+        /* --- Updated Wide Vertical Page Loader --- */
         #preloader {
             position: fixed;
             inset: 0;
@@ -90,56 +90,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
-        .calibration-wrap {
-            width: 400px;
+        .loader-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            z-index: 30002;
+            width: 100%;
+            height: 100%;
         }
 
-        .scan-line {
-            height: 2px;
-            background: var(--hazard-yellow);
-            width: 0%;
-            box-shadow: 0 0 15px var(--hazard-yellow);
-            transition: width 0.1s linear;
-        }
-
-        .hex-stream {
-            font-family: var(--mono-font);
-            font-size: 10px;
-            color: #222;
-            height: 40px;
+        .vertical-loader-wrap {
+            width: 40px;
+            height: 240px;
+            position: relative;
             overflow: hidden;
-            word-break: break-all;
-            line-height: 1;
         }
 
-        .loader-meta {
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--mono-font);
-            font-size: 10px;
-            color: #fff;
-            letter-spacing: 2px;
-        }
-
-        #preloader.exit {
-            opacity: 0;
-            pointer-events: none;
+        .vertical-loader-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, transparent 0%, rgba(255, 204, 0, 0.2) 20%, var(--hazard-yellow) 100%);
+            transform: scaleY(0); 
+            transform-origin: bottom;
+            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         #any-key-prompt {
             font-family: var(--mono-font);
-            font-size: 10px;
+            font-size: 11px;
             color: var(--hazard-yellow);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             opacity: 0;
             text-align: center;
-            margin-top: 10px;
+            transition: opacity 0.5s ease;
+            font-weight: 700;
         }
 
         #any-key-prompt.visible {
@@ -147,44 +138,68 @@
             animation: blinker 1s infinite;
         }
 
+        /* Checkerboard Transition Overlay */
+        #checker-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 29999; /* Just below preloader but above content */
+            pointer-events: none;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            visibility: hidden;
+        }
+
+        .checker-tile {
+            background: #000;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+        }
+
+        .checker-tile.animate-out {
+            animation: tileOut 0.5s forwards cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        @keyframes tileOut {
+            0% { opacity: 1; transform: scale(1.01); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
         @keyframes blinker {
             50% { opacity: 0; }
         }
 
-        /* Profile Backdrop - Updated dimensions & position to prevent content overlap */
+        /* --- Backdrop --- */
         .profile-watermark {
             position: fixed;
             top: 50%;
-            left: 79%; /* Shifted further right to create a safe zone */
+            left: 80%;
             transform: translate(-50%, -50%);
-            width: 550px; /* Reduced size (was 700px) */
-            height: 550px; /* Reduced size (was 700px) */
+            width: 550px;
+            height: 550px;
             z-index: 0;
             opacity: 0;
             pointer-events: none;
             -webkit-mask-image: radial-gradient(circle, black 20%, transparent 85%);
             mask-image: radial-gradient(circle, black 20%, transparent 85%);
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), filter 1s ease;
+            transition: opacity 1.5s ease-out;
+            overflow: hidden;
         }
 
         .profile-watermark.booted {
-            animation: atmosphericEntry 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .profile-watermark.hidden-bg {
-            opacity: 0 !important;
-            animation: none;
-        }
-
-        @keyframes atmosphericEntry {
-            0% { opacity: 0; filter: grayscale(1) brightness(0.5) blur(40px); transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0.45; filter: grayscale(0.5) brightness(1.2) blur(0px); transform: translate(-50%, -50%) scale(1); }
+            opacity: 0.45;
         }
 
         .profile-watermark img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            filter: grayscale(0.5) brightness(1.1);
+        }
+
+        .profile-watermark.hidden-bg {
+            opacity: 0 !important;
         }
 
         /* Brand Pillar */
@@ -569,7 +584,7 @@
             color: rgba(255, 255, 255, 0.15);
             display: block;
             letter-spacing: 4px;
-            font-weight: 700;
+            font-weight: 900;
         }
 
         .inner-label.active {
@@ -657,7 +672,7 @@
             .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
             .content-layout { display: flex; flex-direction: column; }
             .header-top-right { display: none; }
-            .profile-watermark { display: none; } /* Better to hide on mobile for clarity */
+            .profile-watermark { display: none; }
             #project-detail { padding: 80px 20px 20px 20px; overflow-y: auto; }
             .detail-body { display: flex; flex-direction: column; gap: 30px; }
             .detail-visual { height: 250px; }
@@ -669,12 +684,14 @@
 <body>
     <div id="cursor-main"></div>
     
+    <div id="checker-overlay"></div>
+
     <div id="preloader">
-        <div class="calibration-wrap">
-            <div class="loader-meta"><span>SYSTEM_CALIBRATION</span><span id="loader-perc">000%</span></div>
-            <div class="scan-line" id="scan-line"></div>
-            <div class="hex-stream" id="hex-stream"></div>
-            <div id="any-key-prompt">RUN_INITIALIZATION</div>
+        <div class="loader-container">
+            <div class="vertical-loader-wrap">
+                <div class="vertical-loader-bar" id="v-loader"></div>
+            </div>
+            <div id="any-key-prompt">RUN_ARCHIVE.EXE</div>
         </div>
     </div>
 
@@ -693,7 +710,9 @@
         </div>
     </div>
 
-    <div class="profile-watermark" id="global-bg"><img src="profile.jpeg" alt="Backdrop"></div>
+    <div class="profile-watermark" id="global-bg">
+        <img src="profile.jpeg" alt="Backdrop">
+    </div>
 
     <main id="viewport">
         <div class="text-frame">
@@ -745,9 +764,7 @@
                     <div class="desc-container">
                         <div class="scramble-body">Historical data of recent builds and system deployments. Archive state: Healthy.</div>
                         <table class="logs-table">
-                            <thead>
-                                <tr><th>TIMESTAMP</th><th>EVENT_ID</th><th>STATUS</th></tr>
-                            </thead>
+                            <thead><tr><th>TIMESTAMP</th><th>EVENT_ID</th><th>STATUS</th></tr></thead>
                             <tbody>
                                 <tr><td>12.02.26</td><td>DEPLOY_CORE_V2</td><td>STABLE</td></tr>
                                 <tr><td>08.02.26</td><td>SHADER_REFRACT_01</td><td>OPTIMIZED</td></tr>
@@ -785,9 +802,7 @@
                     </div>
                     <div class="form-container">
                         <div class="terminal-interface">
-                            <div class="terminal-log" id="term-log">
-                                <div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div>
-                            </div>
+                            <div class="terminal-log" id="term-log"><div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div></div>
                             <div class="active-prompt-line">
                                 <span class="prompt-label" id="prompt-label">USER_NAME:</span>
                                 <input type="text" id="term-input" class="terminal-input" autocomplete="off" spellcheck="false">
@@ -834,17 +849,19 @@
         const viewport = document.getElementById('viewport');
         const cursor = document.getElementById('cursor-main');
         const scrollHint = document.getElementById('scroll-hint');
+        const checkerOverlay = document.getElementById('checker-overlay');
         
         const totalSlides = slides.length; 
         const stepAngle = 360 / totalSlides; 
 
         let isBooted = false;
+        let isTransitioning = false;
         let interacted = false;
         let targetRotation = 0;
         let currentRotation = 0;
         const lerpFactor = 0.08; 
 
-        // Sequential Form Logic
+        // Email / Form Logic
         let formData = { name: "", email: "", message: "" };
         let formStep = 0; 
         const termInput = document.getElementById('term-input');
@@ -853,9 +870,7 @@
         const execBtn = document.getElementById('execute-btn');
 
         termInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && termInput.value.trim() !== "") {
-                processStep(termInput.value.trim());
-            }
+            if (e.key === 'Enter' && termInput.value.trim() !== "") { processStep(termInput.value.trim()); }
         });
 
         function processStep(val) {
@@ -864,49 +879,28 @@
             entry.innerText = `> ${promptLabel.innerText} ${val}`;
             termLog.appendChild(entry);
             termLog.scrollTop = termLog.scrollHeight;
-
-            if (formStep === 0) {
-                formData.name = val;
-                promptLabel.innerText = "USER_EMAIL:";
-                formStep = 1;
-            } else if (formStep === 1) {
-                formData.email = val;
-                promptLabel.innerText = "MESSAGE:";
-                formStep = 2;
-            } else if (formStep === 2) {
-                formData.message = val;
-                promptLabel.innerText = "SYS_STATUS:";
-                termInput.value = "READY_FOR_EXECUTION";
-                termInput.disabled = true;
-                execBtn.disabled = false;
-                formStep = 3;
-                return;
-            }
+            if (formStep === 0) { formData.name = val; promptLabel.innerText = "USER_EMAIL:"; formStep = 1; }
+            else if (formStep === 1) { formData.email = val; promptLabel.innerText = "MESSAGE:"; formStep = 2; }
+            else if (formStep === 2) { formData.message = val; promptLabel.innerText = "SYS_STATUS:"; termInput.value = "READY_FOR_EXECUTION"; termInput.disabled = true; execBtn.disabled = false; formStep = 3; return; }
             termInput.value = "";
         }
 
         function sendMail() {
             execBtn.innerText = "SENDING...";
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-                from_name: formData.name,
-                from_email: formData.email,
-                message: formData.message
-            }).then(() => {
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { from_name: formData.name, from_email: formData.email, message: formData.message }).then(() => {
                 execBtn.innerText = "SUCCESS_SENT";
                 const successEntry = document.createElement('div');
-                successEntry.className = 'entry';
-                successEntry.style.color = 'var(--hazard-yellow)';
-                successEntry.innerText = "-- UPLINK_SUCCESSFUL: DATA_TERMINATED";
+                successEntry.className = 'entry'; successEntry.style.color = 'var(--hazard-yellow)'; successEntry.innerText = "-- UPLINK_SUCCESSFUL: DATA_TERMINATED";
                 termLog.appendChild(successEntry);
             });
         }
 
+        // Global Visual Logic
         window.addEventListener('mousemove', (e) => {
             if (isMobile) return;
             cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
             const target = e.target;
             cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
-
             const linkUpSlide = document.getElementById('link-up');
             if (linkUpSlide.classList.contains('active')) {
                 const mElement = linkUpSlide.querySelector('.outline-m');
@@ -916,81 +910,79 @@
             }
         });
 
+        // --- Loader Logic ---
+        function runBoot() {
+            const bar = document.getElementById('v-loader');
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 1) {
+                    progress += 0.04; 
+                    bar.style.transform = `scaleY(${progress})`;
+                } else {
+                    clearInterval(interval);
+                    isBooted = true;
+                    document.getElementById('any-key-prompt').classList.add('visible');
+                }
+            }, 80);
+        }
+
+        // --- Updated Randomized Checkerboard Transition Logic ---
+        function exitPreloader() {
+            if (!isBooted || isTransitioning) return;
+            isTransitioning = true;
+            
+            // Prepare the checkerboard
+            checkerOverlay.style.visibility = 'visible';
+            checkerOverlay.innerHTML = '';
+            const tiles = [];
+            for(let i=0; i<100; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'checker-tile';
+                checkerOverlay.appendChild(tile);
+                tiles.push(tile);
+            }
+
+            // Shuffle the tile array for randomness
+            const shuffledTiles = tiles.sort(() => Math.random() - 0.5);
+
+            // Trigger animations
+            setTimeout(() => {
+                document.getElementById('preloader').style.display = 'none';
+                if (!isMobile) bg.classList.add('booted');
+                
+                shuffledTiles.forEach((tile, index) => {
+                    // Random delay between 0 and 600ms for that checkerboard pop
+                    setTimeout(() => {
+                        tile.classList.add('animate-out');
+                    }, index * 8); 
+                });
+
+                // Cleanup overlay after animation completes
+                setTimeout(() => { 
+                    checkerOverlay.style.display = 'none';
+                    requestAnimationFrame(scrollLoop); 
+                }, 1500);
+            }, 100);
+        }
+
         function openProject(name) {
             document.getElementById('detail-title').innerText = name;
             const launchBtn = document.getElementById('launch-link');
-            
-            if (name === 'VOID_CORE') {
-                document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS.";
-                launchBtn.href = "#"; 
-            } else if (name === 'iGLOO') {
-                document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING.";
-                launchBtn.href = "#"; 
-            } else {
-                document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD.";
-                launchBtn.href = "boxom.html";
-            }
-
-            if (!isMobile) {
-                navTrigger.classList.add('cartwheel-active');
-                detail.classList.add('visible');
-                setTimeout(() => { viewport.style.opacity = '0'; }, 550);
-            } else {
-                detail.classList.add('visible');
-            }
+            if (name === 'VOID_CORE') { document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS."; launchBtn.href = "#"; }
+            else if (name === 'iGLOO') { document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING."; launchBtn.href = "#"; }
+            else { document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD."; launchBtn.href = "boxom.html"; }
+            if (!isMobile) { navTrigger.classList.add('cartwheel-active'); detail.classList.add('visible'); setTimeout(() => { viewport.style.opacity = '0'; }, 550); }
+            else { detail.classList.add('visible'); }
         }
 
         function closeProject() {
             if (!isMobile) {
                 detail.style.transition = `clip-path var(--reveal-speed) cubic-bezier(0.23, 1, 0.32, 1)`;
                 detail.style.clipPath = 'inset(0 100% 0 0)';
-                navTrigger.classList.remove('cartwheel-active');
-                navTrigger.classList.add('reverse-wipe');
+                navTrigger.classList.remove('cartwheel-active'); navTrigger.classList.add('reverse-wipe');
                 setTimeout(() => { viewport.style.opacity = '1'; }, 300);
-                setTimeout(() => { 
-                    detail.classList.remove('visible'); 
-                    navTrigger.classList.remove('reverse-wipe'); 
-                    detail.style.clipPath = '';
-                    detail.style.transition = '';
-                    interacted = true; 
-                    requestAnimationFrame(scrollLoop);
-                }, 1500);
-            } else {
-                detail.classList.remove('visible');
-            }
-        }
-
-        function runBoot() {
-            const scan = document.getElementById('scan-line');
-            const perc = document.getElementById('loader-perc');
-            const stream = document.getElementById('hex-stream');
-            let progress = 0;
-            const hexChars = '0123456789ABCDEF';
-            let interval = setInterval(() => {
-                if(progress < 100) {
-                    progress += Math.random() * 3;
-                    if(progress > 100) progress = 100;
-                    scan.style.width = progress + "%";
-                    perc.innerText = Math.floor(progress).toString().padStart(3, '0') + "%";
-                    let hex = '';
-                    for(let i=0; i<80; i++) hex += hexChars[Math.floor(Math.random()*16)];
-                    stream.innerText = hex;
-                } else {
-                    clearInterval(interval);
-                    isBooted = true;
-                    document.getElementById('any-key-prompt').classList.add('visible');
-                }
-            }, 50);
-        }
-
-        function exitPreloader() {
-            if (!isBooted) return;
-            document.getElementById('preloader').classList.add('exit');
-            setTimeout(() => { 
-                if (!isMobile) bg.classList.add('booted'); 
-                document.getElementById('preloader').style.display = 'none'; 
-                requestAnimationFrame(scrollLoop); 
-            }, 800);
+                setTimeout(() => { detail.classList.remove('visible'); navTrigger.classList.remove('reverse-wipe'); detail.style.clipPath = ''; detail.style.transition = ''; interacted = true; requestAnimationFrame(scrollLoop); }, 1500);
+            } else { detail.classList.remove('visible'); }
         }
 
         function scrollLoop() {
@@ -998,14 +990,10 @@
             currentRotation += (targetRotation - currentRotation) * lerpFactor;
             wheel.style.transform = `rotate(${currentRotation}deg)`;
             updateUprightNumbers(currentRotation);
-            
             let newIdx = (Math.round(-currentRotation / stepAngle) % totalSlides + totalSlides) % totalSlides;
             slides.forEach((s, i) => s.classList.toggle('active', i === newIdx));
             document.querySelectorAll('.inner-label').forEach((n, i) => n.classList.toggle('active', i === newIdx));
-            
-            // Background logic for 6 sections
             bg.classList.toggle('hidden-bg', newIdx === (totalSlides - 1));
-            
             requestAnimationFrame(scrollLoop);
         }
 
@@ -1029,4 +1017,3 @@
 </body>
 
 </html>
-
