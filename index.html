@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Syne:wght@800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
@@ -29,13 +29,24 @@
             --header-height: 180px;
             --reveal-speed: 1.5s;
             --wheel-travel-speed: 1.9s;
-            --wheel-return-speed: 1.9s; 
+
+            /* RETURN SPEED IDENTIFIED BELOW: */
+            --wheel-return-speed: 1.9s;
+
             --full-rotation: 1050deg;
-            --step-angle: 60deg; 
+            --step-angle: 60deg;
         }
 
         /* Global cursor styling */
-        *, body, html, a, button, input, textarea, [onclick], .close-project {
+        *,
+        body,
+        html,
+        a,
+        button,
+        input,
+        textarea,
+        [onclick],
+        .close-project {
             cursor: none !important;
         }
 
@@ -49,7 +60,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -59,6 +71,14 @@
             font-family: 'Inter', sans-serif;
             overflow: hidden;
             transition: background 0.5s ease;
+        }
+
+        /* Allow scrolling on mobile */
+        @media (max-width: 768px) {
+            body, html {
+                overflow: auto !important;
+                height: auto;
+            }
         }
 
         #cursor-main {
@@ -117,7 +137,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to top, transparent 0%, rgba(255, 204, 0, 0.2) 20%, var(--hazard-yellow) 100%);
-            transform: scaleY(0); 
+            transform: scaleY(0);
             transform-origin: bottom;
             transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -138,11 +158,10 @@
             animation: blinker 1s infinite;
         }
 
-        /* Checkerboard Transition Overlay */
         #checker-overlay {
             position: fixed;
             inset: 0;
-            z-index: 29999; /* Just below preloader but above content */
+            z-index: 29999;
             pointer-events: none;
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -166,9 +185,7 @@
             100% { opacity: 0; transform: scale(0); }
         }
 
-        @keyframes blinker {
-            50% { opacity: 0; }
-        }
+        @keyframes blinker { 50% { opacity: 0; } }
 
         /* --- Backdrop --- */
         .profile-watermark {
@@ -187,20 +204,9 @@
             overflow: hidden;
         }
 
-        .profile-watermark.booted {
-            opacity: 0.45;
-        }
-
-        .profile-watermark img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(0.5) brightness(1.1);
-        }
-
-        .profile-watermark.hidden-bg {
-            opacity: 0 !important;
-        }
+        .profile-watermark.booted { opacity: 0.45; }
+        .profile-watermark img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5) brightness(1.1); }
+        .profile-watermark.hidden-bg { opacity: 0 !important; }
 
         /* Brand Pillar */
         .brand-pillar {
@@ -226,13 +232,7 @@
             top: 0;
             bottom: 0;
             width: 6px;
-            background: repeating-linear-gradient(
-                -45deg,
-                var(--hazard-yellow),
-                var(--hazard-yellow) 10px,
-                #000 10px,
-                #000 20px
-            );
+            background: repeating-linear-gradient(-45deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
             background-size: 200% 200%;
             animation: hazardSlide 2s linear infinite;
         }
@@ -315,7 +315,7 @@
             font-weight: 800;
             font-size: 120px;
             color: transparent;
-            -webkit-text-stroke: 1px transparent; 
+            -webkit-text-stroke: 1px transparent;
             position: relative;
             line-height: 0.8;
             z-index: 5;
@@ -445,9 +445,7 @@
             border-bottom: 1px solid #0a0a0a;
         }
 
-        .logs-table tr:hover td {
-            color: #fff;
-        }
+        .logs-table tr:hover td { color: #fff; }
 
         .social-link-wrap {
             display: flex;
@@ -514,24 +512,22 @@
         }
 
         .bento-box:hover { border-color: var(--hazard-yellow); }
-
-        .bento-box .box-tag {
-            font-size: 7px;
-            color: #444;
-            display: flex;
-            justify-content: space-between;
-        }
-
+        .bento-box .box-tag { font-size: 7px; color: #444; display: flex; justify-content: space-between; }
         .bento-box .box-title { color: #fff; font-size: 9px; font-weight: 700; }
-
         .bento-box .box-list { color: #666; font-size: 8px; }
-
         .bento-box.full { grid-column: span 2; }
 
         button {
-            background: #fff; color: #000; border: none; padding: 15px;
-            font-family: var(--mono-font); font-size: 10px; font-weight: 900;
-            width: 100%; transition: 0.3s; margin-top: 10px;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-family: var(--mono-font);
+            font-size: 10px;
+            font-weight: 900;
+            width: 100%;
+            transition: 0.3s;
+            margin-top: 10px;
         }
 
         button:hover { background: var(--hazard-yellow); }
@@ -587,103 +583,152 @@
             font-weight: 900;
         }
 
-        .inner-label.active {
-            transform: rotate(calc(var(--step-angle) * var(--i))) translateX(250px);
-        }
-
-        .inner-label.active span {
-            color: var(--hazard-yellow);
-            scale: 1.5;
-            text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
-        }
+        .inner-label.active { transform: rotate(calc(var(--step-angle) * var(--i))) translateX(250px); }
+        .inner-label.active span { color: var(--hazard-yellow); scale: 1.5; text-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
 
         #scroll-hint {
-            margin-top: 15px; font-family: var(--mono-font); font-size: 8px;
-            color: var(--hazard-yellow); letter-spacing: 2px;
-            animation: blinker 2.5s infinite; opacity: 0.5;
+            margin-top: 15px;
+            font-family: var(--mono-font);
+            font-size: 8px;
+            color: var(--hazard-yellow);
+            letter-spacing: 2px;
+            animation: blinker 2.5s infinite;
+            opacity: 0.5;
         }
 
         #scroll-hint.hidden { opacity: 0; }
 
         /* Project Reveal Overlay Styles */
         #project-detail {
-            position: fixed; inset: 0; background: var(--bg-color); z-index: 15;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 15;
             clip-path: inset(0 100% 0 0);
             transition: clip-path var(--reveal-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
-            display: flex; flex-direction: column; padding: 40px 100px 40px 60px;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 100px 40px 60px;
         }
 
         #project-detail.visible { clip-path: inset(0 0 0 0); }
-
         .detail-header-wrap { margin-bottom: 30px; flex-shrink: 0; }
-
         .detail-body { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; flex-grow: 1; min-height: 0; }
-
-        .detail-visual {
-            background: #0a0a0a; border: 1px solid #1a1a1a;
-            position: relative; overflow: hidden; display: flex;
-            align-items: center; justify-content: center; height: 100%;
-        }
-
-        .detail-visual::before {
-            content: "PREVIEW_NOT_AVAILABLE"; font-family: var(--mono-font); font-size: 10px; color: #222;
-        }
-
+        .detail-visual { background: #0a0a0a; border: 1px solid #1a1a1a; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100%; }
+        .detail-visual::before { content: "PREVIEW_NOT_AVAILABLE"; font-family: var(--mono-font); font-size: 10px; color: #222; }
         .detail-content { display: flex; flex-direction: column; gap: 20px; height: 100%; }
-
-        .detail-description {
-            font-family: var(--mono-font); font-size: 12px; color: #888;
-            line-height: 1.8; max-width: 600px;
-        }
-
-        .detail-specs {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
-            border-top: 1px solid #111; padding-top: 20px;
-        }
-
+        .detail-description { font-family: var(--mono-font); font-size: 12px; color: #888; line-height: 1.8; max-width: 600px; }
+        .detail-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; border-top: 1px solid #111; padding-top: 20px; }
         .spec-label { font-size: 9px; color: var(--hazard-yellow); margin-bottom: 5px; display: block; }
         .spec-value { font-size: 11px; color: #fff; }
-
         .detail-footer { margin-top: auto; padding-top: 20px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-
         .launch-action-wrap { border: 1px solid var(--hazard-yellow); padding: 2px; display: inline-block; }
-
-        .launch-btn {
-            background: var(--hazard-yellow); color: #000; font-family: var(--mono-font);
-            font-size: 11px; font-weight: 900; padding: 15px 40px; text-decoration: none;
-            display: block; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
-        }
-
+        .launch-btn { background: var(--hazard-yellow); color: #000; font-family: var(--mono-font); font-size: 11px; font-weight: 900; padding: 15px 40px; text-decoration: none; display: block; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .launch-btn:hover { background: #fff; }
-
-        .close-project {
-            padding: 15px 30px; border: 1px solid #222; color: #555;
-            font-family: var(--mono-font); font-size: 10px; transition: 0.3s;
-            text-transform: uppercase; white-space: nowrap;
-        }
-
+        .close-project { padding: 15px 30px; border: 1px solid #222; color: #555; font-family: var(--mono-font); font-size: 10px; transition: 0.3s; text-transform: uppercase; white-space: nowrap; }
         .close-project:hover { background: #111; color: #fff; border-color: #333; }
 
+        /* MOBILE SPECIFIC OVERRIDES */
         @media (max-width: 768px) {
-            .brand-pillar { position: fixed; top: 0; left: 0; right: 0; width: 100%; height: 60px; flex-direction: row; padding: 0 20px; border-left: none; border-bottom: 1px solid #1a1a1a; }
-            .brand-pillar::before { width: 100%; height: 4px; bottom: 0; top: auto; background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px); }
-            .nav-hub { display: none; }
-            #viewport { padding: 80px 20px 40px 20px; overflow-y: auto; height: auto; position: relative; }
-            .slide { position: relative; opacity: 1 !important; visibility: visible !important; transform: none !important; height: auto; margin-bottom: 80px; }
-            .content-layout { display: flex; flex-direction: column; }
-            .header-top-right { display: none; }
-            .profile-watermark { display: none; }
-            #project-detail { padding: 80px 20px 20px 20px; overflow-y: auto; }
-            .detail-body { display: flex; flex-direction: column; gap: 30px; }
-            .detail-visual { height: 250px; }
-            .detail-footer { flex-direction: column; align-items: stretch; }
+            .brand-pillar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: auto; /* Replaces the side positioning */
+                width: 100%;
+                height: 60px;
+                flex-direction: row; /* Makes heading horizontal */
+                padding: 0 20px;
+                border-left: none;
+                border-bottom: 1px solid #1a1a1a;
+                justify-content: center; /* Center the branding for modern look */
+                gap: 5px;
+            }
+
+            .brand-pillar::before {
+                width: 100%;
+                height: 4px;
+                bottom: 0;
+                top: auto;
+                background: repeating-linear-gradient(90deg, var(--hazard-yellow), var(--hazard-yellow) 10px, #000 10px, #000 20px);
+            }
+
+            .brand-letter {
+                font-size: 18px; /* Adjusted for horizontal header */
+                transform: none; /* Removed vertical stretch */
+                color: var(--text-main);
+                letter-spacing: 2px;
+            }
+
+            /* Hide the wheel on mobile */
+            .nav-hub {
+                display: none !important;
+            }
+
+            #viewport {
+                padding: 100px 20px 40px 20px; /* Offset for horizontal header */
+                overflow-y: visible;
+                height: auto;
+                position: relative;
+            }
+
+            .text-frame {
+                height: auto;
+            }
+
+            .slide {
+                position: relative;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                height: auto;
+                margin-bottom: 80px;
+            }
+
+            .content-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .header-top-right {
+                display: none;
+            }
+
+            .profile-watermark {
+                display: none;
+            }
+
+            #project-detail {
+                padding: 80px 20px 20px 20px;
+                overflow-y: auto;
+            }
+
+            .detail-body {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .detail-visual {
+                height: 250px;
+            }
+
+            .detail-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #scroll-hint {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="cursor-main"></div>
-    
     <div id="checker-overlay"></div>
 
     <div id="preloader">
@@ -696,7 +741,14 @@
     </div>
 
     <header class="brand-pillar">
-        <div class="brand-letter">M</div><div class="brand-letter">O</div><div class="brand-letter">N</div><div class="brand-letter">O</div><div class="brand-letter">L</div><div class="brand-letter">I</div><div class="brand-letter">T</div><div class="brand-letter">H</div>
+        <div class="brand-letter">M</div>
+        <div class="brand-letter">O</div>
+        <div class="brand-letter">N</div>
+        <div class="brand-letter">O</div>
+        <div class="brand-letter">L</div>
+        <div class="brand-letter">I</div>
+        <div class="brand-letter">T</div>
+        <div class="brand-letter">H</div>
     </header>
 
     <div class="nav-hub" id="nav-trigger">
@@ -717,7 +769,10 @@
     <main id="viewport">
         <div class="text-frame">
             <section class="slide active" id="identity">
-                <div class="slide-header"><h1 class="stable-h1">IDENTITY.</h1><div class="scramble-h2">SYSTEM_INIT_IDENTITY</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">IDENTITY.</h1>
+                    <div class="scramble-h2">SYSTEM_INIT_IDENTITY</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>LOC</b>EARTH</span><span><b>SYS</b>01</span></div>
                     <div class="desc-container">
@@ -728,7 +783,10 @@
             </section>
 
             <section class="slide" id="works">
-                <div class="slide-header"><h1 class="stable-h1">WORKS.</h1><div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">WORKS.</h1>
+                    <div class="scramble-h2">ARCHIVE_ACCESS_WORKS</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>UNITS</b>03</span><span><b>ARC</b>2026</span></div>
                     <div class="desc-container">
@@ -743,28 +801,52 @@
             </section>
 
             <section class="slide" id="stack">
-                <div class="slide-header"><h1 class="stable-h1">STACK.</h1><div class="scramble-h2">TECH_SPEC_REVEAL</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">STACK.</h1>
+                    <div class="scramble-h2">TECH_SPEC_REVEAL</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>TYPE</b>FULL</span><span><b>VER</b>8.4</span></div>
                     <div class="desc-container">
                         <div class="scramble-body">Engineered with modern frameworks and low-level optimizations. Utilizing GSAP, Three.js, and custom shader logic.</div>
                         <div class="bento-grid">
-                            <div class="bento-box"><div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div><div class="box-title">FRONT_END</div><div class="box-list">REACT / NEXT.JS / GSAP</div></div>
-                            <div class="bento-box"><div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div><div class="box-title">GRAPHICS</div><div class="box-list">THREE.JS / GLSL</div></div>
-                            <div class="bento-box full"><div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div><div class="box-title">SYSTEMS</div><div class="box-list">NODE.JS / AWS / DOCKER</div></div>
+                            <div class="bento-box">
+                                <div class="box-tag"><span>FE_MODULE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">FRONT_END</div>
+                                <div class="box-list">REACT / NEXT.JS / GSAP</div>
+                            </div>
+                            <div class="bento-box">
+                                <div class="box-tag"><span>VFX_MODULE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">GRAPHICS</div>
+                                <div class="box-list">THREE.JS / GLSL</div>
+                            </div>
+                            <div class="bento-box full">
+                                <div class="box-tag"><span>SYS_CORE</span> <span class="status-dot"></span></div>
+                                <div class="box-title">SYSTEMS</div>
+                                <div class="box-list">NODE.JS / AWS / DOCKER</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="slide" id="logs">
-                <div class="slide-header"><h1 class="stable-h1">LOGS.</h1><div class="scramble-h2">SYSTEM_EVENT_HISTORY</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">LOGS.</h1>
+                    <div class="scramble-h2">SYSTEM_EVENT_HISTORY</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>LOG</b>64_BIT</span><span><b>SEQ</b>409</span></div>
                     <div class="desc-container">
                         <div class="scramble-body">Historical data of recent builds and system deployments. Archive state: Healthy.</div>
                         <table class="logs-table">
-                            <thead><tr><th>TIMESTAMP</th><th>EVENT_ID</th><th>STATUS</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>TIMESTAMP</th>
+                                    <th>EVENT_ID</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr><td>12.02.26</td><td>DEPLOY_CORE_V2</td><td>STABLE</td></tr>
                                 <tr><td>08.02.26</td><td>SHADER_REFRACT_01</td><td>OPTIMIZED</td></tr>
@@ -777,7 +859,10 @@
             </section>
 
             <section class="slide" id="void">
-                <div class="slide-header"><h1 class="stable-h1">VOID.</h1><div class="scramble-h2">NULL_SPACE_MONITOR</div></div>
+                <div class="slide-header">
+                    <h1 class="stable-h1">VOID.</h1>
+                    <div class="scramble-h2">NULL_SPACE_MONITOR</div>
+                </div>
                 <div class="content-layout">
                     <div class="side-info"><span><b>AREA</b>0x0</span><span><b>SIG</b>LOW</span></div>
                     <div class="desc-container">
@@ -790,7 +875,9 @@
                 <div class="slide-header">
                     <h1 class="stable-h1">LINK UP.</h1>
                     <div class="scramble-h2">SECURE_CHANNEL_INIT</div>
-                    <div class="header-top-right"><div class="outline-m">M</div></div>
+                    <div class="header-top-right">
+                        <div class="outline-m">M</div>
+                    </div>
                 </div>
                 <div class="content-layout contact-layout">
                     <div class="side-info">
@@ -802,7 +889,9 @@
                     </div>
                     <div class="form-container">
                         <div class="terminal-interface">
-                            <div class="terminal-log" id="term-log"><div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div></div>
+                            <div class="terminal-log" id="term-log">
+                                <div class="entry">-- SYSTEM_READY: WAITING FOR UPLINK...</div>
+                            </div>
                             <div class="active-prompt-line">
                                 <span class="prompt-label" id="prompt-label">USER_NAME:</span>
                                 <input type="text" id="term-input" class="terminal-input" autocomplete="off" spellcheck="false">
@@ -850,20 +939,20 @@
         const cursor = document.getElementById('cursor-main');
         const scrollHint = document.getElementById('scroll-hint');
         const checkerOverlay = document.getElementById('checker-overlay');
-        
-        const totalSlides = slides.length; 
-        const stepAngle = 360 / totalSlides; 
+
+        const totalSlides = slides.length;
+        const stepAngle = 360 / totalSlides;
 
         let isBooted = false;
         let isTransitioning = false;
         let interacted = false;
         let targetRotation = 0;
         let currentRotation = 0;
-        const lerpFactor = 0.08; 
+        const lerpFactor = 0.08;
 
         // Email / Form Logic
         let formData = { name: "", email: "", message: "" };
-        let formStep = 0; 
+        let formStep = 0;
         const termInput = document.getElementById('term-input');
         const termLog = document.getElementById('term-log');
         const promptLabel = document.getElementById('prompt-label');
@@ -887,7 +976,8 @@
 
         function sendMail() {
             execBtn.innerText = "SENDING...";
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { from_name: formData.name, from_email: formData.email, message: formData.message }).then(() => {
+            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", { from_name: formData.name, from_email: formData.email, message: formData.message })
+            .then(() => {
                 execBtn.innerText = "SUCCESS_SENT";
                 const successEntry = document.createElement('div');
                 successEntry.className = 'entry'; successEntry.style.color = 'var(--hazard-yellow)'; successEntry.innerText = "-- UPLINK_SUCCESSFUL: DATA_TERMINATED";
@@ -898,7 +988,8 @@
         // Global Visual Logic
         window.addEventListener('mousemove', (e) => {
             if (isMobile) return;
-            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
             const target = e.target;
             cursor.classList.toggle('active', !!target.closest('a, button, input, textarea, [onclick], .close-project'));
             const linkUpSlide = document.getElementById('link-up');
@@ -915,53 +1006,30 @@
             const bar = document.getElementById('v-loader');
             let progress = 0;
             const interval = setInterval(() => {
-                if (progress < 1) {
-                    progress += 0.04; 
-                    bar.style.transform = `scaleY(${progress})`;
-                } else {
-                    clearInterval(interval);
-                    isBooted = true;
-                    document.getElementById('any-key-prompt').classList.add('visible');
-                }
+                if (progress < 1) { progress += 0.04; bar.style.transform = `scaleY(${progress})`; }
+                else { clearInterval(interval); isBooted = true; document.getElementById('any-key-prompt').classList.add('visible'); }
             }, 80);
         }
 
-        // --- Updated Randomized Checkerboard Transition Logic ---
+        // --- Randomized Checkerboard Transition Logic ---
         function exitPreloader() {
             if (!isBooted || isTransitioning) return;
             isTransitioning = true;
-            
-            // Prepare the checkerboard
             checkerOverlay.style.visibility = 'visible';
             checkerOverlay.innerHTML = '';
             const tiles = [];
-            for(let i=0; i<100; i++) {
+            for (let i = 0; i < 100; i++) {
                 const tile = document.createElement('div');
                 tile.className = 'checker-tile';
                 checkerOverlay.appendChild(tile);
                 tiles.push(tile);
             }
-
-            // Shuffle the tile array for randomness
             const shuffledTiles = tiles.sort(() => Math.random() - 0.5);
-
-            // Trigger animations
             setTimeout(() => {
                 document.getElementById('preloader').style.display = 'none';
                 if (!isMobile) bg.classList.add('booted');
-                
-                shuffledTiles.forEach((tile, index) => {
-                    // Random delay between 0 and 600ms for that checkerboard pop
-                    setTimeout(() => {
-                        tile.classList.add('animate-out');
-                    }, index * 8); 
-                });
-
-                // Cleanup overlay after animation completes
-                setTimeout(() => { 
-                    checkerOverlay.style.display = 'none';
-                    requestAnimationFrame(scrollLoop); 
-                }, 1500);
+                shuffledTiles.forEach((tile, index) => { setTimeout(() => { tile.classList.add('animate-out'); }, index * 8); });
+                setTimeout(() => { checkerOverlay.style.display = 'none'; if(!isMobile) requestAnimationFrame(scrollLoop); }, 1500);
             }, 100);
         }
 
@@ -971,18 +1039,34 @@
             if (name === 'VOID_CORE') { document.getElementById('detail-desc').innerText = "CENTRAL PROCESSING CORE FOR NULL-SPACE DATA SETS."; launchBtn.href = "#"; }
             else if (name === 'iGLOO') { document.getElementById('detail-desc').innerText = "PROTECTIVE DIGITAL SHELL DESIGNED FOR SECURE ARCHIVING."; launchBtn.href = "#"; }
             else { document.getElementById('detail-desc').innerText = "EXPERIMENTAL ARCHITECTURE BUILT FOR STABILITY UNDER EXTREME LOAD."; launchBtn.href = "boxom.html"; }
-            if (!isMobile) { navTrigger.classList.add('cartwheel-active'); detail.classList.add('visible'); setTimeout(() => { viewport.style.opacity = '0'; }, 550); }
-            else { detail.classList.add('visible'); }
+            
+            if (!isMobile) {
+                navTrigger.classList.add('cartwheel-active');
+                detail.classList.add('visible');
+                setTimeout(() => { viewport.style.opacity = '0'; }, 550);
+            } else {
+                detail.classList.add('visible');
+            }
         }
 
         function closeProject() {
             if (!isMobile) {
                 detail.style.transition = `clip-path var(--reveal-speed) cubic-bezier(0.23, 1, 0.32, 1)`;
                 detail.style.clipPath = 'inset(0 100% 0 0)';
-                navTrigger.classList.remove('cartwheel-active'); navTrigger.classList.add('reverse-wipe');
+                navTrigger.classList.remove('cartwheel-active');
+                navTrigger.classList.add('reverse-wipe');
                 setTimeout(() => { viewport.style.opacity = '1'; }, 300);
-                setTimeout(() => { detail.classList.remove('visible'); navTrigger.classList.remove('reverse-wipe'); detail.style.clipPath = ''; detail.style.transition = ''; interacted = true; requestAnimationFrame(scrollLoop); }, 1500);
-            } else { detail.classList.remove('visible'); }
+                setTimeout(() => {
+                    detail.classList.remove('visible');
+                    navTrigger.classList.remove('reverse-wipe');
+                    detail.style.clipPath = '';
+                    detail.style.transition = '';
+                    interacted = true;
+                    requestAnimationFrame(scrollLoop);
+                }, 1500);
+            } else {
+                detail.classList.remove('visible');
+            }
         }
 
         function scrollLoop() {
