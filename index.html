@@ -692,6 +692,45 @@
                 gap: 20px;
             }
 
+            /* Specifically for LINK UP mobile refinement */
+            .contact-layout {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .contact-layout .side-info {
+                order: 2; /* Move socials below terminal for mobile ergonomics */
+                padding: 20px 0;
+            }
+
+            .social-link-wrap {
+                flex-direction: row;
+                justify-content: center;
+                gap: 40px;
+            }
+
+            .form-container {
+                height: auto;
+                min-height: 350px;
+                order: 1;
+            }
+
+            .terminal-interface {
+                padding: 25px 15px;
+            }
+
+            .terminal-log {
+                height: 180px;
+                font-size: 10px;
+            }
+
+            .map-container {
+                order: 3;
+                height: 250px; /* Specific height to prevent infinite scroll feel */
+                margin-top: 20px;
+                border-color: #333;
+            }
+
             .header-top-right {
                 display: none;
             }
